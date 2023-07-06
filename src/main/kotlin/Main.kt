@@ -1,34 +1,23 @@
-import com.pi4j.library.pigpio.PiGpio
-import org.apache.logging.log4j.kotlin.Logging
-
-class Test() : Logging {
-
-    init {
-        println("Testing logging...")
-        logger.debug("Debug!")
-        logger.info("Info!")
-        logger.fatal("Fatal!")
-        println("Test over!")
-    }
-}
+import handy_display.RunCommand
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import picocli.CommandLine
 
 fun main(args: Array<String>) {
-    println("Hello World!")
 
-    // Try adding program arguments via Run/Debug configuration.
-    // Learn more about running applications: https://www.jetbrains.com/help/idea/running-applications.html.
-    println("Program arguments: ${args.joinToString()}")
+    val logger = LoggerFactory.getLogger("root")
+    logger.info("Starting Handy Display!")
+    logger.info("Program arguments: ${args.joinToString()}")
 
-    println(PiGpio.newNativeInstance())
+    checkForResources(logger)
 
-    checkForResources()
-    Test()
+    CommandLine(RunCommand()).execute(*args)
 }
 
-fun checkForResources() {
-    if (Test::class.java.classLoader.getResource("resources_root") == null) {
+fun checkForResources(logger: Logger) {
+    if (RunCommand::class.java.classLoader.getResource("resources_root") == null) {
         throw NullPointerException("Cannot find resources_root. This indicates that the necessary JAR resources are inaccessible.")
     }
 
-    println("Resources are intact!")
+    logger.debug("Resources are intact!")
 }

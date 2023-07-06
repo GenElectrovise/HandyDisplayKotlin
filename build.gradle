@@ -1,13 +1,18 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.9.0'
     id 'application'
+    id 'distribution'
+    id 'org.hidetake.ssh' version '2.11.2'
 }
 
-group = 'me.genel'
-version = '1.0-SNAPSHOT'
+group = 'me.genel.handy_display'
+version = '0.0.1'
 
 repositories {
     mavenCentral()
+    maven {
+        url "https://plugins.gradle.org/m2/"
+    }
 }
 
 dependencies {
@@ -17,10 +22,6 @@ dependencies {
     implementation 'com.pi4j:pi4j-core:2.3.0'
     implementation 'com.pi4j:pi4j-plugin-raspberrypi:2.3.0'
     implementation 'com.pi4j:pi4j-plugin-pigpio:2.3.0'
-}
-
-test {
-    useJUnitPlatform()
 }
 
 compileKotlin {
@@ -33,4 +34,57 @@ compileTestKotlin {
 
 application {
     mainClassName = 'MainKt'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+distributions {
+    full_zip_archive {
+        distributionBaseName = 'handy_display_zip'
+        distributionClassifier = 'classifer'
+        contents {
+            from 'src/main'
+        }
+    }
+}
+
+remotes {
+    atompi {
+        host = ATOMPI_HOST
+        user = ATOMPI_USER
+        password = ATOMPI_PASS
+    }
+}
+
+task __zipSSHDeploy {
+    println("SSH Deploy >> Deploying to: ${ATOMPI_HOST}")
+    doLast {
+         ssh.run {
+            session(remotes.atompi) {
+                def zipName = "HandyDisplayKotlin-${version}"
+                def zipFile = project.file("build/distributions/${zipName}.zip")
+                println("SSH Deploy >> Transferring ${zipFile} to remote...")
+
+                println("SSH Deploy >> Preparing remote directory: ${ATOMPI_PATH}")
+                execute "mkdir -p ${ATOMPI_PATH}/archives"
+
+                println('SSH Deploy >> Uploading...')
+                put from: zipFile, into: "${ATOMPI_PATH}/archives/${zipName}.zip"
+
+                println("SSH Deploy >> Moving into ${ATOMPI_PATH}")
+                execute "cd ${ATOMPI_PATH}"
+
+                println("SSH Deploy >> Unzipping ${zipName}")
+                execute "sudo unzip -o ${ATOMPI_PATH}/archives/${zipName}.zip -d ${ATOMPI_PATH}/tmp"
+                execute "cp -R ${ATOMPI_PATH}/tmp/${zipName}/* ${ATOMPI_PATH}"
+                execute "sudo rm -r ${ATOMPI_PATH}/tmp"
+
+                def deployFile = project.file("deploy/")
+                println("SSH Deploy >> Transferring scripts from ${deployFile}")
+                put from: deployFile.getAbsolutePath(), into: "${ATOMPI_PATH}"
+            }
+        }
+    }
 }

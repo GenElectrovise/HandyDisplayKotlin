@@ -1,5 +1,9 @@
 import com.pi4j.library.pigpio.PiGpio
 
+class Test {
+
+}
+
 fun main(args: Array<String>) {
     println("Hello World!")
 
@@ -8,4 +12,8 @@ fun main(args: Array<String>) {
     println("Program arguments: ${args.joinToString()}")
 
     println(PiGpio.newNativeInstance())
+
+    if (Test::class.java.classLoader.getResource("resources_root") == null) {
+        throw NullPointerException("Cannot find resources_root. This indicates that the necessary JAR resources are inaccessible.")
+    }
 }

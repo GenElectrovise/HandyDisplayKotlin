@@ -1,7 +1,15 @@
 import com.pi4j.library.pigpio.PiGpio
+import org.apache.logging.log4j.kotlin.Logging
 
-class Test {
+class Test() : Logging {
 
+    init {
+        println("Testing logging...")
+        logger.debug("Debug!")
+        logger.info("Info!")
+        logger.fatal("Fatal!")
+        println("Test over!")
+    }
 }
 
 fun main(args: Array<String>) {
@@ -13,7 +21,14 @@ fun main(args: Array<String>) {
 
     println(PiGpio.newNativeInstance())
 
+    checkForResources()
+    Test()
+}
+
+fun checkForResources() {
     if (Test::class.java.classLoader.getResource("resources_root") == null) {
         throw NullPointerException("Cannot find resources_root. This indicates that the necessary JAR resources are inaccessible.")
     }
+
+    println("Resources are intact!")
 }

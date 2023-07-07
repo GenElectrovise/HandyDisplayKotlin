@@ -43,8 +43,6 @@ class RunCommand : Runnable, Logging {
             SwingUtilities.invokeLater {
                 val frame = HandyFrame(mirror)
                 frame.isVisible = true
-
-                frame.currentWidget = NoneWidget()
             }
         }
     }

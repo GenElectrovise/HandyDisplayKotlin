@@ -12,9 +12,8 @@ fun main(args: Array<String>) {
 }
 
 fun checkForResources() {
-    if (RunCommand::class.java.classLoader.getResource("resources_root") == null) {
-        throw NullPointerException("Cannot find resources_root. This indicates that the necessary JAR resources are inaccessible.")
-    }
-
+    val root = RunCommand::class.java.classLoader.getResource("resources_root")
+        ?: throw NullPointerException("Cannot find resources_root. This indicates that the necessary JAR resources are inaccessible.")
+    println("Found resources_root: $root")
     println("Resources are intact!")
 }

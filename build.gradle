@@ -1,8 +1,12 @@
 plugins {
+    // Gradle
     id 'org.jetbrains.kotlin.jvm' version '1.9.0'
     id 'application'
     id 'distribution'
     id 'org.hidetake.ssh' version '2.11.2'
+
+    // Java/Kotlin
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.9.0'
 }
 
 group = 'me.genel.handy_display'
@@ -23,6 +27,7 @@ dependencies {
     implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.20.0'
     implementation group: 'org.apache.logging.log4j', name: 'log4j-api-kotlin', version: '1.2.0'
     implementation group: 'info.picocli', name: 'picocli', version: '4.7.4'
+    implementation group: 'org.jetbrains.kotlinx', name: 'kotlinx-serialization-json', version: '1.5.1'
 
     // Raspberry Pi
     implementation 'org.slf4j:slf4j-api:2.0.5'

@@ -1,22 +1,25 @@
 package handy_display.widget
 
 import org.apache.logging.log4j.kotlin.Logging
+import java.awt.BorderLayout
 import java.awt.Color
-import java.awt.Graphics
 import java.awt.Label
-import javax.swing.Timer
+import javax.swing.JPanel
 
 class NoneWidget : AbstractWidget("none"), Logging {
 
-    private val label = Label("No widget here :(")
-    init {
-        add(label)
-        background = Color.YELLOW
-        isOpaque = true
-    }
+    override fun getContentPanel(): JPanel {
+        val panel = JPanel()
+        panel.isOpaque = true
+        panel.background = Color.YELLOW
 
-    override fun paintComponent(g: Graphics?) {
-        super.paintComponent(g)
-        logger.info("Painting NoneWidget!")
+        val layout = BorderLayout()
+        panel.layout = layout
+
+        val label = Label("No widget here :(")
+
+        panel.add(label, BorderLayout.CENTER)
+
+        return panel
     }
 }

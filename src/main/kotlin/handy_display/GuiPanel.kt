@@ -9,8 +9,8 @@ import javax.swing.OverlayLayout
 
 class GuiPanel(widgets: List<AbstractWidget>) : JPanel(), Logging {
 
-    val overlayPanel: OverlayPanel
-    val cardsPanel: JPanel
+    private val overlayPanel: OverlayPanel
+    private val cardsPanel: JPanel
 
     override fun isOptimizedDrawingEnabled(): Boolean = false
 
@@ -22,6 +22,11 @@ class GuiPanel(widgets: List<AbstractWidget>) : JPanel(), Logging {
         cardsPanel = createWidgetCards(widgets)
 
         layout = OverlayLayout(this)
+
+        overlayPanel.alignmentX = 0f
+        overlayPanel.alignmentY = 0f
+        cardsPanel.alignmentX = 0f
+        cardsPanel.alignmentY = 0f
 
         add(overlayPanel)
         add(cardsPanel)
@@ -38,6 +43,7 @@ class GuiPanel(widgets: List<AbstractWidget>) : JPanel(), Logging {
     }
 
     private fun cycleWidgetCards(forwards: Boolean) {
+
         val layout = cardsPanel.layout as CardLayout
         logger.info("Cycling widgets " + (if (forwards) "forwards" else "backwards"))
 

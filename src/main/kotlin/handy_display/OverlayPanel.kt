@@ -27,7 +27,6 @@ class OverlayPanel(
 
     init {
         layout = BorderLayout()
-        background = Color(0, 0, 0, 0)
         isOpaque = false
 
         barBoxLabel = JLabel(ImageIcon(barBox))
@@ -40,16 +39,23 @@ class OverlayPanel(
         leftButton = JButton(leftIcon)
         leftButton.isContentAreaFilled = false
         leftButton.isBorderPainted = false
+        leftButton.isFocusable = false
         leftButton.addActionListener { onLeftPressed.invoke(Unit) }
 
         rightIcon = ImageIcon(rightImg)
         rightButton = JButton(rightIcon)
         rightButton.isContentAreaFilled = false
         rightButton.isBorderPainted = false
+        rightButton.isFocusable = false
         rightButton.addActionListener { onRightPressed.invoke(Unit) }
 
         add(barBoxLabel, BorderLayout.NORTH)
         add(leftButton, BorderLayout.WEST)
         add(rightButton, BorderLayout.EAST)
+
+        // TODO remove debug leftButton
+        leftButton.addActionListener {
+            isVisible = !isVisible
+        }
     }
 }

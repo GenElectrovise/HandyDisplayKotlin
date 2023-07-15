@@ -2,6 +2,7 @@ package handy_display
 
 import handy_display.mirror.AbstractMirror
 import javax.swing.JFrame
+import javax.swing.JRootPane
 
 class MirroredJFrame(private val mirror: AbstractMirror) : JFrame() {
 

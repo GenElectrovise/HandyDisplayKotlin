@@ -25,6 +25,8 @@ class OverlayPanel(
     private val leftButton: JButton
     private val rightButton: JButton
 
+    override fun isOptimizedDrawingEnabled(): Boolean = false
+
     init {
         layout = BorderLayout()
         isOpaque = false
@@ -37,6 +39,7 @@ class OverlayPanel(
 
         leftIcon = ImageIcon(leftImg)
         leftButton = JButton(leftIcon)
+        leftButton.isOpaque = false
         leftButton.isContentAreaFilled = false
         leftButton.isBorderPainted = false
         leftButton.isFocusable = false
@@ -44,6 +47,7 @@ class OverlayPanel(
 
         rightIcon = ImageIcon(rightImg)
         rightButton = JButton(rightIcon)
+        rightButton.isOpaque = false
         rightButton.isContentAreaFilled = false
         rightButton.isBorderPainted = false
         rightButton.isFocusable = false

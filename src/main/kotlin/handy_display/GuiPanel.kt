@@ -3,6 +3,7 @@ package handy_display
 import handy_display.widget.AbstractWidget
 import org.apache.logging.log4j.kotlin.Logging
 import java.awt.CardLayout
+import java.awt.Color
 import javax.swing.JPanel
 import javax.swing.OverlayLayout
 
@@ -25,7 +26,7 @@ class GuiPanel(widgets: List<AbstractWidget>) : JPanel(), Logging {
 
         overlayPanel.alignmentX = 0f
         overlayPanel.alignmentY = 0f
-        cardsPanel.alignmentX = 0f
+        cardsPanel.alignmentX = 0.5f
         cardsPanel.alignmentY = 0f
 
         add(overlayPanel)

@@ -1,6 +1,6 @@
 package handy_display
 
-import handy_display.widget.AbstractWidget
+import me.genel.handydisplay.core.widget.AbstractWidget
 import org.apache.logging.log4j.kotlin.KotlinLogger
 import org.apache.logging.log4j.kotlin.logger
 import java.awt.Font

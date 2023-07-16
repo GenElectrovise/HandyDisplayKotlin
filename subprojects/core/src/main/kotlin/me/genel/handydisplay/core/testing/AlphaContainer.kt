@@ -1,4 +1,4 @@
-package handy_display
+package me.genel.handydisplay.core.testing
 
 import java.awt.BorderLayout
 import java.awt.Graphics

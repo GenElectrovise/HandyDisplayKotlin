@@ -1,25 +1,21 @@
-package handy_display.widget
+package me.genel.handydisplay.core.widget
 
+import javafx.scene.Parent
+import javafx.scene.Scene
+import javafx.scene.control.Label
+import javafx.scene.layout.Pane
+import javafx.scene.layout.VBox
+import me.genel.handydisplay.core.widget.AbstractWidget
 import org.apache.logging.log4j.kotlin.Logging
-import java.awt.BorderLayout
-import java.awt.Color
-import java.awt.Label
-import javax.swing.JPanel
 
 class NoneWidget : AbstractWidget("none"), Logging {
 
-    override fun getContentPanel(): JPanel {
-        val panel = JPanel()
-        panel.isOpaque = true
-        panel.background = Color.YELLOW
-
-        val layout = BorderLayout()
-        panel.layout = layout
+    override fun createContentPane(): Pane {
+        val box = VBox()
 
         val label = Label("No widget here :(")
+        box.children.add(label)
 
-        panel.add(label, BorderLayout.CENTER)
-
-        return panel
+        return box
     }
 }

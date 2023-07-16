@@ -1,13 +1,10 @@
-package handy_display
+package me.genel.handydisplay.core
 
-import handy_display.mirror.AbstractMirror
-import handy_display.mirror.LcdTftMirror
-import handy_display.widget.AbstractWidget
-import handy_display.widget.NoneWidget
+import javafx.application.Platform
+import javafx.stage.Stage
 import org.apache.logging.log4j.kotlin.Logging
 import picocli.CommandLine
-import javax.swing.SwingUtilities
-import javax.swing.WindowConstants
+
 
 /**
  * The "real" entrypoint to the application, where arguments have been parsed and tasks are delegated.
@@ -36,21 +33,13 @@ class RunCommand : Runnable, Logging {
         // val jsonContent = optionsFile.readText()
         // val options = Json.decodeFromString<Options>(jsonContent)
 
-        val mirror: AbstractMirror = LcdTftMirror()
-        val widgets: List<AbstractWidget> = listOf(NoneWidget())
-        val frame = MirroredJFrame(mirror)
+        val widgetManager = WidgetManager()
+        val guiApp = GUI(widgetManager)
+        guiApp.init()
 
-        frame.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
-        // isResizable = false
-        frame.size = mirror.size
-        val content = GuiPanel(widgets)
-        frame.add(content)
-
-        if (headful) {
-            logger.info("Starting Swing GUI...")
-            SwingUtilities.invokeLater {
-                frame.isVisible = true
-            }
+        Platform.startup {
+            val rootStage = Stage()
+            guiApp.start(rootStage)
         }
     }
 }

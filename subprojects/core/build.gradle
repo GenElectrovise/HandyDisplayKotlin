@@ -5,6 +5,8 @@ plugins {
     id 'distribution'
     id 'org.hidetake.ssh' version '2.11.2'
 
+    id 'org.openjfx.javafxplugin' version '0.0.9'
+
     // Java/Kotlin
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.9.0'
 }
@@ -17,6 +19,11 @@ repositories {
     maven {
         url "https://plugins.gradle.org/m2/"
     }
+}
+
+javafx {
+    version = "16"
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
 
 dependencies {

@@ -1,11 +1,11 @@
-package handy_display.widget
+package me.genel.handydisplay.core.widget
 
+import javafx.scene.Scene
+import javafx.scene.layout.Pane
 import org.apache.logging.log4j.kotlin.Logging
-import javax.swing.JPanel
 
 
 abstract class AbstractWidget(val widgetName: String) : Logging {
 
-
-    abstract fun getContentPanel(): JPanel
+    abstract fun createContentPane(): Pane
 }

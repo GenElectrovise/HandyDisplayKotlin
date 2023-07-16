@@ -12,7 +12,7 @@ import org.apache.logging.log4j.kotlin.Logging
 val WIDTH: Double = 480.0
 val HEIGHT: Double = 320.0
 
-class GUI(val widgetProvider: WidgetManager) : Application(), Logging {
+class GUI(val widgetManager: WidgetManager) : Application(), Logging {
 
     private lateinit var rootStage: Stage
     private lateinit var contentStack: StackPane
@@ -33,7 +33,7 @@ class GUI(val widgetProvider: WidgetManager) : Application(), Logging {
             { cycleWidgets(true) }
         )
 
-        showWidget(widgetProvider.currentWidget)
+        showWidget(widgetManager.currentWidget)
         contentStack.children.add(overlay)
     }
 
@@ -58,7 +58,7 @@ class GUI(val widgetProvider: WidgetManager) : Application(), Logging {
     }
 
     fun cycleWidgets(forwards: Boolean) {
-        //TODO Cycle widgets implementation
+        logger.info("Cycling widgets " + (if (forwards) "+/forwards/right" else "-/backwards/left"))
     }
 
 }

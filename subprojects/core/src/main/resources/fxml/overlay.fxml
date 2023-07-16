@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="320.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.genel.handydisplay.core.OverlayController">
+   <children>
+      <Rectangle id="bar-rect" arcWidth="5.0" fill="#00000066" height="28.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="480.0" StackPane.alignment="TOP_CENTER" />
+      <Text id="widget-name-text" fill="WHITE" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Widget Name" StackPane.alignment="TOP_CENTER">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
+      <BorderPane id="barBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="28.0" prefWidth="480.0" StackPane.alignment="TOP_CENTER">
+         <left>
+            <Text id="datetime-text" fill="WHITE" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="20:21 - 16/07/23" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Text>
+         </left>
+         <right>
+            <Text id="lag-data-text" fill="WHITE" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="0.015s" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Text>
+         </right>
+         <padding>
+            <Insets left="5.0" right="5.0" />
+         </padding>
+      </BorderPane>
+      <Button id="left-toggle-button" mnemonicParsing="false" onAction="#fxmlLeftToggleButtonOnAction" prefHeight="74.0" prefWidth="40.0" stylesheets="@overlay.css" text="&lt;" textAlignment="CENTER" textFill="WHITE" StackPane.alignment="CENTER_LEFT">
+         <padding>
+            <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+         </padding>
+      </Button>
+      <Button id="right-toggle-button" alignment="CENTER" mnemonicParsing="false" onAction="#fxmlRightToggleButtonOnAction" prefHeight="74.0" prefWidth="40.0" stylesheets="@overlay.css" text="&gt;" textAlignment="CENTER" textFill="WHITE" StackPane.alignment="CENTER_RIGHT">
+         <padding>
+            <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+         </padding>
+      </Button>
+   </children>
+</StackPane>

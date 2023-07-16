@@ -3,15 +3,11 @@ package me.genel.handydisplay.core
 import javafx.application.Application
 import javafx.application.ConditionalFeature
 import javafx.application.Platform
-import javafx.scene.Node
 import javafx.scene.Scene
-import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.StackPane
 import javafx.stage.Stage
 import me.genel.handydisplay.core.widget.AbstractWidget
 import org.apache.logging.log4j.kotlin.Logging
-import org.apache.logging.log4j.kotlin.logger
-import java.lang.Exception
 
 val WIDTH: Double = 480.0
 val HEIGHT: Double = 320.0
@@ -41,7 +37,7 @@ class GUI(val widgetProvider: WidgetManager) : Application(), Logging {
         contentStack.children.add(overlay)
     }
 
-    fun checkSupported() {
+    private fun checkSupported() {
         logger.debug("Supported JavaFX ConditionalFeatures:")
         ConditionalFeature.entries.forEach {
             try {

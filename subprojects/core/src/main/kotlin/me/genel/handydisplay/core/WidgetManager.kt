@@ -15,10 +15,11 @@ class WidgetManager {
             }
             field = value
         }
-    val currentWidget: AbstractWidget get() {
-        val name = currentWidgetName
-        return widgets[name] ?: throw NoSuchElementException("No widget present with the name $name")
-    }
+    val currentWidget: AbstractWidget
+        get() {
+            val name = currentWidgetName
+            return widgets[name] ?: throw NoSuchElementException("No widget present with the name $name")
+        }
 
 
     init {

@@ -2,11 +2,9 @@ package me.genel.handydisplay.core
 
 import handy_display.loadImage
 import javafx.scene.control.Label
-import javafx.scene.layout.Background
-import javafx.scene.layout.BackgroundFill
 import javafx.scene.layout.Pane
 import javafx.scene.layout.VBox
-import java.awt.*
+import java.awt.Image
 
 const val OVERLAY_GROUP = "overlay"
 

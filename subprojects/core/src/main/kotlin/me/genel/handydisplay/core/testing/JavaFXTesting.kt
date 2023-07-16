@@ -12,7 +12,7 @@ import java.io.FileInputStream
 
 var APP: JavaFXTesting? = null
 
-class JavaFXTesting: Application() {
+class JavaFXTesting : Application() {
 
     init {
         println("Init app")
@@ -23,8 +23,10 @@ class JavaFXTesting: Application() {
         primaryStage.title = "OK"
 
 
-        val bee = Image(FileInputStream("C:\\Users\\GenElectrovise\\OneDrive\\Pictures\\my photos\\Backgrounds\\bee.jpg"))
-        val colours = Image(FileInputStream("C:\\Users\\GenElectrovise\\OneDrive\\Pictures\\my photos\\Backgrounds\\alpha_testing.png"))
+        val bee =
+            Image(FileInputStream("C:\\Users\\GenElectrovise\\OneDrive\\Pictures\\my photos\\Backgrounds\\bee.jpg"))
+        val colours =
+            Image(FileInputStream("C:\\Users\\GenElectrovise\\OneDrive\\Pictures\\my photos\\Backgrounds\\alpha_testing.png"))
 
         val stackPane = StackPane(ImageView(bee), ImageView(colours))
         val scene = Scene(stackPane, 200.0, 250.0)
@@ -45,6 +47,8 @@ class JavaFXTesting: Application() {
 fun main() {
     Thread { Application.launch(JavaFXTesting::class.java) }.start()
     println("launched")
-    while (APP == null) { Thread.sleep(100) }
+    while (APP == null) {
+        Thread.sleep(100)
+    }
     APP?.test()
 }

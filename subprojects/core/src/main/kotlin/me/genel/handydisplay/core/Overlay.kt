@@ -6,12 +6,17 @@ import javafx.fxml.FXMLLoader
 import javafx.scene.layout.Pane
 import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
+import javafx.scene.text.Text
 import me.genel.handydisplay.core.widget.AbstractWidget
 import org.apache.logging.log4j.kotlin.Logging
 import java.awt.Image
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 const val OVERLAY_GROUP = "overlay"
 
+val formatter = DateTimeFormatter.ofPattern("hh:mm - dd/MM/yy");
 val SEMI_BLACK: Color = Color.rgb(0, 0, 0, 0.4)
 
 private val barBox = loadImage(OVERLAY_GROUP, "bar_box.bmp").getScaledInstance(480, 28, Image.SCALE_DEFAULT)
@@ -34,6 +39,23 @@ fun createOverlayPane(
 }
 
 class OverlayController : Logging {
+
+    @FXML
+    lateinit var widgetNameText: Text
+    @FXML
+    lateinit var datetimeText: Text
+    @FXML
+    lateinit var lagDataText: Text
+
+    @FXML
+    fun initialize() {
+        val datetimeTimer = Timer()
+        datetimeTimer.scheduleAtFixedRate( object: TimerTask() {
+            override fun run() {
+                widgetNameText.text = LocalDate.now().format(formatter)
+            }
+        }, 0L, 1000L)
+    }
 
     @FXML
     fun fxmlLeftToggleButtonOnAction() =

@@ -11,21 +11,21 @@
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="320.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.genel.handydisplay.core.OverlayController">
    <children>
       <Rectangle id="bar-rect" arcWidth="5.0" fill="#00000066" height="28.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="480.0" StackPane.alignment="TOP_CENTER" />
-      <Text id="widget-name-text" fill="WHITE" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Widget Name" StackPane.alignment="TOP_CENTER">
+      <Text id="widget-name-text" fx:id="widgetNameText" fill="WHITE" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Widget Name" StackPane.alignment="TOP_CENTER">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
       <BorderPane id="barBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="28.0" prefWidth="480.0" StackPane.alignment="TOP_CENTER">
          <left>
-            <Text id="datetime-text" fill="WHITE" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="20:21 - 16/07/23" BorderPane.alignment="CENTER">
+            <Text id="datetime-text" fx:id="datetimeText" fill="WHITE" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="20:21 - 16/07/23" BorderPane.alignment="CENTER">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Text>
          </left>
          <right>
-            <Text id="lag-data-text" fill="WHITE" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="0.015s" BorderPane.alignment="CENTER">
+            <Text id="lag-data-text" fx:id="lagDataText" fill="WHITE" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="0.015s" BorderPane.alignment="CENTER">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>

@@ -1,59 +1,68 @@
 package me.genel.handydisplay.core
 
 import javafx.application.Application
+import javafx.application.ConditionalFeature
 import javafx.application.Platform
+import javafx.scene.Node
 import javafx.scene.Scene
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.StackPane
-import javafx.scene.paint.Color
-import javafx.stage.Modality
 import javafx.stage.Stage
-import javafx.stage.StageStyle
 import me.genel.handydisplay.core.widget.AbstractWidget
 import org.apache.logging.log4j.kotlin.Logging
 import org.apache.logging.log4j.kotlin.logger
+import java.lang.Exception
 
 val WIDTH: Double = 480.0
 val HEIGHT: Double = 320.0
 
 class GUI(val widgetProvider: WidgetManager) : Application(), Logging {
 
-    var contentScene: Scene
-        get() = contentStage?.scene ?: throw NullPointerException("contentStage or contentStage.scene is null. Perhaps it was accessed before assignment?")
-        set(value) = if (contentStage != null) contentStage!!.scene = value else throw NullPointerException("contentStage is null so a stage cannot be assigned to it. Perhaps it was accessed before assignment?")
+    private lateinit var rootStage: Stage
+    private lateinit var contentStack: StackPane
 
-    var contentStage: Stage? = null
-    var overlayScene: Scene?
-        get() = overlayStage?.scene ?: throw NullPointerException("overlayStage or overlayStage.scene is null. Perhaps it was accessed before assignment?")
-        set(value) = if (overlayStage != null) overlayStage!!.scene = value else throw NullPointerException("overlayStage is null so a stage cannot be assigned to it. Perhaps it was accessed before assignment?")
-    var overlayStage: Stage? = null
+    init {
+        checkSupported()
+    }
 
     override fun start(primaryStage: Stage?) {
-        assert(primaryStage != null)
-        contentStage = primaryStage
+        rootStage = primaryStage ?: throw NullPointerException("Cannot create GUI with null primaryStage!")
+        contentStack = StackPane()
+
+        rootStage.scene = Scene(contentStack, WIDTH, HEIGHT)
+        rootStage.show()
+
+        val overlay = createOverlayPane(
+            { cycleWidgets(false) },
+            { cycleWidgets(true) }
+        )
 
         showWidget(widgetProvider.currentWidget)
+        contentStack.children.add(overlay)
+    }
 
-        logger.debug("Transparency supported: " + Platform.isSupported(javafx.application.ConditionalFeature.TRANSPARENT_WINDOW))
-        overlayStage = Stage(StageStyle.TRANSPARENT)
-        overlayStage!!.initOwner(contentStage)
-        overlayStage!!.initModality(Modality.NONE)
-        this.overlayScene = Scene(createOverlayPane(
-            {cycleWidgets(false)},
-            {cycleWidgets(true)}
-        ), WIDTH, HEIGHT, Color.TRANSPARENT)
-
-        contentStage!!.show()
-        overlayStage!!.show()
+    fun checkSupported() {
+        logger.debug("Supported JavaFX ConditionalFeatures:")
+        ConditionalFeature.entries.forEach {
+            try {
+                logger.debug(" > ${it.name}: ${Platform.isSupported(it)}")
+            } catch (e: Exception) {
+                logger.debug(" ! FAILED ${it.name}: ${e.message}")
+            }
+        }
     }
 
     fun showWidget(widget: AbstractWidget) {
         val pane = widget.createContentPane()
-        contentScene = Scene(pane, WIDTH, HEIGHT)
+
+        if (contentStack.children.size > 1)
+            contentStack.children[0] = pane
+        else
+            contentStack.children.add(pane)
     }
 
     fun cycleWidgets(forwards: Boolean) {
-
+        //TODO Cycle widgets implementation
     }
 
 }

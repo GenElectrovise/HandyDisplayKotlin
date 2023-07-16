@@ -1,3 +1,5 @@
+package me.genel.handydisplay.core
+
 import handy_display.RunCommand
 import picocli.CommandLine
 

@@ -1,0 +1,100 @@
+plugins {
+    // Gradle
+    id 'org.jetbrains.kotlin.jvm' version '1.9.0'
+    id 'application'
+    id 'distribution'
+    id 'org.hidetake.ssh' version '2.11.2'
+
+    // Java/Kotlin
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.9.0'
+}
+
+group = 'me.genel.handydisplay.core'
+version = '0.0.1'
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://plugins.gradle.org/m2/"
+    }
+}
+
+dependencies {
+    //
+    testImplementation 'org.jetbrains.kotlin:kotlin-test'
+
+    // Core
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.20.0'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-api-kotlin', version: '1.2.0'
+    implementation group: 'info.picocli', name: 'picocli', version: '4.7.4'
+    implementation group: 'org.jetbrains.kotlinx', name: 'kotlinx-serialization-json', version: '1.5.1'
+
+    // Raspberry Pi
+    implementation 'org.slf4j:slf4j-api:2.0.5'
+    implementation 'org.slf4j:slf4j-simple:2.0.5'
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = '17'
+}
+
+compileTestKotlin {
+    kotlinOptions.jvmTarget = '17'
+}
+
+application {
+    mainClassName = 'me.genel.handydisplay.core.MainKt'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+distributions {
+    full_zip_archive {
+        distributionBaseName = 'handy_display_zip'
+        distributionClassifier = 'classifer'
+        contents {
+            from 'src/main'
+        }
+    }
+}
+
+remotes {
+    atompi {
+        host = ATOMPI_HOST
+        user = ATOMPI_USER
+        password = ATOMPI_PASS
+    }
+}
+
+task __zipSSHDeploy {
+    println("SSH Deploy >> Deploying to: ${ATOMPI_HOST}")
+    doLast {
+        ssh.run {
+            session(remotes.atompi) {
+                def zipName = "HandyDisplayKotlin-${version}"
+                def zipFile = project.file("build/distributions/${zipName}.zip")
+                println("SSH Deploy >> Transferring ${zipFile} to remote...")
+
+                println("SSH Deploy >> Preparing remote directory: ${ATOMPI_PATH}")
+                execute "mkdir -p ${ATOMPI_PATH}/archives"
+
+                println('SSH Deploy >> Uploading...')
+                put from: zipFile, into: "${ATOMPI_PATH}/archives/${zipName}.zip"
+
+                println("SSH Deploy >> Moving into ${ATOMPI_PATH}")
+                execute "cd ${ATOMPI_PATH}"
+
+                println("SSH Deploy >> Unzipping ${zipName}")
+                execute "sudo unzip -o ${ATOMPI_PATH}/archives/${zipName}.zip -d ${ATOMPI_PATH}/tmp"
+                execute "cp -R ${ATOMPI_PATH}/tmp/${zipName}/* ${ATOMPI_PATH}"
+                execute "sudo rm -r ${ATOMPI_PATH}/tmp"
+
+                def deployFile = project.file("deploy/")
+                println("SSH Deploy >> Transferring scripts from ${deployFile}")
+                put from: deployFile.getAbsolutePath(), into: "${ATOMPI_PATH}"
+            }
+        }
+    }
+}

@@ -19,6 +19,11 @@ class GUI(val widgetManager: WidgetManager) : Application(), Logging {
 
     init {
         checkSupported()
+        instance = this
+    }
+
+    companion object {
+        lateinit var instance: GUI
     }
 
     override fun start(primaryStage: Stage?) {

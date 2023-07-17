@@ -2,12 +2,13 @@ package me.genel.handydisplay.core
 
 import handy_display.loadImage
 import javafx.application.Platform
+import javafx.beans.value.ChangeListener
+import javafx.beans.value.ObservableValue
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.scene.control.Label
 import javafx.scene.layout.Pane
 import javafx.scene.layout.StackPane
-import javafx.scene.paint.Color
 import me.genel.handydisplay.core.widget.AbstractWidget
 import org.apache.logging.log4j.kotlin.Logging
 import java.awt.Image
@@ -40,6 +41,17 @@ fun createOverlayPane(
 
 class OverlayController : Logging {
 
+    inner class WidgetNameChangeListener : ChangeListener<String> {
+        override fun changed(observable: ObservableValue<out String>?, oldValue: String?, newValue: String?) = triggerNow()
+
+        fun triggerNow() {
+            val oldVal = widgetNameText.text
+            val newVal = GUI.instance.widgetManager.currentWidget.displayName
+            logger.debug("Updating widgetNameText.text from '$oldVal' to '$newVal'...")
+            widgetNameText.text = newVal
+        }
+    }
+
     @FXML
     lateinit var widgetNameText: Label
 
@@ -53,8 +65,14 @@ class OverlayController : Logging {
     fun initialize() {
         val datetimeTimer = Timer()
         datetimeTimer.scheduleAtFixedRate(object : TimerTask() {
-            override fun run() = Platform.runLater { datetimeText.text = LocalDateTime.now().format(dateTimeTextFormatter) }
+            override fun run() =
+                Platform.runLater { datetimeText.text = LocalDateTime.now().format(dateTimeTextFormatter) }
         }, 0L, 1000L)
+
+        val widgetNameChangeListener = WidgetNameChangeListener()
+        GUI.instance.widgetManager.currentWidgetName.addListener(widgetNameChangeListener)
+        // widgetNameChangeListener.triggerNow()  //TODO triggerNow() works
+        // GUI.instance.widgetManager.currentWidgetName.value = "none" //TODO Does currentWidgetName.value trigger change? (MUST ACTUALLY CHANGE VALUE)
     }
 
     @FXML

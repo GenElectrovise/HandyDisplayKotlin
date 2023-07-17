@@ -5,7 +5,7 @@ import javafx.scene.layout.Pane
 import javafx.scene.layout.VBox
 import org.apache.logging.log4j.kotlin.Logging
 
-class NoneWidget : AbstractWidget("none"), Logging {
+class NoneWidget : AbstractWidget("none", "None"), Logging {
 
     override fun createContentPane(): Pane {
         val box = VBox()

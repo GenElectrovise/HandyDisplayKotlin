@@ -1,23 +1,23 @@
 package me.genel.handydisplay.core
 
 import handy_display.loadImage
+import javafx.application.Platform
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
+import javafx.scene.control.Label
 import javafx.scene.layout.Pane
 import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
-import javafx.scene.text.Text
 import me.genel.handydisplay.core.widget.AbstractWidget
 import org.apache.logging.log4j.kotlin.Logging
 import java.awt.Image
-import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
 const val OVERLAY_GROUP = "overlay"
 
-val formatter = DateTimeFormatter.ofPattern("hh:mm - dd/MM/yy");
-val SEMI_BLACK: Color = Color.rgb(0, 0, 0, 0.4)
+val dateTimeTextFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm - dd/MM/yy");
 
 private val barBox = loadImage(OVERLAY_GROUP, "bar_box.bmp").getScaledInstance(480, 28, Image.SCALE_DEFAULT)
 private val leftImg = loadImage(OVERLAY_GROUP, "left_toggle.bmp").getScaledInstance(40, 74, Image.SCALE_DEFAULT)
@@ -41,19 +41,19 @@ fun createOverlayPane(
 class OverlayController : Logging {
 
     @FXML
-    lateinit var widgetNameText: Text
+    lateinit var widgetNameText: Label
+
     @FXML
-    lateinit var datetimeText: Text
+    lateinit var datetimeText: Label
+
     @FXML
-    lateinit var lagDataText: Text
+    lateinit var lagDataText: Label
 
     @FXML
     fun initialize() {
         val datetimeTimer = Timer()
-        datetimeTimer.scheduleAtFixedRate( object: TimerTask() {
-            override fun run() {
-                widgetNameText.text = LocalDate.now().format(formatter)
-            }
+        datetimeTimer.scheduleAtFixedRate(object : TimerTask() {
+            override fun run() = Platform.runLater { datetimeText.text = LocalDateTime.now().format(dateTimeTextFormatter) }
         }, 0L, 1000L)
     }
 

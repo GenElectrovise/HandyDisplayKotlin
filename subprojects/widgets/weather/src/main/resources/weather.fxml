@@ -174,12 +174,12 @@
                         <Font name="System Bold" size="20.0" />
                      </font>
                   </Label>
-                  <Label fx:id="maxYesterdayLabel1" alignment="CENTER_RIGHT" text="Max:" textFill="WHITE" textOverrun="CLIP" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                  <Label fx:id="maxYesterdayLabel" alignment="CENTER_RIGHT" text="Max:" textFill="WHITE" textOverrun="CLIP" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                      <font>
                         <Font name="System Bold" size="20.0" />
                      </font>
                   </Label>
-                  <Label fx:id="windYesterdayLabel1" alignment="CENTER_RIGHT" text="Wind:" textFill="WHITE" textOverrun="CLIP" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
+                  <Label fx:id="windYesterdayLabel" alignment="CENTER_RIGHT" text="Wind:" textFill="WHITE" textOverrun="CLIP" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
                      <font>
                         <Font name="System Bold" size="20.0" />
                      </font>

@@ -4,6 +4,11 @@ import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
 import me.genel.handydisplay.core.widget.AbstractWidget
 import me.genel.handydisplay.core.widget.NoneWidget
+import org.reflections.Reflections
+import org.reflections.util.ConfigurationBuilder
+import org.reflections.util.FilterBuilder
+import java.io.File
+import java.net.URLClassLoader
 
 class WidgetManager {
 
@@ -31,7 +36,45 @@ class WidgetManager {
     }
 
     private fun collectWidgetInstances(): Map<String, AbstractWidget> {
-        val w = listOf(NoneWidget())
+        val w = ArrayList<AbstractWidget>()
+
+        w.add(NoneWidget())
+
+        val files = File("mods/widgets").listFiles()
+        val urlLoader = URLClassLoader(
+            files?.map { it.toURI().toURL() }?.toTypedArray()
+                ?: throw NullPointerException("Error collecting files for widget generation: $files")
+        )
+
+        val config = ConfigurationBuilder()
+        config.addClassLoaders(urlLoader)
+        config.setInputsFilter(
+            FilterBuilder().excludePackage("org.reflections")
+                // JDK Packages
+                // https://docs.oracle.com/en/java/javase/11/docs/api/allpackages-index.html
+                .excludePackage("com.sun")
+                .excludePackage("java")
+                .excludePackage("javax")
+                .excludePackage("jdk")
+                .excludePackage("netscape")
+                .excludePackage("org.ietf")
+                .excludePackage("org.w3c")
+                .excludePackage("org.xml")
+                // Library packages
+                .excludePackage("javafx")
+                .excludePackage("kotlin")
+                .excludePackage("kotlinx")
+                .excludePackage("sun")
+        )
+
+        val reflections = Reflections(config)
+        val widgetClasses = reflections.getSubTypesOf(AbstractWidget::class.java)
+
+        widgetClasses.forEach {
+            val inst = it.getDeclaredConstructor().newInstance()
+            w.add(inst)
+        }
+
         return w.associateBy { it.internalName }
     }
 

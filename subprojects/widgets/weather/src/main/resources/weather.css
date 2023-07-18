@@ -1,0 +1,33 @@
+.containerHBox {
+	-fx-background-color: #9eb7e5;
+}
+
+.todayVBox {
+	-fx-background-color: #d9d9d9;
+	-fx-background-radius: 30;
+    -fx-border-radius: 30;
+}
+
+.todayDataHBox {
+	-fx-background-color: #cdc392;
+	-fx-background-radius: 10;
+    -fx-border-radius: 10;
+}
+
+.yesterdayGrid {
+	-fx-background-color: #648de5;
+	-fx-background-radius: 20;
+    -fx-border-radius: 20;
+}
+
+.yesterdayImagePane {
+	-fx-background-color: #d9d9d9;
+	-fx-background-radius: 20;
+    -fx-border-radius: 20;
+}
+
+.visibilityVBox {
+	-fx-background-color: #304c89;
+	-fx-background-radius: 20;
+    -fx-border-radius: 20;
+}

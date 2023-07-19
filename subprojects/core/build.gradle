@@ -1,50 +1,18 @@
 plugins {
     id 'application'
     id 'distribution'
-    alias(handylibs.plugins.kotlin.jvm)
-    alias(handylibs.plugins.kotlin.serialization)
     alias(handylibs.plugins.hidetake.ssh)
-    alias(handylibs.plugins.javafx)
-}
-
-group = 'me.genel.handydisplay.core'
-version = '0.0.1'
-
-javafx {
-    version = JAVAFX_VERSION
-    modules = ['javafx.controls', 'javafx.fxml']
 }
 
 dependencies {
-    // Test
-    testImplementation handylibs.kotlin.test
-    // Core
-    implementation handylibs.log4j.core
-    implementation handylibs.log4j.api.kotlin
-    implementation handylibs.kotlinx.json
     implementation handylibs.picocli
     implementation handylibs.classgraph
-    // Raspberry Pi
-    implementation handylibs.slf4j.api
-    implementation handylibs.slf4j.simple
 
     implementation project(':subprojects:widgets:widget-api')
 }
 
-compileKotlin {
-    kotlinOptions.jvmTarget = '17'
-}
-
-compileTestKotlin {
-    kotlinOptions.jvmTarget = '17'
-}
-
 application {
     mainClassName = 'me.genel.handydisplay.core.MainKt'
-}
-
-test {
-    useJUnitPlatform()
 }
 
 distributions {

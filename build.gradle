@@ -1,0 +1,45 @@
+plugins {
+    id 'java'
+    id 'java-library'
+    alias(handylibs.plugins.kotlin.jvm)
+    alias(handylibs.plugins.kotlin.serialization)
+    alias(handylibs.plugins.javafx)
+}
+
+allprojects {
+
+    group = 'me.genel.handydisplay'
+    version = '0.0.1'
+
+    apply plugin: handylibs.plugins.kotlin.jvm.get().pluginId
+    apply plugin: handylibs.plugins.kotlin.serialization.get().pluginId
+    apply plugin: handylibs.plugins.javafx.get().pluginId
+    apply plugin: 'java'
+    apply plugin: 'java-library'
+
+    javafx {
+        version = JAVAFX_VERSION
+        modules = ['javafx.controls', 'javafx.fxml']
+    }
+
+    dependencies {
+        testImplementation handylibs.kotlin.test
+        implementation handylibs.log4j.api.kotlin
+        implementation handylibs.kotlinx.json
+        implementation handylibs.log4j.core
+        implementation handylibs.slf4j.api
+        implementation handylibs.slf4j.simple
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+
+    compileKotlin {
+        kotlinOptions.jvmTarget = '17'
+    }
+
+    compileTestKotlin {
+        kotlinOptions.jvmTarget = '17'
+    }
+}

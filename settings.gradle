@@ -9,3 +9,41 @@ findProject(':subprojects:widgets:weather')?.name = 'widget-weather'
 include 'subprojects:widgets:api'
 findProject(':subprojects:widgets:api')?.name = 'widget-api'
 
+dependencyResolutionManagement {
+
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    versionCatalogs {
+        handylibs {
+            //
+            // Plugins: alias(handylibs.plugins.xxx)
+            plugin('kotlin-jvm', 'org.jetbrains.kotlin.jvm').version('1.9.0')
+            plugin('kotlin-serialization', 'org.jetbrains.kotlin.plugin.serialization').version('1.9.0')
+            // plugin('gradle-app', 'application') // No version
+            // plugin('gradle-dist', 'distribution') // No version
+            plugin('hidetake-ssh', 'org.hidetake.ssh').version('2.11.2')
+            plugin('javafx', 'org.openjfx.javafxplugin').version('0.0.9')
+
+            // Libraries: library(handylibs.xxx)
+            // Test
+            library('kotlin-test', 'org.jetbrains.kotlin:kotlin-test:1.9.0')
+            // Core
+            library('log4j-core', 'org.apache.logging.log4j:log4j-core:2.20.0')
+            library('log4j-api-kotlin', 'org.apache.logging.log4j:log4j-api-kotlin:1.2.0')
+            library('kotlinx-json', 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1')
+            library('picocli', 'info.picocli:picocli:4.7.4')
+            library('classgraph', 'io.github.classgraph:classgraph:4.8.161')
+            // Raspberry Pi
+            library('slf4j-api', 'org.slf4j:slf4j-api:2.0.5')
+            library('slf4j-simple', 'org.slf4j:slf4j-simple:2.0.5')
+            library('pi4j-core', 'com.pi4j:pi4j-core:2.3.0')
+            library('pi4j-rpi', 'com.pi4j:pi4j-plugin-raspberrypi:2.3.0')
+            library('pi4j-pigpio', 'com.pi4j:pi4j-plugin-pigpio:2.3.0')
+        }
+    }
+}

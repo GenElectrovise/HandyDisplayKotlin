@@ -1,4 +1,4 @@
-package handy_display.mirror
+package me.genel.handydisplay.core.mirror
 
 import java.awt.Dimension
 

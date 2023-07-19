@@ -1,4 +1,4 @@
-package me.genel.handydisplay.core.widget
+package me.genel.handydisplay.api
 
 import javafx.scene.layout.Pane
 import org.apache.logging.log4j.kotlin.Logging

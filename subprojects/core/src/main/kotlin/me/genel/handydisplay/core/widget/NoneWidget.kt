@@ -3,6 +3,7 @@ package me.genel.handydisplay.core.widget
 import javafx.scene.control.Label
 import javafx.scene.layout.Pane
 import javafx.scene.layout.VBox
+import me.genel.handydisplay.api.AbstractWidget
 import org.apache.logging.log4j.kotlin.Logging
 
 class NoneWidget : AbstractWidget("none", "None"), Logging {

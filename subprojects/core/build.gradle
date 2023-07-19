@@ -35,7 +35,8 @@ dependencies {
     implementation group: 'org.apache.logging.log4j', name: 'log4j-api-kotlin', version: '1.2.0'
     implementation group: 'org.jetbrains.kotlinx', name: 'kotlinx-serialization-json', version: '1.5.1'
     implementation group: 'info.picocli', name: 'picocli', version: '4.7.4'
-    implementation group: 'org.reflections', name: 'reflections', version: '0.10.2'
+    // implementation group: 'org.reflections', name: 'reflections', version: '0.10.2'
+    implementation group: 'io.github.classgraph', name: 'classgraph', version: '4.8.161'
 
     // Raspberry Pi
     implementation 'org.slf4j:slf4j-api:2.0.5'

@@ -4,7 +4,6 @@ import io.github.classgraph.ClassGraph
 import io.github.classgraph.ScanResult
 import me.genel.handydisplay.api.AbstractWidget
 import org.apache.logging.log4j.kotlin.Logging
-import java.io.File
 import java.io.FileFilter
 
 class ModManager : Logging {
@@ -27,7 +26,7 @@ class ModManager : Logging {
     }
 
     private fun getModJarPaths(): Array<String> {
-        val widgetsFile = File("mods")
+        val widgetsFile = hdRunFile("mods")
         if (!widgetsFile.exists()) {
             logger.warn("Mods file ${widgetsFile.absolutePath} doesn't exist - creating...")
             widgetsFile.mkdirs()

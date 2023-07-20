@@ -1,7 +1,7 @@
 rootProject.name = 'handy-display-kotlin'
 
-include 'core'
-project(':core').projectDir = file('subprojects/core')
+include 'subprojects:core'
+findProject(':subprojects:core')?.name = 'core'
 
 include 'subprojects:widgets:weather'
 findProject(':subprojects:widgets:weather')?.name = 'widget-weather'

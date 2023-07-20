@@ -3,8 +3,12 @@ package me.genel.handydisplay.core
 import io.github.classgraph.ClassGraph
 import io.github.classgraph.ScanResult
 import me.genel.handydisplay.api.AbstractWidget
+import me.genel.handydisplay.api.hdRunFile
+import nonapi.io.github.classgraph.utils.JarUtils
 import org.apache.logging.log4j.kotlin.Logging
 import java.io.FileFilter
+import java.net.URL
+import java.net.URLClassLoader
 
 class ModManager : Logging {
 
@@ -18,15 +22,17 @@ class ModManager : Logging {
 
     private fun scanClasspathAndJars(): ScanResult {
         val jars = getModJarPaths()
+        logger.info("Found ${jars.size} mod .JAR files:")
+        jars.forEach { logger.info(" : ${JarUtils.leafName(it)} - $it") }
         return ClassGraph()
             .enableClassInfo()
-            .acceptJars(*jars)
+            .acceptJars(*jars)  //TODO This only searches for JARs on the classpath. I need to load the JAR classes myself and THEN search those CLASSES
             .acceptPackages(this.javaClass.`package`.name)
             .scan()
     }
 
     private fun getModJarPaths(): Array<String> {
-        val widgetsFile = hdRunFile("mods")
+        val widgetsFile = hdRunFile(null, "mods")
         if (!widgetsFile.exists()) {
             logger.warn("Mods file ${widgetsFile.absolutePath} doesn't exist - creating...")
             widgetsFile.mkdirs()

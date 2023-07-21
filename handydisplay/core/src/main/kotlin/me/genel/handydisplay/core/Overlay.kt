@@ -8,13 +8,10 @@ import javafx.fxml.FXMLLoader
 import javafx.scene.control.Label
 import javafx.scene.layout.Pane
 import javafx.scene.layout.StackPane
-import me.genel.handydisplay.api.AbstractWidget
 import org.apache.logging.log4j.kotlin.Logging
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
-
-const val OVERLAY_GROUP = "overlay"
 
 val dateTimeTextFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm - dd/MM/yy");
 
@@ -66,8 +63,6 @@ class OverlayController : Logging {
 
         val widgetNameChangeListener = UpdateTitleWhenWidgetNameChangedListener()
         GUI.currentWidgetName.addListener(widgetNameChangeListener)
-        // widgetNameChangeListener.triggerNow()  //TODO triggerNow() works
-        // GUI.instance.widgetManager.currentWidgetName.value = "none" //TODO Does currentWidgetName.value trigger change? (MUST ACTUALLY CHANGE VALUE)
     }
 
     @FXML

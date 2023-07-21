@@ -6,9 +6,6 @@ findProject(':handydisplay:core')?.name = 'core'
 include 'handydisplay:mods:widget-weather'
 findProject(':handydisplay:mods:widget-weather')?.name = 'widget-weather'
 
-include 'handydisplay:mods:api'
-findProject(':handydisplay:mods:api')?.name = 'api'
-
 dependencyResolutionManagement {
 
     repositories {
@@ -23,6 +20,7 @@ dependencyResolutionManagement {
             //
             // Plugins: alias(handylibs.plugins.xxx)
             plugin('kotlin-jvm', 'org.jetbrains.kotlin.jvm').version('1.9.0')
+            plugin('kotlin-multiplatform', 'org.jetbrains.kotlin.multiplatform').version('1.9.0')
             plugin('kotlin-serialization', 'org.jetbrains.kotlin.plugin.serialization').version('1.9.0')
             // plugin('gradle-app', 'application') // No version
             // plugin('gradle-dist', 'distribution') // No version

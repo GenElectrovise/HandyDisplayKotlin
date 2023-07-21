@@ -10,7 +10,6 @@ import javafx.beans.value.ObservableValue
 import javafx.scene.Scene
 import javafx.scene.layout.StackPane
 import javafx.stage.Stage
-import me.genel.handydisplay.api.AbstractWidget
 import org.apache.logging.log4j.kotlin.Logging
 
 val WIDTH: Double = 480.0

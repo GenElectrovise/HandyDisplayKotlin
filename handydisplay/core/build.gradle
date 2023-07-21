@@ -2,13 +2,12 @@ plugins {
     id 'application'
     id 'distribution'
     alias(handylibs.plugins.hidetake.ssh)
+    alias(handylibs.plugins.kotlin.serialization)
 }
 
 dependencies {
     implementation handylibs.picocli
     implementation handylibs.classgraph
-
-    implementation project(':handydisplay:mods:api')
 }
 
 application {

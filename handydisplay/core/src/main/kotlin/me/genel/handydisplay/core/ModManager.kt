@@ -2,8 +2,6 @@ package me.genel.handydisplay.core
 
 import io.github.classgraph.ClassGraph
 import io.github.classgraph.ScanResult
-import me.genel.handydisplay.api.AbstractWidget
-import me.genel.handydisplay.api.hdRunFile
 import nonapi.io.github.classgraph.utils.JarUtils
 import org.apache.logging.log4j.kotlin.Logging
 import java.io.File
@@ -34,7 +32,7 @@ class ModManager : Logging {
     }
 
     private fun getModJarPaths(): Array<String> {
-        val widgetsFile = hdRunFile(null, "mods")
+        val widgetsFile = hdRunFile("mods")
         if (!widgetsFile.exists()) {
             logger.warn("Mods file ${widgetsFile.absolutePath} doesn't exist - creating...")
             widgetsFile.mkdirs()

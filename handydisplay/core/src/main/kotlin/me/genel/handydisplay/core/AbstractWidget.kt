@@ -1,10 +1,8 @@
-package me.genel.handydisplay.api
+package me.genel.handydisplay.core
 
 import javafx.scene.layout.Pane
 import org.apache.logging.log4j.kotlin.Logging
 import java.io.File
-
-fun hdRunFile(widget: AbstractWidget?, path: String) = File("hdrun/${widget?.internalName ?: ""}", path)
 
 abstract class AbstractWidget(val internalName: String, val displayName: String) : Logging {
 
@@ -24,5 +22,5 @@ abstract class AbstractWidget(val internalName: String, val displayName: String)
 
     abstract fun createContentPane(): Pane
 
-    fun widgetFile(path: String) = hdRunFile(this, path)
+    fun widgetFile(path: String): File = hdRunFile("widgets/$internalName/$path")
 }

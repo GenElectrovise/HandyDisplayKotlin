@@ -4,9 +4,14 @@ import javafx.application.Platform
 import javafx.stage.Stage
 import org.apache.logging.log4j.kotlin.Logging
 import picocli.CommandLine
+import java.io.File
 
 lateinit var GUI: JavaFXGui
 lateinit var MOD_MANAGER: ModManager
+
+val runDir = File("hdrun/")
+
+fun hdRunFile(path: String) = File(runDir.absolutePath, path)
 
 fun main(args: Array<String>) {
 

@@ -3,7 +3,7 @@ package me.genel.handydisplay.widgets.weather
 import javafx.fxml.FXMLLoader
 import javafx.scene.layout.Pane
 import javafx.scene.layout.StackPane
-import me.genel.handydisplay.api.AbstractWidget
+import me.genel.handydisplay.core.AbstractWidget
 
 class WeatherWidget : AbstractWidget("weather", "Weather") {
     override fun createContentPane(): Pane {

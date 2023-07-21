@@ -8,7 +8,7 @@ dependencies {
     implementation handylibs.picocli
     implementation handylibs.classgraph
 
-    implementation project(':subprojects:widgets:widget-api')
+    implementation project(':handydisplay:mods:api')
 }
 
 application {

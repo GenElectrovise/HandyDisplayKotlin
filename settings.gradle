@@ -1,13 +1,13 @@
 rootProject.name = 'handy-display-kotlin'
 
-include 'subprojects:core'
-findProject(':subprojects:core')?.name = 'core'
+include 'handydisplay:core'
+findProject(':handydisplay:core')?.name = 'core'
 
-include 'subprojects:widgets:weather'
-findProject(':subprojects:widgets:weather')?.name = 'widget-weather'
+include 'handydisplay:mods:widget-weather'
+findProject(':handydisplay:mods:widget-weather')?.name = 'widget-weather'
 
-include 'subprojects:widgets:api'
-findProject(':subprojects:widgets:api')?.name = 'widget-api'
+include 'handydisplay:mods:api'
+findProject(':handydisplay:mods:api')?.name = 'api'
 
 dependencyResolutionManagement {
 

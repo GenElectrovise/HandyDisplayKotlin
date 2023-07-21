@@ -35,11 +35,11 @@ fun createOverlayPane(
 
 class OverlayController : Logging {
 
-    inner class WidgetNameChangeListener : ChangeListener<String> {
+    inner class UpdateTitleWhenWidgetNameChangedListener : ChangeListener<String> {
         override fun changed(observable: ObservableValue<out String>?, oldValue: String?, newValue: String?) =
-            triggerNow()
+            updateTitleText()
 
-        fun triggerNow() {
+        fun updateTitleText() {
             val oldVal = widgetNameText.text
             val newVal = GUI.currentWidget.displayName
             logger.debug("Updating widgetNameText.text from '$oldVal' to '$newVal'...")
@@ -64,7 +64,7 @@ class OverlayController : Logging {
                 Platform.runLater { datetimeText.text = LocalDateTime.now().format(dateTimeTextFormatter) }
         }, 0L, 1000L)
 
-        val widgetNameChangeListener = WidgetNameChangeListener()
+        val widgetNameChangeListener = UpdateTitleWhenWidgetNameChangedListener()
         GUI.currentWidgetName.addListener(widgetNameChangeListener)
         // widgetNameChangeListener.triggerNow()  //TODO triggerNow() works
         // GUI.instance.widgetManager.currentWidgetName.value = "none" //TODO Does currentWidgetName.value trigger change? (MUST ACTUALLY CHANGE VALUE)

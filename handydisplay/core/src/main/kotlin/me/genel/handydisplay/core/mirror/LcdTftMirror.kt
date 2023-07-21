@@ -1,6 +1,5 @@
 package me.genel.handydisplay.core.mirror
 
-import me.genel.handydisplay.core.mirror.AbstractMirror
 import org.apache.logging.log4j.kotlin.Logging
 import java.awt.Dimension
 

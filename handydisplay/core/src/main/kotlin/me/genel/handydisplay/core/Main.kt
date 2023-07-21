@@ -4,7 +4,6 @@ import javafx.application.Platform
 import javafx.stage.Stage
 import org.apache.logging.log4j.kotlin.Logging
 import picocli.CommandLine
-import java.io.File
 
 lateinit var GUI: JavaFXGui
 lateinit var MOD_MANAGER: ModManager

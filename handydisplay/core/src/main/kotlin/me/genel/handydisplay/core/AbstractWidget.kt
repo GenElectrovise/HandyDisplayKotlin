@@ -1,5 +1,6 @@
 package me.genel.handydisplay.core
 
+import javafx.fxml.FXMLLoader
 import javafx.scene.layout.Pane
 import org.apache.logging.log4j.kotlin.Logging
 import java.io.File
@@ -21,6 +22,20 @@ abstract class AbstractWidget(val internalName: String, val displayName: String)
     }
 
     abstract fun createContentPane(): Pane
+
+    fun <T> loadFXML(resourcePath: String, controller: Any): T {
+        try {
+            val url = this::class.java.classLoader.getResource(resourcePath)
+            val loader = FXMLLoader(url, null, null) { _ -> controller }
+            return loader.load()
+        } catch (cnf: ClassNotFoundException) {
+            logger.fatal("Error creating content for widget: $internalName")
+            logger.fatal("ClassNotFoundException *may* indicate that a controller was designated in the given FXML.")
+            logger.fatal("Remove this designation and try again.")
+            logger.fatal(cnf)
+            throw cnf
+        }
+    }
 
     fun widgetFile(path: String): File = hdRunFile("widgets/$internalName/$path")
 }

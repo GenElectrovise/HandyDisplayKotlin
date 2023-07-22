@@ -32,14 +32,14 @@ class ModManager : Logging {
     }
 
     private fun getModJarPaths(): Array<String> {
-        val widgetsFile = hdRunFile("mods")
-        if (!widgetsFile.exists()) {
-            logger.warn("Mods file ${widgetsFile.absolutePath} doesn't exist - creating...")
-            widgetsFile.mkdirs()
+        val modsFile = hdRunFile("mods")
+        if (!modsFile.exists()) {
+            logger.warn("Mods file ${modsFile.absolutePath} doesn't exist - creating...")
+            modsFile.mkdirs()
         }
-        logger.info("Loading mods from ${widgetsFile.absolutePath}")
+        logger.info("Loading mods from ${modsFile.absolutePath}")
 
-        return widgetsFile.listFiles(FileFilter { !it.isDirectory })!!.map { it.absolutePath }.toTypedArray()
+        return modsFile.listFiles(FileFilter { !it.isDirectory })!!.map { it.absolutePath }.toTypedArray()
     }
 
     private inline fun <reified T> findSubclassesOf(): List<T> {
@@ -48,10 +48,10 @@ class ModManager : Logging {
         val w = ArrayList<T>()
 
         scanResult.use { result ->
-            val widgetClassInfos = result.getSubclasses(T::class.java)
-            val classes = widgetClassInfos.loadClasses()
+            val classInfos = result.getSubclasses(T::class.java)
+            val classes = classInfos.loadClasses()
 
-            logger.info("Found ${widgetClassInfos.size} match${if (widgetClassInfos.size == 1) "" else "es"}!")
+            logger.info("Found ${classInfos.size} match${if (classInfos.size == 1) "" else "es"}!")
             classes.forEach { clazz ->
                 logger.debug("Instantiating match: ${clazz.name}")
                 val inst = clazz.getDeclaredConstructor().newInstance()
@@ -63,13 +63,18 @@ class ModManager : Logging {
     }
 
     private fun collectWidgetInstances(): Map<String, AbstractWidget> {
-        val w = findSubclassesOf<AbstractWidget>()
+        val list = findSubclassesOf<AbstractWidget>()
+        val map = HashMap<String, AbstractWidget>(list.size)
 
         logger.info("Found widgets:")
-        return w.associateBy {
-            logger.info(" + [${it.internalName}]=${it::class.simpleName}")
-            it.internalName
+
+        list.forEach { aw ->
+            val old = map.putIfAbsent(aw.internalName, aw)
+            if (old != null) throw IllegalStateException("Duplicate widgets of the name ${old.internalName}: ${aw.javaClass.name} & ${old.javaClass.name}")
+            logger.info(" + [${aw.internalName}]=${aw::class.simpleName}")
         }
+
+        return map
     }
 }
 

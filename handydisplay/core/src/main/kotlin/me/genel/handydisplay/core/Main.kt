@@ -2,6 +2,7 @@ package me.genel.handydisplay.core
 
 import javafx.application.Platform
 import javafx.stage.Stage
+import me.genel.handydisplay.core.mod.ModManager
 import org.apache.logging.log4j.kotlin.Logging
 import picocli.CommandLine
 import java.io.File

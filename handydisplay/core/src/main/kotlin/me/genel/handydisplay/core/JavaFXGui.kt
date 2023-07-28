@@ -10,6 +10,7 @@ import javafx.beans.value.ObservableValue
 import javafx.scene.Scene
 import javafx.scene.layout.StackPane
 import javafx.stage.Stage
+import me.genel.handydisplay.core.mod.AbstractMod
 import org.apache.logging.log4j.kotlin.Logging
 
 val WIDTH: Double = 480.0
@@ -28,7 +29,7 @@ class JavaFXGui : Application(), Logging {
             }
             field = value
         }
-    val currentWidget: `AbstractMod`
+    val currentWidget: AbstractMod
         get() {
             val name = currentWidgetName.value
             return MOD_MANAGER.mods[name] ?: throw NoSuchElementException("No widget present with the name $name")
@@ -78,7 +79,7 @@ class JavaFXGui : Application(), Logging {
         return o
     }
 
-    fun showWidget(widget: `AbstractMod`) {
+    fun showWidget(widget: AbstractMod) {
         val pane = widget.createContentPane()
 
         if (contentStack.children.size > 1)

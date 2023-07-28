@@ -2,7 +2,6 @@ package me.genel.handydisplay.widgets.weather
 
 import javafx.application.Platform
 import javafx.fxml.FXML
-import javafx.scene.control.Label
 import javafx.scene.layout.HBox
 import javafx.stage.WindowEvent
 import org.apache.logging.log4j.kotlin.Logging

@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader
 import javafx.scene.control.Label
 import javafx.scene.layout.Pane
 import javafx.scene.layout.StackPane
+import me.genel.handydisplay.core.mod.AbstractMod
 import org.apache.logging.log4j.kotlin.Logging
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -25,7 +26,7 @@ fun createOverlayPane(
     cycleWidgetsLeft = left
     cycleWidgetsRight = right
 
-    val url = `AbstractMod`::class.java.classLoader.getResource("fxml/overlay.fxml")
+    val url = AbstractMod::class.java.classLoader.getResource("fxml/overlay.fxml")
     val loader = FXMLLoader(url)
     return loader.load<StackPane>()
 }

@@ -1,13 +1,19 @@
-package me.genel.handydisplay.core
+package me.genel.handydisplay.core.mod
 
 import io.github.classgraph.ClassGraph
 import io.github.classgraph.ScanResult
+import me.genel.handydisplay.core.hdRunFile
 import nonapi.io.github.classgraph.utils.JarUtils
 import org.apache.logging.log4j.kotlin.Logging
 import java.io.File
 import java.io.FileFilter
 import java.net.URLClassLoader
+import kotlin.system.exitProcess
 
+/**
+ * Loads mods from disk at application startup and maintains instances of their main classes (any subclass of `AbstractMod`). Order of mod
+ * loading cannot be guaranteed.
+ */
 class ModManager : Logging {
 
     private val scanResult: ScanResult
@@ -16,6 +22,7 @@ class ModManager : Logging {
     init {
         scanResult = scanClasspathAndJars()
         mods = collectModInstances()
+        finishModLoading()
     }
 
     private fun scanClasspathAndJars(): ScanResult {
@@ -25,10 +32,7 @@ class ModManager : Logging {
 
         val classLoader = URLClassLoader(jars.map { File(it).toURI().toURL() }.toTypedArray())
 
-        return ClassGraph()
-            .enableClassInfo()
-            .addClassLoader(classLoader)
-            .scan()
+        return ClassGraph().enableClassInfo().addClassLoader(classLoader).scan()
     }
 
     private fun getModJarPaths(): Array<String> {
@@ -63,9 +67,7 @@ class ModManager : Logging {
 
         scanResult.use { result ->
             val classInfoList = result.getSubclasses(AbstractMod::class.java)
-
-            @Suppress("UNCHECKED_CAST")
-            return classInfoList.loadClasses() as List<Class<AbstractMod>>
+            @Suppress("UNCHECKED_CAST") return classInfoList.loadClasses() as List<Class<AbstractMod>>
         }
     }
 
@@ -73,12 +75,42 @@ class ModManager : Logging {
         classes.map { clazz -> instantiateModClass(clazz) }
 
     private fun instantiateModClass(clazz: Class<AbstractMod>): AbstractMod {
+        var mie: ModInstantiationException? = null
+
         try {
-            return clazz.getDeclaredConstructor().newInstance()
-        } catch (nsm: NoSuchMethodError) {
-            throw nsm
-        } catch (se: SecurityException) {
-            throw se
+            val cons = clazz.getDeclaredConstructor()
+
+            mie = try {
+                return cons.newInstance()
+            } catch (acc: IllegalAccessException) {
+                ModInstantiationException("Found constructor, but unable to access it.", clazz, cons, acc)
+            } catch (arg: IllegalArgumentException) {
+                ModInstantiationException("Cannot invoke constructor with 0 arguments.", clazz, cons, arg)
+            } catch (ins: InstantiationException) {
+                ModInstantiationException("newInstance() failed. Unable to instantiate.", clazz, cons, ins)
+            } catch (ini: ExceptionInInitializerError) {
+                ModInstantiationException("Exception occurred inside constructor.", clazz, cons, ini)
+            }
+
+        } catch (nsm: NoSuchMethodException) {
+            mie = ModInstantiationException("No public 0-argument constructor found.", clazz, null, nsm)
+        } catch (sec: SecurityException) {
+            mie = ModInstantiationException("A security manager prohibited searching for the mod constructor.", clazz, null, sec)
+        } finally {
+            if (mie != null) {
+                logger.fatal(mie)
+                throw mie
+            }
+        }
+
+        logger.error("How did I get here?")
+        exitProcess(100)
+    }
+
+    private fun finishModLoading() {
+        mods.forEach {
+            logger.debug(" # [${it.key}]")
+            it.value.finishModLoading()
         }
     }
 }

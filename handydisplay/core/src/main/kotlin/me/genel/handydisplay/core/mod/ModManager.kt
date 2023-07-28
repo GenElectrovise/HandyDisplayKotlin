@@ -109,7 +109,7 @@ class ModManager : Logging {
 
     private fun finishModLoading() {
         mods.forEach {
-            logger.debug(" # [${it.key}]")
+            logger.info("Finishing loading [${it.key}]")
             it.value.finishModLoading()
         }
     }

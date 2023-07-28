@@ -63,7 +63,9 @@ class ModManager : Logging {
 
         scanResult.use { result ->
             val classInfoList = result.getSubclasses(AbstractMod::class.java)
-            return classInfoList.loadClasses() as List<Class<AbstractMod>>//TODO Unchecked abstractmod class cast
+
+            @Suppress("UNCHECKED_CAST")
+            return classInfoList.loadClasses() as List<Class<AbstractMod>>
         }
     }
 

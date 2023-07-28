@@ -5,7 +5,13 @@ import javafx.scene.layout.Pane
 import org.apache.logging.log4j.kotlin.Logging
 import java.io.File
 
-abstract class AbstractWidget(val internalName: String, val displayName: String) : Logging {
+/**
+ * The class which the core will search for during mod loading: children of this class will be automatically
+ * instantiated and stored as singletons by the ModManager, indexed by their internal name.
+ *
+ * Subclasses should declare a zero-argument constructor.
+ */
+abstract class AbstractMod(val internalName: String, val displayName: String) : Logging {
 
     init {
         // Internal

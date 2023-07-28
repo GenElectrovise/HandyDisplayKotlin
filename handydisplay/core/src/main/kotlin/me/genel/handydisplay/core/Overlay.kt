@@ -25,7 +25,7 @@ fun createOverlayPane(
     cycleWidgetsLeft = left
     cycleWidgetsRight = right
 
-    val url = AbstractWidget::class.java.classLoader.getResource("fxml/overlay.fxml")
+    val url = `AbstractMod`::class.java.classLoader.getResource("fxml/overlay.fxml")
     val loader = FXMLLoader(url)
     return loader.load<StackPane>()
 }

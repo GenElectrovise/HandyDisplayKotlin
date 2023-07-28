@@ -11,11 +11,11 @@ import java.net.URLClassLoader
 class ModManager : Logging {
 
     private val scanResult: ScanResult
-    val widgets: Map<String, AbstractWidget>
+    val mods: Map<String, AbstractMod>
 
     init {
         scanResult = scanClasspathAndJars()
-        widgets = collectWidgetInstances()
+        mods = collectModInstances()
     }
 
     private fun scanClasspathAndJars(): ScanResult {
@@ -42,39 +42,42 @@ class ModManager : Logging {
         return modsFile.listFiles(FileFilter { !it.isDirectory })!!.map { it.absolutePath }.toTypedArray()
     }
 
-    private inline fun <reified T> findSubclassesOf(): List<T> {
-        logger.debug("Searching for subclasses of ${T::class.qualifiedName}")
-
-        val w = ArrayList<T>()
-
-        scanResult.use { result ->
-            val classInfos = result.getSubclasses(T::class.java)
-            val classes = classInfos.loadClasses()
-
-            logger.info("Found ${classInfos.size} match${if (classInfos.size == 1) "" else "es"}!")
-            classes.forEach { clazz ->
-                logger.debug("Instantiating match: ${clazz.name}")
-                val inst = clazz.getDeclaredConstructor().newInstance()
-                w.add(inst as T)
-            }
-        }
-
-        return w
-    }
-
-    private fun collectWidgetInstances(): Map<String, AbstractWidget> {
-        val list = findSubclassesOf<AbstractWidget>()
-        val map = HashMap<String, AbstractWidget>(list.size)
+    private fun collectModInstances(): Map<String, AbstractMod> {
+        val subclasses = findModSubclasses()
+        val instances = createModInstances(subclasses)
+        val map = HashMap<String, AbstractMod>(subclasses.size)
 
         logger.info("Found widgets:")
 
-        list.forEach { aw ->
+        instances.forEach { aw ->
             val old = map.putIfAbsent(aw.internalName, aw)
             if (old != null) throw IllegalStateException("Duplicate widgets of the name ${old.internalName}: ${aw.javaClass.name} & ${old.javaClass.name}")
             logger.info(" + [${aw.internalName}]=${aw::class.simpleName}")
         }
 
         return map
+    }
+
+    private fun findModSubclasses(): List<Class<AbstractMod>> {
+        logger.debug("Searching for subclasses of ${AbstractMod::class.qualifiedName}")
+
+        scanResult.use { result ->
+            val classInfoList = result.getSubclasses(AbstractMod::class.java)
+            return classInfoList.loadClasses() as List<Class<AbstractMod>>//TODO Unchecked abstractmod class cast
+        }
+    }
+
+    private fun createModInstances(classes: List<Class<AbstractMod>>) =
+        classes.map { clazz -> instantiateModClass(clazz) }
+
+    private fun instantiateModClass(clazz: Class<AbstractMod>): AbstractMod {
+        try {
+            return clazz.getDeclaredConstructor().newInstance()
+        } catch (nsm: NoSuchMethodError) {
+            throw nsm
+        } catch (se: SecurityException) {
+            throw se
+        }
     }
 }
 

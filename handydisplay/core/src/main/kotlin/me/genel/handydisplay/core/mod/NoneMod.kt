@@ -16,4 +16,6 @@ class NoneMod : AbstractMod("none", "None"), Logging {
 
         return box
     }
+
+    override fun shutdownNow() {}
 }

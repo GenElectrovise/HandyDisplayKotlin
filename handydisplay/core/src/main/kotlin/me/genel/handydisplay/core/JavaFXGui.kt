@@ -18,7 +18,6 @@ val HEIGHT: Double = 320.0
 
 class JavaFXGui : Application(), Logging {
 
-    private lateinit var rootStage: Stage
     private lateinit var contentStack: StackPane
     private val order: Set<String>
 
@@ -44,11 +43,19 @@ class JavaFXGui : Application(), Logging {
     }
 
     override fun start(primaryStage: Stage?) {
-        rootStage = primaryStage ?: throw NullPointerException("Cannot create GUI with null primaryStage!")
+        if (primaryStage == null) throw NullPointerException("Cannot create GUI with null primaryStage!")
+
         contentStack = StackPane()
 
-        rootStage.scene = Scene(contentStack, WIDTH, HEIGHT)
-        rootStage.show()
+        Platform.setImplicitExit(true)
+        primaryStage.setOnCloseRequest { _ ->
+            logger.fatal("Close requested, shutting down platform...")
+            println("Close requested, shutting down platform...")
+            Platform.exit()
+        }
+
+        primaryStage.scene = Scene(contentStack, WIDTH, HEIGHT)
+        primaryStage.show()
 
         val overlay = createOverlayPane(
             { cycleWidgets(false) },
@@ -57,6 +64,10 @@ class JavaFXGui : Application(), Logging {
 
         showWidget(currentWidget)
         contentStack.children.add(overlay)
+    }
+
+    override fun stop() {
+        super.stop()
     }
 
     private fun checkSupported() {

@@ -5,7 +5,12 @@ import me.genel.handydisplay.core.mod.AbstractMod
 
 class WeatherMod() : AbstractMod("weather", "Weather") {
 
+    lateinit var controller: WeatherController
+
     override fun finishModLoading() = logger.debug("WeatherMod loading done!")
 
-    override fun createContentPane(): Pane = loadFXML("fxml/weather.fxml", WeatherController())
+    override fun createContentPane(): Pane = loadFXML("fxml/weather.fxml")
+
+    override fun shutdownNow() {
+    }
 }

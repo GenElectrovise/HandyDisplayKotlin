@@ -44,12 +44,29 @@ abstract class AbstractMod(val internalName: String, val displayName: String) : 
     abstract fun createContentPane(): Pane
 
     /**
-     * Convenience method to load a JavaFX pane of type `T` from an FXML file located at the given path within the JAR containing this class.
+     * Called when mods must shut down immediately because the application wants to close. This must terminate any rogue threads or executors!
      */
-    fun <T> loadFXML(resourcePath: String, controller: Any): T {
+    abstract fun shutdownNow()
+
+    //TODO Implement shutdownNow
+
+    /**
+     * Convenience method to load a JavaFX pane of type `T` from an FXML file located at the given path within the JAR containing this class. This
+     * method avoids nasty issues with ClassLoaders, or JavaFX being unable to find a controller class.
+     *
+     * This may or may not work if the controller class was loaded by a different ClassLoader. This is dependant on whether the parent ClassLoader
+     * will search its siblings/parents/children if it does not find a class. Fortunately, all mod JARs in this app are loaded by the same
+     * URLClassLoader, whose parent is the main AppClassLoader (or equivalent in other environments), so controllers from other mods should be
+     * perfectly accessible.
+     *
+     * TODO Check whether controllers within other ClassLoaders can be used.
+     */
+    fun <T> loadFXML(resourcePath: String): T {
         try {
             val url = this::class.java.classLoader.getResource(resourcePath)
-            val loader = FXMLLoader(url, null, null) { _ -> controller }
+            val loader = FXMLLoader()
+            loader.location = url
+            loader.classLoader = javaClass.classLoader  // This line is very, very important!!
             return loader.load()
         } catch (cnf: ClassNotFoundException) {
             logger.fatal("Error creating content for widget: $internalName")

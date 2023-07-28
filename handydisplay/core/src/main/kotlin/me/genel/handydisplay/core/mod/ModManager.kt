@@ -30,7 +30,11 @@ class ModManager : Logging {
         logger.info("Found ${jars.size} mod .JAR files:")
         jars.forEach { logger.info(" : ${JarUtils.leafName(it)} - $it") }
 
-        val classLoader = URLClassLoader(jars.map { File(it).toURI().toURL() }.toTypedArray())
+        val classLoader = URLClassLoader(
+            "modJarURLClassLoader",
+            jars.map { File(it).toURI().toURL() }.toTypedArray(),
+            javaClass.classLoader
+        )
 
         return ClassGraph().enableClassInfo().addClassLoader(classLoader).scan()
     }

@@ -36,6 +36,7 @@ dependencyResolutionManagement {
             library('kotlinx-json', 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1')
             library('picocli', 'info.picocli:picocli:4.7.4')
             library('classgraph', 'io.github.classgraph:classgraph:4.8.161')
+            library('hoplite', 'com.sksamuel.hoplite:hoplite-core:2.7.4')
             // Raspberry Pi
             library('slf4j-api', 'org.slf4j:slf4j-api:2.0.5')
             library('slf4j-simple', 'org.slf4j:slf4j-simple:2.0.5')

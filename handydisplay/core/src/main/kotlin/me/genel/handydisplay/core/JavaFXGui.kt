@@ -20,7 +20,7 @@ val HEIGHT: Double = 320.0
 class JavaFXGui : Application(), Logging {
 
     private lateinit var contentStack: StackPane
-    private val order: Set<String>
+    private val guiConfig: GuiConfigModel = fileConfig(hdRunFile(null, "gui.properties"))
 
     var currentWidgetName: StringProperty = SimpleStringProperty("!@£$%^&*()")
         set(value) {
@@ -37,8 +37,8 @@ class JavaFXGui : Application(), Logging {
 
     init {
         checkSupported()
-        order = createOrder()
-        currentWidgetName.value = order.iterator().next()
+        validateOrder()
+        currentWidgetName.value = guiConfig.order.iterator().next()
 
         currentWidgetName.addListener(ShowNewWidgetOnWidgetNameChangedListener())
     }
@@ -82,13 +82,11 @@ class JavaFXGui : Application(), Logging {
         }
     }
 
-    private fun createOrder(): Set<String> {
-        val o = setOf("none", "weather")  //TODO Load order from disk
-        o.forEach {
+    private fun validateOrder() {
+        guiConfig.order.forEach {
             if (get<AbstractPlugin>(it) == null)
-                throw NoSuchElementException("There is no appropriately named widget to bind the name $it to in the given order: $o")
+                throw NoSuchElementException("There is no appropriately named widget to bind the name $it to in the given order: ${guiConfig.order}")
         }
-        return o
     }
 
     fun showWidget(widget: AbstractWidget) {
@@ -103,13 +101,13 @@ class JavaFXGui : Application(), Logging {
     fun cycleWidgets(forwards: Boolean) {
         logger.info("Cycling widgets " + (if (forwards) "+/forwards/right" else "-/backwards/left"))
 
-        val oldIndex = order.indexOf(currentWidgetName.value)
+        val oldIndex = guiConfig.order.indexOf(currentWidgetName.value)
         var newIndex = if (forwards) oldIndex + 1 else oldIndex - 1
 
-        if (newIndex < 0) newIndex = order.size - 1
-        else if (newIndex >= order.size) newIndex = 0
+        if (newIndex < 0) newIndex = guiConfig.order.size - 1
+        else if (newIndex >= guiConfig.order.size) newIndex = 0
 
-        currentWidgetName.value = order.elementAt(newIndex)
+        currentWidgetName.value = guiConfig.order.elementAt(newIndex)
     }
 
     inner class ShowNewWidgetOnWidgetNameChangedListener : ChangeListener<String> {
@@ -117,5 +115,9 @@ class JavaFXGui : Application(), Logging {
             showWidget(currentWidget)
         }
     }
+
+    data class GuiConfigModel(
+        val order: Set<String>
+    )
 
 }

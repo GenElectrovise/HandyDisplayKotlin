@@ -1,9 +1,7 @@
 package me.genel.handydisplay.core.plugin
 
 import me.genel.handydisplay.core.IRegisterable
-import me.genel.handydisplay.core.hdRunFile
 import org.apache.logging.log4j.kotlin.Logging
-import java.io.File
 
 /**
  * The class which the core will search for during plugin loading: children of this class are IRegisterables and will be automatically instantiated
@@ -26,10 +24,4 @@ abstract class AbstractPlugin() : IRegisterable<AbstractPlugin>, Logging {
     abstract fun shutdownNow()
 
     //TODO Implement shutdownNow
-
-    /**
-     * Convenience method to get a file on the disk within the `hdrun/plugins/${internalName}` directory. Any time a plugin must access a file specific
-     * to itself should be done through this method.
-     */
-    fun pluginFile(path: String): File = hdRunFile("plugins/$registryName/$path")
 }

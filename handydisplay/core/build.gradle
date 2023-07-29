@@ -8,6 +8,7 @@ plugins {
 dependencies {
     implementation handylibs.picocli
     implementation handylibs.classgraph
+    implementation handylibs.hoplite
 }
 
 application {

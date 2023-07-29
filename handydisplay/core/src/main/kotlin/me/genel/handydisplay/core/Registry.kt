@@ -1,27 +1,26 @@
 package me.genel.handydisplay.core
 
-import org.slf4j.LoggerFactory
 import kotlin.reflect.KClass
 
-val entries: MutableMap<KClass<out IRegisterable<*>>, MutableMap<String, IRegisterable<*>>> = LinkedHashMap()
-val logger = org.apache.logging.log4j.kotlin.logger("me.genel.handydisplay.core.Registry")
+val registryEntries: MutableMap<KClass<out IRegisterable<*>>, MutableMap<String, IRegisterable<*>>> = LinkedHashMap()
+val registryLogger = org.apache.logging.log4j.kotlin.logger("me.genel.handydisplay.core.Registry")
 
 inline fun <reified R : IRegisterable<R>> register(item: R) {
     assertRegistryNameValid(item.registryName)
 
-    var map = entries[R::class]
+    var map = registryEntries[R::class]
     if (map == null) {
         map = LinkedHashMap()
-        entries[R::class] = map
+        registryEntries[R::class] = map
     }
     val old = map[item.registryName]
     if (old != null) {
         val ex = DuplicateRegistrationException(R::class, item.registryName, old, item)
-        logger.fatal(ex)
+        registryLogger.fatal(ex)
         throw ex
     }
 
-    logger.debug("Registering ${item.registryName}=<${R::class.simpleName}>${item.javaClass.name}")
+    registryLogger.debug("Registering ${item.registryName}=<${R::class.simpleName}>${item.javaClass.name}")
     map[item.registryName] = item
 }
 
@@ -30,13 +29,13 @@ inline fun <reified R : IRegisterable<R>> registerAll(items: Set<R>) {
 }
 
 inline fun <reified R : IRegisterable<R>> get(name: String): R? {
-    return entries[R::class]
+    return registryEntries[R::class]
         ?.get(name) as R?
 }
 
 @Suppress("UNCHECKED_CAST")
 inline fun <reified R : IRegisterable<R>> getAll(): Set<R>? {
-    return entries[R::class]
+    return registryEntries[R::class]
         ?.toList()
         ?.map { it.second }
         ?.toSet() as Set<R>?

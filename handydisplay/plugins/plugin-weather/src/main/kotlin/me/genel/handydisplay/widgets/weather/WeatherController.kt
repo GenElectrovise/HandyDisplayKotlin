@@ -8,6 +8,8 @@ import java.util.*
 
 class WeatherController : Logging {
 
+    var config: WeatherPlugin.ConfigModel? = null
+
     @FXML
     lateinit var containerHBox: HBox
 
@@ -17,7 +19,7 @@ class WeatherController : Logging {
             logger.debug("Starting weather controller...")
 
             val datetimeTimer = Timer()
-            datetimeTimer.scheduleAtFixedRate(object : TimerTask() {
+            datetimeTimer.scheduleAtFixedRate(object : TimerTask() { //TODO dispose of weather executor on program closing
                 override fun run() = Platform.runLater {
                     println("Not updating datetime yet :(")
                 }

@@ -1,2 +1,2 @@
 println("Creating hdrun directories...")
-mkdir('hdrun/mods')
+mkdir('hdrun/plugins')

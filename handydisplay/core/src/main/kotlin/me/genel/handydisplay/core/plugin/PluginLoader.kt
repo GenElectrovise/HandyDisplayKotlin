@@ -12,11 +12,12 @@ import java.io.FileFilter
 import java.net.URLClassLoader
 import kotlin.system.exitProcess
 
+
 /**
  * Loads plugins from disk at application startup and maintains instances of their main classes (any subclass of `AbstractPlugin`). Order of plugin
  * loading cannot be guaranteed.
  */
-class PluginManager : Logging {
+class PluginLoader : Logging {
 
     private val scanResult: ScanResult
 
@@ -42,7 +43,7 @@ class PluginManager : Logging {
     }
 
     private fun getPluginJarPaths(): Array<String> {
-        val pluginsFile = hdRunFile("plugins")
+        val pluginsFile = hdRunFile(null, "plugins")
         if (!pluginsFile.exists()) {
             logger.warn("Plugins file ${pluginsFile.absolutePath} doesn't exist - creating...")
             pluginsFile.mkdirs()

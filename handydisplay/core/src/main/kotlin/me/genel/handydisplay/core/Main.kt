@@ -2,17 +2,13 @@ package me.genel.handydisplay.core
 
 import javafx.application.Platform
 import javafx.stage.Stage
-import me.genel.handydisplay.core.plugin.PluginManager
+import me.genel.handydisplay.core.plugin.PluginLoader
 import org.apache.logging.log4j.kotlin.Logging
 import picocli.CommandLine
-import java.io.File
 
+lateinit var CORE_CONFIG: CoreConfigModel
+lateinit var PLUGIN_LOADER: PluginLoader
 lateinit var GUI: JavaFXGui
-lateinit var MOD_MANAGER: PluginManager
-
-val runDir = File("hdrun/")
-
-fun hdRunFile(path: String) = File(runDir.absolutePath, path)
 
 fun main(args: Array<String>) {
 
@@ -52,10 +48,8 @@ class RunCommand : Runnable, Logging {
         val map = mapOf("mirror" to mirrorName, "headful" to headful)
         logger.debug("Parsed arguments: $map")
 
-        // val jsonContent = optionsFile.readText()
-        // val options = Json.decodeFromString<Options>(jsonContent)
-
-        MOD_MANAGER = PluginManager()
+        PLUGIN_LOADER = PluginLoader()
+        CORE_CONFIG = fileConfig(hdRunFile(null, "core.properties"))
         GUI = JavaFXGui()
 
         GUI.init()
@@ -65,3 +59,8 @@ class RunCommand : Runnable, Logging {
         }
     }
 }
+
+data class CoreConfigModel(
+    val key: List<String>,
+    val yay: String
+)

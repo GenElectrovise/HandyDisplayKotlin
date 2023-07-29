@@ -5,7 +5,7 @@ import javafx.scene.layout.Pane
 import me.genel.handydisplay.core.IRegisterable
 import org.apache.logging.log4j.kotlin.Logging
 
-abstract class AbstractWidget(override val registryName: String, val displayName: String): IRegisterable<AbstractWidget>, Logging {
+abstract class AbstractWidget(override val registryName: String, val displayName: String) : IRegisterable<AbstractWidget>, Logging {
 
     init {
         // Display
@@ -32,13 +32,17 @@ abstract class AbstractWidget(override val registryName: String, val displayName
      *
      * TODO Check whether controllers within other ClassLoaders can be used.
      */
-    fun <T> loadFXML(resourcePath: String): T {
+    fun <C, L> loadFXML(resourcePath: String): FXMLLoadResult<C, L> {
         try {
             val url = this::class.java.classLoader.getResource(resourcePath)
             val loader = FXMLLoader()
             loader.location = url
             loader.classLoader = javaClass.classLoader  // This line is very, very important!!
-            return loader.load()
+
+            return FXMLLoadResult(
+                loader.getController(),
+                loader.load()
+            )
         } catch (cnf: ClassNotFoundException) {
             logger.fatal("Error creating content for widget: $registryName")
             logger.fatal("ClassNotFoundException *may* indicate that a controller was designated in the given FXML.")
@@ -47,4 +51,9 @@ abstract class AbstractWidget(override val registryName: String, val displayName
             throw cnf
         }
     }
+
+    data class FXMLLoadResult<C, T>(
+        val controller: C,
+        val rootComponent: T
+    )
 }

@@ -16,7 +16,7 @@ class NonePlugin : AbstractPlugin(), Logging {
     override val registryName: String = "none"
 }
 
-class NoneWidget: AbstractWidget("none", "None") {
+class NoneWidget : AbstractWidget("none", "None") {
 
     override fun createContentPane(): Pane {
         val box = VBox()

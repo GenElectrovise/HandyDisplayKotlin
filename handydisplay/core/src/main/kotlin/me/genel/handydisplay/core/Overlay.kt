@@ -26,7 +26,7 @@ fun createOverlayPane(
     cycleWidgetsLeft = left
     cycleWidgetsRight = right
 
-    val url = AbstractPlugin::class.java.classLoader.getResource("fxml/overlay.fxml")
+    val url = JavaFXGui::class.java.classLoader.getResource("fxml/overlay.fxml")
     val loader = FXMLLoader(url)
     return loader.load<StackPane>()
 }

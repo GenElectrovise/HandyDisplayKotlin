@@ -11,6 +11,7 @@ import javafx.scene.Scene
 import javafx.scene.layout.StackPane
 import javafx.stage.Stage
 import me.genel.handydisplay.core.plugin.AbstractPlugin
+import me.genel.handydisplay.core.plugin.AbstractWidget
 import org.apache.logging.log4j.kotlin.Logging
 
 val WIDTH: Double = 480.0
@@ -23,15 +24,15 @@ class JavaFXGui : Application(), Logging {
 
     var currentWidgetName: StringProperty = SimpleStringProperty("!@£$%^&*()")
         set(value) {
-            if (get<AbstractPlugin>(value.value) == null) {
+            if (get<AbstractWidget>(value.value) == null) {
                 throw NoSuchElementException("currentWidgetName cannot take the value $value because there is no widget associated with the name $value.")
             }
             field = value
         }
-    val currentWidget: AbstractPlugin
+    val currentWidget: AbstractWidget
         get() {
             val name = currentWidgetName.value
-            return get<AbstractPlugin>(name) ?: throw NoSuchElementException("No widget present with the name $name")
+            return get<AbstractWidget>(name) ?: throw NoSuchElementException("No widget present with the name $name")
         }
 
     init {
@@ -90,7 +91,7 @@ class JavaFXGui : Application(), Logging {
         return o
     }
 
-    fun showWidget(widget: AbstractPlugin) {
+    fun showWidget(widget: AbstractWidget) {
         val pane = widget.createContentPane()
 
         if (contentStack.children.size > 1)

@@ -2,13 +2,13 @@ package me.genel.handydisplay.core
 
 import javafx.application.Platform
 import javafx.stage.Stage
-import me.genel.handydisplay.core.mod.ModManager
+import me.genel.handydisplay.core.plugin.PluginManager
 import org.apache.logging.log4j.kotlin.Logging
 import picocli.CommandLine
 import java.io.File
 
 lateinit var GUI: JavaFXGui
-lateinit var MOD_MANAGER: ModManager
+lateinit var MOD_MANAGER: PluginManager
 
 val runDir = File("hdrun/")
 
@@ -55,7 +55,7 @@ class RunCommand : Runnable, Logging {
         // val jsonContent = optionsFile.readText()
         // val options = Json.decodeFromString<Options>(jsonContent)
 
-        MOD_MANAGER = ModManager()
+        MOD_MANAGER = PluginManager()
         GUI = JavaFXGui()
 
         GUI.init()

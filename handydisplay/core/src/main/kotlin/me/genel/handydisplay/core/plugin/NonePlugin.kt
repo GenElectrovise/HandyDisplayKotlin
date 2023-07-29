@@ -1,12 +1,12 @@
-package me.genel.handydisplay.core.mod
+package me.genel.handydisplay.core.plugin
 
 import javafx.scene.control.Label
 import javafx.scene.layout.Pane
 import javafx.scene.layout.VBox
 import org.apache.logging.log4j.kotlin.Logging
 
-class NoneMod : AbstractMod("none", "None"), Logging {
-    override fun finishModLoading() {}
+class NonePlugin : AbstractPlugin( "None"), Logging {
+    override fun finishPluginLoading() {}
 
     override fun createContentPane(): Pane {
         val box = VBox()
@@ -18,4 +18,6 @@ class NoneMod : AbstractMod("none", "None"), Logging {
     }
 
     override fun shutdownNow() {}
+
+    override val registryName: String = "none"
 }

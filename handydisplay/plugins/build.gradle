@@ -1,0 +1,12 @@
+subprojects {
+    tasks.register('copyJarToCoreHdrunPlugins', Copy) {
+        var name = project.name
+        var file = project(':handydisplay:core').file('hdrun/plugins/')
+        println("Copying JAR for mod $name into $file...")
+
+        from jar
+        into file
+    }
+
+    jar.finalizedBy(copyJarToCoreHdrunPlugins)
+}

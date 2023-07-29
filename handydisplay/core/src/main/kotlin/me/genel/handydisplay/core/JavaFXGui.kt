@@ -10,7 +10,7 @@ import javafx.beans.value.ObservableValue
 import javafx.scene.Scene
 import javafx.scene.layout.StackPane
 import javafx.stage.Stage
-import me.genel.handydisplay.core.mod.AbstractMod
+import me.genel.handydisplay.core.plugin.AbstractPlugin
 import org.apache.logging.log4j.kotlin.Logging
 
 val WIDTH: Double = 480.0
@@ -21,17 +21,17 @@ class JavaFXGui : Application(), Logging {
     private lateinit var contentStack: StackPane
     private val order: Set<String>
 
-    var currentWidgetName: StringProperty = SimpleStringProperty("")
+    var currentWidgetName: StringProperty = SimpleStringProperty("!@£$%^&*()")
         set(value) {
-            if (!MOD_MANAGER.mods.containsKey(value.value)) {
+            if (get<AbstractPlugin>(value.value) == null) {
                 throw NoSuchElementException("currentWidgetName cannot take the value $value because there is no widget associated with the name $value.")
             }
             field = value
         }
-    val currentWidget: AbstractMod
+    val currentWidget: AbstractPlugin
         get() {
             val name = currentWidgetName.value
-            return MOD_MANAGER.mods[name] ?: throw NoSuchElementException("No widget present with the name $name")
+            return get<AbstractPlugin>(name) ?: throw NoSuchElementException("No widget present with the name $name")
         }
 
     init {
@@ -84,13 +84,13 @@ class JavaFXGui : Application(), Logging {
     private fun createOrder(): Set<String> {
         val o = setOf("none", "weather")  //TODO Load order from disk
         o.forEach {
-            if (!MOD_MANAGER.mods.containsKey(it))
+            if (get<AbstractPlugin>(it) == null)
                 throw NoSuchElementException("There is no appropriately named widget to bind the name $it to in the given order: $o")
         }
         return o
     }
 
-    fun showWidget(widget: AbstractMod) {
+    fun showWidget(widget: AbstractPlugin) {
         val pane = widget.createContentPane()
 
         if (contentStack.children.size > 1)

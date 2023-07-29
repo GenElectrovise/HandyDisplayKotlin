@@ -1,4 +1,4 @@
-package me.genel.handydisplay.core.mod
+package me.genel.handydisplay.core.plugin
 
 import java.lang.reflect.Constructor
 import java.lang.reflect.Modifier
@@ -7,8 +7,8 @@ import java.lang.reflect.Modifier
  * Typically thrown by the `ModManager` while it is creating instances of mods' main classes, hence the presence of a `Constructor<AbstractMod>?` in the
  * constructor.
  */
-class ModInstantiationException(
-    message: String, clazz: Class<AbstractMod>, cons: Constructor<AbstractMod>?, cause: Throwable
+class PluginInstantiationException(
+    message: String, clazz: Class<AbstractPlugin>, cons: Constructor<AbstractPlugin>?, cause: Throwable
 ) : Exception(
     StringBuilder()
         .appendLine(message)

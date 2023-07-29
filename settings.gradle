@@ -3,8 +3,8 @@ rootProject.name = 'handy-display-kotlin'
 include 'handydisplay:core'
 findProject(':handydisplay:core')?.name = 'core'
 
-include 'handydisplay:mods:widget-weather'
-findProject(':handydisplay:mods:widget-weather')?.name = 'widget-weather'
+include 'handydisplay:plugins:plugin-weather'
+findProject(':handydisplay:plugins:plugin-weather')?.name = 'plugin-weather'
 
 dependencyResolutionManagement {
 

@@ -8,7 +8,7 @@ import javafx.fxml.FXMLLoader
 import javafx.scene.control.Label
 import javafx.scene.layout.Pane
 import javafx.scene.layout.StackPane
-import me.genel.handydisplay.core.mod.AbstractMod
+import me.genel.handydisplay.core.plugin.AbstractPlugin
 import org.apache.logging.log4j.kotlin.Logging
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -26,7 +26,7 @@ fun createOverlayPane(
     cycleWidgetsLeft = left
     cycleWidgetsRight = right
 
-    val url = AbstractMod::class.java.classLoader.getResource("fxml/overlay.fxml")
+    val url = AbstractPlugin::class.java.classLoader.getResource("fxml/overlay.fxml")
     val loader = FXMLLoader(url)
     return loader.load<StackPane>()
 }
@@ -37,7 +37,7 @@ class OverlayController : Logging {
         override fun changed(observable: ObservableValue<out String>?, oldValue: String?, newValue: String?) =
             updateTitleText()
 
-        fun updateTitleText() {
+        private fun updateTitleText() {
             val oldVal = widgetNameText.text
             val newVal = GUI.currentWidget.displayName
             logger.debug("Updating widgetNameText.text from '$oldVal' to '$newVal'...")

@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader
 import javafx.scene.layout.Pane
 import me.genel.handydisplay.core.IRegisterable
 import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 abstract class AbstractWidget(override val registryName: String, val displayName: String) : IRegisterable<AbstractWidget>, Logging {
 
@@ -17,9 +18,35 @@ abstract class AbstractWidget(override val registryName: String, val displayName
 
     /**
      * Called when the visible widget switches to that of this plugin. Should create a new instance each time, but can achieve data persistence by
-     * loading from the disk.
+     * loading from the disk. To perform logic at creation or close time, it is recommended to use `@FXML` annotations (such as on an `initialize()`
+     * method) in a JavaFX controller.
      */
     abstract fun createContentPane(): Pane
+
+    /**
+     * Called when the HandyDisplay GUI switches the current widget AWAY FROM this widget.
+     *
+     * WARNING: THIS METHOD IS CALLED ON THE MAIN THREAD, NOT THE JAVAFX THREAD. This means that GUI elements cannot be updated from this thread,
+     * unless `Platform.runLater()` is used.
+     *
+     * Can be used to notify JavaFX controllers that they should cancel background tasks, so long as care with multithreading is taken.
+     */
+    fun onHide() {
+        logger.debug("Hiding $registryName")
+    }
+
+    /**
+     * Called when the HandyDisplay GUI switches the current widget ONTO this widget.
+     *
+     * WARNING: THIS METHOD IS CALLED ON THE MAIN THREAD, NOT THE JAVAFX THREAD. This means that GUI elements cannot be updated from this thread,
+     * unless `Platform.runLater()` is used.
+     *
+     * This is called after `createContentPane(): Pane`, so a controller may be available if the widget author has made one, but BE CAREFUL. It is
+     * preferable to use the `@FXML` annotation with an `initialize()` method for configuring a controller.
+     */
+    fun onShow() {
+        logger.debug("Showing $registryName")
+    }
 
     /**
      * Convenience method to load a JavaFX pane of type `T` from an FXML file located at the given path within the JAR containing this class. This

@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader
 import javafx.scene.control.Label
 import javafx.scene.layout.Pane
 import javafx.scene.layout.StackPane
+import me.genel.handydisplay.core.plugin.AbstractWidget
 import org.apache.logging.log4j.kotlin.Logging
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -32,13 +33,10 @@ fun createOverlayPane(
 
 class OverlayController : Logging {
 
-    inner class UpdateTitleWhenWidgetNameChangedListener : ChangeListener<String> {
-        override fun changed(observable: ObservableValue<out String>?, oldValue: String?, newValue: String?) =
-            updateTitleText()
-
-        private fun updateTitleText() {
+    inner class UpdateTitleWhenWidgetNameChangedListener : ChangeListener<AbstractWidget> {
+        override fun changed(observable: ObservableValue<out AbstractWidget>?, oldValue: AbstractWidget?, newValue: AbstractWidget?) {
             val oldVal = widgetNameText.text
-            val newVal = GUI.currentWidget.displayName
+            val newVal = newValue?.displayName
             logger.debug("Updating widgetNameText.text from '$oldVal' to '$newVal'...")
             widgetNameText.text = newVal
         }
@@ -62,7 +60,7 @@ class OverlayController : Logging {
         }, 0L, 1000L)
 
         val widgetNameChangeListener = UpdateTitleWhenWidgetNameChangedListener()
-        GUI.currentWidgetName.addListener(widgetNameChangeListener)
+        GUI.currentWidget.addListener(widgetNameChangeListener)
     }
 
     @FXML

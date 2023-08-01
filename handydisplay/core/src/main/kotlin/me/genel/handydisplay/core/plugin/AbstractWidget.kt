@@ -39,9 +39,11 @@ abstract class AbstractWidget(override val registryName: String, val displayName
             loader.location = url
             loader.classLoader = javaClass.classLoader  // This line is very, very important!!
 
+            val loaded: L = loader.load()
+
             return FXMLLoadResult(
                 loader.getController(),
-                loader.load()
+                loaded
             )
         } catch (cnf: ClassNotFoundException) {
             logger.fatal("Error creating content for widget: $registryName")

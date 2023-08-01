@@ -10,7 +10,7 @@ class WeatherWidget(private val config: WeatherPlugin.ConfigModel) : AbstractWid
 
     override fun createContentPane(): Pane {
         loadResult = loadFXML("fxml/weather.fxml")
-        loadResult.controller.config = config  //TODO significant unhappiness occurs when setting controller config because controller is null :(
+        loadResult.controller.config = config
         return loadResult.rootComponent
     }
 }

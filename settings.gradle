@@ -3,6 +3,9 @@ rootProject.name = 'handy-display-kotlin'
 include 'handydisplay:core'
 findProject(':handydisplay:core')?.name = 'core'
 
+include 'handydisplay:plugins'
+findProject(':handydisplay:plugins')?.name = 'plugins'
+
 include 'handydisplay:plugins:plugin-weather'
 findProject(':handydisplay:plugins:plugin-weather')?.name = 'plugin-weather'
 

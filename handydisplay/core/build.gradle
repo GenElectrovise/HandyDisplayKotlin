@@ -33,9 +33,14 @@ remotes {
     }
 }
 
-task __zipSSHDeploy {
-    println("SSH Deploy >> Deploying to: ${ATOMPI_HOST}")
+run {
+    dependsOn(project(":handydisplay:plugins").tasks.named("build"))
+}
+
+tasks.register('__zipSSHDeploy') {
     doLast {
+        println("SSH Deploy >> Deploying to: ${ATOMPI_HOST}")
+
         ssh.run {
             session(remotes.atompi) {
                 def zipName = "HandyDisplayKotlin-${version}"

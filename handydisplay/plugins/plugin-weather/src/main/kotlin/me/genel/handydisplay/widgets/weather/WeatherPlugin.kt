@@ -1,10 +1,10 @@
 package me.genel.handydisplay.widgets.weather
 
+import me.genel.handydisplay.core.Registry
 import me.genel.handydisplay.core.fileConfig
 import me.genel.handydisplay.core.hdRunFile
 import me.genel.handydisplay.core.plugin.AbstractPlugin
 import me.genel.handydisplay.core.plugin.AbstractWidget
-import me.genel.handydisplay.core.register
 
 class WeatherPlugin: AbstractPlugin() {
 
@@ -14,9 +14,14 @@ class WeatherPlugin: AbstractPlugin() {
     lateinit var config: ConfigModel
 
     override fun finishPluginLoading() {
-        config = fileConfig(hdRunFile(this, "weather.properties"))
+        config = fileConfig(
+                hdRunFile(
+                        this,
+                        "weather.properties"
+                         )
+                           )
 
-        register<AbstractWidget>(WeatherWidget(config))
+        Registry.register<AbstractWidget>(WeatherWidget(config))
 
         logger.debug("WeatherPlugin loading done!")
     }

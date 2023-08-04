@@ -2,15 +2,30 @@ package me.genel.handydisplay.core.plugin
 
 import javafx.fxml.FXMLLoader
 import javafx.scene.layout.Pane
-import me.genel.handydisplay.core.IRegisterable
+import me.genel.handydisplay.core.IRegistrable
 import org.apache.logging.log4j.kotlin.Logging
 
-abstract class AbstractWidget(override val registryName: String, val displayName: String): IRegisterable<AbstractWidget>, Logging {
+/**
+ * A screen which can be displayed to the user. Must be registered and its registryName added to
+ * the JavaFxGui order to function. Please note that technically *this* class is not actually
+ * displayed because it acts as a supplier for a JavaFX Pane. See methods for details.
+ *
+ * @param registryName The name of this widget will be accessed by when it is registered.
+ * @param displayName The name of this widget to be displayed by the JavaFXGui overlay when this
+ * AbstractWidget is visible.
+ *
+ * @see IRegistrable
+ */
+abstract class AbstractWidget(
+        override val registryName: String,
+        val displayName: String
+                             ): IRegistrable<AbstractWidget>, Logging {
+
 
     init { // Display
-        assert(
-                displayName.asSequence()
-                        .all { it.isLetterOrDigit() }) { "Displayed widget names may only contain letters and digits. $displayName is invalid." }
+        assert(displayName
+                       .asSequence()
+                       .all { it.isLetterOrDigit() }) { "Displayed widget names may only contain letters and digits. $displayName is invalid." }
         assert(displayName.length in 1 .. 16) { "Displayed widget names must have [1,16] characters. $displayName is invalid." }
     }
 
@@ -74,7 +89,8 @@ abstract class AbstractWidget(override val registryName: String, val displayName
             val loaded: L = loader.load()
 
             return FXMLLoadResult(
-                    loader.getController(), loaded
+                    loader.getController(),
+                    loaded
                                  )
         } catch (cnf: ClassNotFoundException) {
             logger.fatal("Error creating content for widget: $registryName")
@@ -85,7 +101,13 @@ abstract class AbstractWidget(override val registryName: String, val displayName
         }
     }
 
+
+    /**
+     * Returned by `loadFXML(..)`. Handy way of getting access to otherwise obscured properties
+     * like the FXML controller.
+     */
     data class FXMLLoadResult<C, T>(
-            val controller: C, val rootComponent: T
+            val controller: C,
+            val rootComponent: T
                                    )
 }

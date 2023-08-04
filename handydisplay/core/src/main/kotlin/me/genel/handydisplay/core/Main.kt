@@ -6,10 +6,15 @@ import org.apache.logging.log4j.kotlin.Logging
 import picocli.CommandLine
 import kotlin.system.exitProcess
 
+/**
+ * Core configuration singleton instance, loaded from core.properties.
+ */
 lateinit var CORE_CONFIG: CoreConfigModel
-lateinit var PLUGIN_LOADER: PluginLoader
-lateinit var GUI: JavaFXGui
 
+
+/**
+ * Welcome! This is the entry point for the HandyDisplay! Please make yourself at home...
+ */
 fun main(args: Array<String>) {
 
     println("Starting Handy Display!")
@@ -20,6 +25,10 @@ fun main(args: Array<String>) {
     CommandLine(RunCommand()).execute(*args)
 }
 
+
+/**
+ * Check that the JAR resources are available.
+ */
 fun checkForResources() {
     val root = RunCommand::class.java.classLoader.getResource("resources_root")
             ?: throw NullPointerException("Cannot find resources_root. This indicates that the necessary JAR resources are inaccessible.")
@@ -27,31 +36,56 @@ fun checkForResources() {
     println("Resources are intact!")
 }
 
+
+/**
+ * The one and only PicoCLI command for HandyDisplay. Parses program arguments and runs the app.
+ */
 class RunCommand: Runnable, Logging {
 
 
     @CommandLine.Option(
-            names = ["-m", "--mirror"], description = ["Name of the mirror to use."], required = true
+            names = ["-m", "--mirror"],
+            description = ["Name of the mirror to use."],
+            required = true
                        ) lateinit var mirrorName: String
 
 
     @CommandLine.Option(
-            names = ["-h", "--head"], description = ["Whether to run the application with a mirror-independent GUI."], required = true
+            names = ["-h", "--head"],
+            description = ["Whether to run the application with a mirror-independent GUI."],
+            required = true
                        ) var headful: Boolean = false
 
 
     override fun run() {
-        val map = mapOf("mirror" to mirrorName, "headful" to headful)
+        val map = mapOf(
+                "mirror" to mirrorName,
+                "headful" to headful
+                       )
         logger.debug("Parsed arguments: $map")
 
-        PLUGIN_LOADER = PluginLoader()
-        CORE_CONFIG = fileConfig(hdRunFile(null, "core.properties"))
+        // Create configuration
+        CORE_CONFIG = fileConfig(
+                hdRunFile(
+                        null,
+                        "core.properties"
+                         )
+                                )
+
+        // Reference PluginLoader singleton to initialise it
+        PluginLoader
+
         // Start application (initialises GUI variable)
         Application.launch(JavaFXGui::class.java)
         exitProcess(0)
     }
 }
 
+
+/**
+ * Configuration model for the core.properties file.
+ */
 data class CoreConfigModel(
-        val key: List<String>, val yay: String
+        val key: List<String>,
+        val yay: String
                           )

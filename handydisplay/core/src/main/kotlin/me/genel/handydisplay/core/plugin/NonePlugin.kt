@@ -3,14 +3,14 @@ package me.genel.handydisplay.core.plugin
 import javafx.scene.control.Label
 import javafx.scene.layout.Pane
 import javafx.scene.layout.VBox
-import me.genel.handydisplay.core.register
+import me.genel.handydisplay.core.Registry
 import org.apache.logging.log4j.kotlin.Logging
 
 class NonePlugin: AbstractPlugin(), Logging {
 
 
     override fun finishPluginLoading() {
-        register<AbstractWidget>(NoneWidget())
+        Registry.register<AbstractWidget>(NoneWidget())
     }
 
     override fun shutdownNow() {}
@@ -18,7 +18,10 @@ class NonePlugin: AbstractPlugin(), Logging {
     override val registryName: String = "none"
 }
 
-class NoneWidget: AbstractWidget("none", "None") {
+class NoneWidget: AbstractWidget(
+        "none",
+        "None"
+                                ) {
 
 
     override fun createContentPane(): Pane {

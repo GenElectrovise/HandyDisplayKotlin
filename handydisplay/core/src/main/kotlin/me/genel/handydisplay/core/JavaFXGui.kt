@@ -22,15 +22,35 @@ const val HEIGHT: Double = 320.0
 const val WIDGET_LAYER = 0
 const val OVERLAY_LAYER = WIDGET_LAYER + 1
 
+
+/**
+ * JavaFXGui singleton instance.
+ */
+@Volatile var GUI: JavaFXGui? = null
+
+
+/**
+ * The GUI for HandyDisplay! Handles the displaying of widgets and application lifecycle, plus it
+ * delegates to the active mirror.
+ *
+ * This class is a singleton, the instance of which can be accessed by the package-level `GUI`
+ * variable.
+ */
 class JavaFXGui: Application(), Logging {
 
 
     private lateinit var contentStack: StackPane
-    private val guiConfig: GuiConfigModel = fileConfig(hdRunFile(null, "gui.properties"))
+    private val guiConfig: GuiConfigModel = fileConfig(
+            hdRunFile(
+                    null,
+                    "gui.properties"
+                     )
+                                                      )
 
     val currentWidget: SimpleObjectProperty<AbstractWidget> = SimpleObjectProperty()
 
     init {
+        if (GUI != null) throw IllegalStateException("Cannot instantiate multiple GUIs!")
         GUI = this
         checkSupported()
         validateOrder()
@@ -52,16 +72,25 @@ class JavaFXGui: Application(), Logging {
             println("Close requested - shutting down platform...")
             Platform.exit()
         }
-        primaryStage.scene = Scene(contentStack, WIDTH, HEIGHT)
+        primaryStage.scene = Scene(
+                contentStack,
+                WIDTH,
+                HEIGHT
+                                  )
         primaryStage.show()
 
         // Set up overlay
-        val overlay = createOverlayPane({ cycleWidgets(false) }, { cycleWidgets(true) })
+        val overlay = createOverlayPane({ cycleWidgets(false) },
+                                        { cycleWidgets(true) })
         contentStack.children[OVERLAY_LAYER] = overlay
 
         // Set up initial widget
         currentWidget.addListener(CurrentWidgetPropertyChangedListener())
-        currentWidget.value = get<AbstractWidget>(guiConfig.order.iterator().next())
+        currentWidget.value = Registry.get<AbstractWidget>(
+                guiConfig.order
+                        .iterator()
+                        .next()
+                                                          )
     }
 
     override fun stop() {
@@ -69,6 +98,10 @@ class JavaFXGui: Application(), Logging {
         println("Stopping application...")
     }
 
+
+    /**
+     * Log supported JavaFX features.
+     */
     private fun checkSupported() {
         logger.debug("Supported JavaFX ConditionalFeatures:")
         ConditionalFeature.entries.forEach {
@@ -80,14 +113,27 @@ class JavaFXGui: Application(), Logging {
         }
     }
 
+
+    /**
+     * Ensure that the given widget order (from guiConfig) is valid.
+     *
+     * @throws IndexOutOfBoundsException If the widget order is empty.
+     * @throws NoSuchElementException If a name is present in the order for which there is no
+     * AbstractWidget registered.
+     */
     private fun validateOrder() {
         if (guiConfig.order.isEmpty()) throw IndexOutOfBoundsException("Cannot start application with an empty widget order. Please configure this in gui.properties. If in doubt, delete gui.properties and a default version will be created in its place.")
 
         guiConfig.order.forEach {
-            if (get<AbstractPlugin>(it) == null) throw NoSuchElementException("There is no widget named $it to populate the given widget order: ${guiConfig.order}")
+            if (Registry.get<AbstractPlugin>(it) == null) throw NoSuchElementException("There is no widget named $it to populate the given widget order: ${guiConfig.order}")
         }
     }
 
+
+    /**
+     * Cycle the current widget left/right (+1 / -1) through the order, wrapping to the start/end
+     * if needed.
+     */
     private fun cycleWidgets(forwards: Boolean) {
         logger.info("Cycling widgets " + (if (forwards) "+/forwards/right" else "-/backwards/left"))
 
@@ -98,13 +144,22 @@ class JavaFXGui: Application(), Logging {
         else if (newIndex >= guiConfig.order.size) newIndex = 0
 
         val newName = guiConfig.order.elementAt(newIndex)
-        currentWidget.value = get<AbstractWidget>(newName)
+        currentWidget.value = Registry.get<AbstractWidget>(newName)
     }
 
+
+    /**
+     * ChangeListener to update the currently displayed AbstractWidget on the JavaFX stage when
+     * the currentWidget property changes.
+     */
     inner class CurrentWidgetPropertyChangedListener: ChangeListener<AbstractWidget>, Logging {
 
 
-        override fun changed(observable: ObservableValue<out AbstractWidget>?, oldValue: AbstractWidget?, newValue: AbstractWidget?) {
+        override fun changed(
+                observable: ObservableValue<out AbstractWidget>?,
+                oldValue: AbstractWidget?,
+                newValue: AbstractWidget?
+                            ) {
             logger.info("Switching current widget from ${oldValue?.registryName} to ${newValue?.registryName}")
             if (newValue == null) throw NullPointerException("Cannot switch to null widget.")
 
@@ -117,6 +172,10 @@ class JavaFXGui: Application(), Logging {
         }
     }
 
+
+    /**
+     * Configuration model for the gui.properties file.
+     */
     data class GuiConfigModel(
             val order: Set<String>
                              )

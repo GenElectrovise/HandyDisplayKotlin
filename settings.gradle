@@ -29,6 +29,7 @@ dependencyResolutionManagement {
             // plugin('gradle-dist', 'distribution') // No version
             plugin('hidetake-ssh', 'org.hidetake.ssh').version('2.11.2')
             plugin('javafx', 'org.openjfx.javafxplugin').version('0.0.9')
+            plugin('dokka', 'org.jetbrains.dokka').version('1.8.20')
 
             // Libraries: library(handylibs.xxx)
             // Test

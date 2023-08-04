@@ -4,6 +4,7 @@ plugins {
     alias(handylibs.plugins.kotlin.jvm)
     alias(handylibs.plugins.kotlin.serialization)
     alias(handylibs.plugins.javafx)
+    alias(handylibs.plugins.dokka)
 }
 
 allprojects {
@@ -14,6 +15,7 @@ allprojects {
     apply plugin: handylibs.plugins.kotlin.jvm.get().pluginId
     apply plugin: handylibs.plugins.kotlin.serialization.get().pluginId
     apply plugin: handylibs.plugins.javafx.get().pluginId
+    apply plugin: handylibs.plugins.dokka.get().pluginId
     apply plugin: 'java'
     apply plugin: 'java-library'
 

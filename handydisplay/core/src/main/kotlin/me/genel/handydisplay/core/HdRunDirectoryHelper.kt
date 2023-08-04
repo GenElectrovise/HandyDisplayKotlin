@@ -6,7 +6,8 @@ import java.io.InputStream
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 
-private val hdRunLogger = org.apache.logging.log4j.kotlin.logger("me.genel.handydisplay.core.HdRunDirectoryHelper")
+private val hdRunLogger =
+        org.apache.logging.log4j.kotlin.logger("me.genel.handydisplay.core.HdRunDirectoryHelper")
 
 
 /**
@@ -35,12 +36,22 @@ val runDir = File("hdrun/")
  * @param deployIfNotPresent Whether to, if the given file does not already exist, attempt to load a default version of it from within the given
  * plugin's JAR if a plugin is given, or from the core JAR's resources if one is not.
  */
-fun hdRunFile(plugin: AbstractPlugin?, name: String, deployIfNotPresent: Boolean = true): File {
+fun hdRunFile(
+        plugin: AbstractPlugin?,
+        name: String,
+        deployIfNotPresent: Boolean = true
+             ): File {
     val path = if (plugin == null) name else "plugins/${plugin.registryName}/$name"
-    val file = File(runDir.absolutePath, path)
+    val file = File(
+            runDir.absolutePath,
+            path
+                   )
     file.parentFile?.mkdirs()
     if (!file.exists() && deployIfNotPresent) {
-        deployFile(plugin, name)
+        deployFile(
+                plugin,
+                name
+                  )
     }
     return file
 }
@@ -49,7 +60,10 @@ fun hdRunFile(plugin: AbstractPlugin?, name: String, deployIfNotPresent: Boolean
 /**
  * Copies a file from the plugin's JAR to the disk to, for example, set up configuration defaults.
  */
-private fun deployFile(plugin: AbstractPlugin?, name: String) {
+private fun deployFile(
+        plugin: AbstractPlugin?,
+        name: String
+                      ) {
     hdRunLogger.debug("Deploying file $name from ${plugin?.registryName ?: "<core>"}")
 
     val resource: InputStream = if (plugin != null) {
@@ -58,11 +72,20 @@ private fun deployFile(plugin: AbstractPlugin?, name: String) {
                 ?: throw NullPointerException("Cannot deploy non-existent plugin file $path from plugin ${plugin.registryName}")
     } else {
         val path = "hdrun/$name"
-        AbstractPlugin::class.java.classLoader.getResourceAsStream(path) ?: throw NullPointerException("Cannot deploy non-existent core file $path.")
+        AbstractPlugin::class.java.classLoader.getResourceAsStream(path)
+                ?: throw NullPointerException("Cannot deploy non-existent core file $path.")
     }
-    val destinationFile: File = hdRunFile(plugin, name, deployIfNotPresent = false) // Plugin is sometimes null and this is a good thing!!
+    val destinationFile: File = hdRunFile(
+            plugin,
+            name,
+            deployIfNotPresent = false
+                                         ) // Plugin is sometimes null and this is a good thing!!
 
     resource.use { stream ->
-        Files.copy(stream, destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
+        Files.copy(
+                stream,
+                destinationFile.toPath(),
+                StandardCopyOption.REPLACE_EXISTING
+                  )
     }
 }

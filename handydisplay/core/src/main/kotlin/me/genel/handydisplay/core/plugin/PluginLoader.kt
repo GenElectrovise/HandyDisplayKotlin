@@ -2,9 +2,8 @@ package me.genel.handydisplay.core.plugin
 
 import io.github.classgraph.ClassGraph
 import io.github.classgraph.ScanResult
-import me.genel.handydisplay.core.getAll
+import me.genel.handydisplay.core.Registry
 import me.genel.handydisplay.core.hdRunFile
-import me.genel.handydisplay.core.registerAll
 import nonapi.io.github.classgraph.utils.JarUtils
 import org.apache.logging.log4j.kotlin.Logging
 import java.io.File
@@ -17,41 +16,74 @@ import kotlin.system.exitProcess
  * Loads plugins from disk at application startup and maintains instances of their main classes (any subclass of `AbstractPlugin`). Order of plugin
  * loading cannot be guaranteed.
  */
-class PluginLoader: Logging {
+object PluginLoader: Logging {
 
 
+    /**
+     * The cached result of the ClassGraph scan.
+     */
     private val scanResult: ScanResult
 
     init {
         scanResult = scanClasspathAndJars()
         val plugins = collectPluginInstances()
-        registerAll<AbstractPlugin>(plugins)
+        Registry.registerAll<AbstractPlugin>(plugins)
         finishPluginLoading()
     }
 
+
+    /**
+     * Locate JAR files in the runtime plugin directory, loads their classes and creates a
+     * ScanResult.
+     *
+     * @return The ScanResult
+     */
     private fun scanClasspathAndJars(): ScanResult {
         val jars = getPluginJarPaths()
         logger.info("Found ${jars.size} plugin .JAR files:")
         jars.forEach { logger.info(" : ${JarUtils.leafName(it)} - $it") }
 
-        val classLoader = URLClassLoader(
-                "pluginJarURLClassLoader", jars.map { File(it).toURI().toURL() }.toTypedArray(), javaClass.classLoader
-                                        )
+        val classLoader = URLClassLoader("pluginJarURLClassLoader",
+                                         jars
+                                                 .map {
+                                                     File(it)
+                                                             .toURI()
+                                                             .toURL()
+                                                 }
+                                                 .toTypedArray(),
+                                         javaClass.classLoader)
 
-        return ClassGraph().enableClassInfo().addClassLoader(classLoader).scan()
+        return ClassGraph()
+                .enableClassInfo()
+                .addClassLoader(classLoader)
+                .scan()
     }
 
+
+    /**
+     * @return A list of the absolute paths to the plugin JAR files.
+     */
     private fun getPluginJarPaths(): Array<String> {
-        val pluginsFile = hdRunFile(null, "plugins")
+        val pluginsFile = hdRunFile(
+                null,
+                "plugins"
+                                   )
         if (!pluginsFile.exists()) {
             logger.warn("Plugins file ${pluginsFile.absolutePath} doesn't exist - creating...")
             pluginsFile.mkdirs()
         }
         logger.info("Loading plugins from ${pluginsFile.absolutePath}")
 
-        return pluginsFile.listFiles(FileFilter { !it.isDirectory })!!.map { it.absolutePath }.toTypedArray()
+        return pluginsFile
+                .listFiles(FileFilter { !it.isDirectory })!!
+                .map { it.absolutePath }
+                .toTypedArray()
     }
 
+
+    /**
+     * @return A Set of instances of the detected plugins.
+     */
     private fun collectPluginInstances(): Set<AbstractPlugin> {
         val subclasses = findPluginSubclasses()
         val instances = createPluginInstances(subclasses)
@@ -70,6 +102,13 @@ class PluginLoader: Logging {
         return set
     }
 
+
+    /**
+     * Use the cached ScanResult to find subclasses of AbstractPlugin in the combined ClassLoader
+     * for the main app and the JAR files.
+     *
+     * @return A list of all the detected classes extending from AbstractPlugin.
+     */
     private fun findPluginSubclasses(): List<Class<AbstractPlugin>> {
         logger.debug("Searching for subclasses of ${AbstractPlugin::class.qualifiedName}")
 
@@ -79,8 +118,25 @@ class PluginLoader: Logging {
         }
     }
 
-    private fun createPluginInstances(classes: List<Class<AbstractPlugin>>) = classes.map { clazz -> instantiatePluginClass(clazz) }
 
+    /**
+     * Creates an instance of every class (extending AbstractPlugin) which is passed to it.
+     *
+     * @param classes The list of classes to instantiate.
+     */
+    private fun createPluginInstances(classes: List<Class<AbstractPlugin>>) =
+            classes.map { clazz -> instantiatePluginClass(clazz) }
+
+
+    /**
+     * Instantiates the given clazz, with lots of error handling!!
+     *
+     * @param clazz The class, extending AbstractPlugin, to instantiate.
+     *
+     * @throws PluginInstantiationException For any 'normal' error, otherwise fails fatally.
+     *
+     * @return A new instance of clazz.
+     */
     private fun instantiatePluginClass(clazz: Class<AbstractPlugin>): AbstractPlugin {
         var mie: PluginInstantiationException? = null
 
@@ -90,18 +146,48 @@ class PluginLoader: Logging {
             mie = try {
                 return cons.newInstance()
             } catch (acc: IllegalAccessException) {
-                PluginInstantiationException("Found constructor, but unable to access it.", clazz, cons, acc)
+                PluginInstantiationException(
+                        "Found constructor, but unable to access it.",
+                        clazz,
+                        cons,
+                        acc
+                                            )
             } catch (arg: IllegalArgumentException) {
-                PluginInstantiationException("Cannot invoke constructor with 0 arguments.", clazz, cons, arg)
+                PluginInstantiationException(
+                        "Cannot invoke constructor with 0 arguments.",
+                        clazz,
+                        cons,
+                        arg
+                                            )
             } catch (ins: InstantiationException) {
-                PluginInstantiationException("newInstance() failed. Unable to instantiate.", clazz, cons, ins)
+                PluginInstantiationException(
+                        "newInstance() failed. Unable to instantiate.",
+                        clazz,
+                        cons,
+                        ins
+                                            )
             } catch (ini: ExceptionInInitializerError) {
-                PluginInstantiationException("Exception occurred inside constructor.", clazz, cons, ini)
+                PluginInstantiationException(
+                        "Exception occurred inside constructor.",
+                        clazz,
+                        cons,
+                        ini
+                                            )
             }
         } catch (nsm: NoSuchMethodException) {
-            mie = PluginInstantiationException("No public 0-argument constructor found.", clazz, null, nsm)
+            mie = PluginInstantiationException(
+                    "No public 0-argument constructor found.",
+                    clazz,
+                    null,
+                    nsm
+                                              )
         } catch (sec: SecurityException) {
-            mie = PluginInstantiationException("A security manager prohibited searching for the plugin constructor.", clazz, null, sec)
+            mie = PluginInstantiationException(
+                    "A security manager prohibited searching for the plugin constructor.",
+                    clazz,
+                    null,
+                    sec
+                                              )
         } finally {
             if (mie != null) {
                 logger.fatal(mie)
@@ -113,9 +199,15 @@ class PluginLoader: Logging {
         exitProcess(100)
     }
 
+
+    /**
+     * Called after plugins have been instantiated. Finishes loading each plugin, in no
+     * particular order.
+     */
     private fun finishPluginLoading() {
 
-        val plugins = getAll<AbstractPlugin>() ?: throw NullPointerException("Unable to getAll<AbstractPlugin> for finishPluginLoading")
+        val plugins = Registry.getAll<AbstractPlugin>()
+                ?: throw NullPointerException("Unable to getAll<AbstractPlugin> for finishPluginLoading")
 
         plugins.forEach {
             logger.info("Finishing loading [${it.registryName}]")

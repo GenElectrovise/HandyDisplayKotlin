@@ -22,18 +22,24 @@ class WeatherController: Logging {
 
         // When the root node has no parent (has been removed from the scene tree),
         // the widget has been hidden and can be disposed of.
-        containerHBox.parentProperty().addListener { _, _, new ->
-            if (new == null) {
-                shutdown()
-            }
-        }
+        containerHBox
+                .parentProperty()
+                .addListener { _, _, new ->
+                    if (new == null) {
+                        shutdown()
+                    }
+                }
 
         try {
-            datetimeTimer.scheduleAtFixedRate(object: TimerTask() { //TODO dispose of weather executor on program closing
-                override fun run() = Platform.runLater {
-                    logger.debug("Not updating datetime yet :(")
-                }
-            }, 0L, 1000L)
+            datetimeTimer.scheduleAtFixedRate(
+                    object: TimerTask() { //TODO dispose of weather executor on program closing
+                        override fun run() = Platform.runLater {
+                            logger.debug("Not updating datetime yet :(")
+                        }
+                    },
+                    0L,
+                    1000L
+                                             )
         } catch (ex: Exception) {
             throw ex
         }

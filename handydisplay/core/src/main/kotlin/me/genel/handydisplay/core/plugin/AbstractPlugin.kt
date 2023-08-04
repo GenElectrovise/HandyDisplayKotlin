@@ -1,6 +1,6 @@
 package me.genel.handydisplay.core.plugin
 
-import me.genel.handydisplay.core.IRegisterable
+import me.genel.handydisplay.core.IRegistrable
 import org.apache.logging.log4j.kotlin.Logging
 
 /**
@@ -9,7 +9,7 @@ import org.apache.logging.log4j.kotlin.Logging
  *
  * Subclasses should declare a zero-argument constructor.
  */
-abstract class AbstractPlugin(): IRegisterable<AbstractPlugin>, Logging {
+abstract class AbstractPlugin: IRegistrable<AbstractPlugin>, Logging {
 
 
     /**

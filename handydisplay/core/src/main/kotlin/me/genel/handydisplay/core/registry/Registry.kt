@@ -1,7 +1,7 @@
-package me.genel.handydisplay.core
+package me.genel.handydisplay.core.registry
 
 import me.genel.handydisplay.core.plugin.AbstractPlugin
-import me.genel.handydisplay.core.plugin.AbstractWidget
+import me.genel.handydisplay.core.gui.AbstractWidget
 import kotlin.reflect.KClass
 
 
@@ -116,54 +116,3 @@ fun getRegistryNameErrors(registryName: String): RegistryNameException? {
     }
     return null
 }
-
-
-/**
- * Declares that a type may be registered.
- *
- * @sample AbstractPlugin
- */
-interface IRegistrable<out IRegistrable> {
-
-
-    val registryName: String
-}
-
-
-/**
- * An exception thrown when the name of an entry in the registry is somehow invalid.
- *
- * @param registryName The name with which there is an error.
- * @param errorReason An explanation of the error.
- */
-class RegistryNameException(
-        registryName: String,
-        errorReason: String
-                           ): Exception(
-        StringBuilder()
-                .appendLine("$registryName is an invalid name for a registry entry.")
-                .appendLine(errorReason)
-                .toString()
-                                       )
-
-
-/**
- * An exception which is thrown when calling `register(..)` to add an item to a registry sub-map
- * which already contains an entry for that name.
- */
-class DuplicateRegistrationException(
-        registryType: KClass<*>,
-        key: String,
-        entry1: Any,
-        entry2: Any
-                                    ): Exception(
-        StringBuilder()
-                .appendLine("Cannot register two items with the same registry name and registry type.")
-                .appendLine("Registry Type: ${registryType.qualifiedName}")
-                .appendLine("Registry Key: $key")
-                .appendLine("Entry #1 Type: ${entry1.javaClass.name}")
-                .appendLine("Entry #1 toString: $entry1")
-                .appendLine("Entry #2 Type: ${entry2.javaClass.name}")
-                .appendLine("Entry #2 toString: $entry2")
-                .toString()
-                                                )

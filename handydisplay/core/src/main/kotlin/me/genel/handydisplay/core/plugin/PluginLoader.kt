@@ -2,8 +2,8 @@ package me.genel.handydisplay.core.plugin
 
 import io.github.classgraph.ClassGraph
 import io.github.classgraph.ScanResult
-import me.genel.handydisplay.core.Registry
 import me.genel.handydisplay.core.hdRunFile
+import me.genel.handydisplay.core.registry.Registry
 import nonapi.io.github.classgraph.utils.JarUtils
 import org.apache.logging.log4j.kotlin.Logging
 import java.io.File
@@ -24,6 +24,28 @@ object PluginLoader: Logging {
      */
     private val scanResult: ScanResult
 
+
+    /**
+     * _Three classes for the BootstrapClassLoader under the JVM,_
+     *
+     * _Seven for the AppClassLoaders in their halls of JARs,_
+     *
+     * _Nine for URLClassLoaders, doomed to be garbage collected,_
+     *
+     * _One for the Master Class Loader in the Plugin Loader,_
+     *
+     * _In the Handy Display, where the Kotlin lies,_
+     *
+     * _One ClassLoader to rule them all,_
+     *
+     * _One ClassLoader to find them,_
+     *
+     * _One ClassLoader to bring them all and in the PluginLoader bind them,_
+     *
+     * _In the Handy Display, where the Kotlin lies._
+     */
+    lateinit var masterClassLoader: ClassLoader
+
     init {
         scanResult = scanClasspathAndJars()
         val plugins = collectPluginInstances()
@@ -43,19 +65,19 @@ object PluginLoader: Logging {
         logger.info("Found ${jars.size} plugin .JAR files:")
         jars.forEach { logger.info(" : ${JarUtils.leafName(it)} - $it") }
 
-        val classLoader = URLClassLoader("pluginJarURLClassLoader",
-                                         jars
-                                                 .map {
-                                                     File(it)
-                                                             .toURI()
-                                                             .toURL()
-                                                 }
-                                                 .toTypedArray(),
-                                         javaClass.classLoader)
+        masterClassLoader = URLClassLoader("pluginJarURLClassLoader",
+                                           jars
+                                                   .map {
+                                                       File(it)
+                                                               .toURI()
+                                                               .toURL()
+                                                   }
+                                                   .toTypedArray(),
+                                           javaClass.classLoader)
 
         return ClassGraph()
                 .enableClassInfo()
-                .addClassLoader(classLoader)
+                .addClassLoader(masterClassLoader)
                 .scan()
     }
 

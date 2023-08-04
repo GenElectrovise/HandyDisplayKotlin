@@ -7,7 +7,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="320.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.genel.handydisplay.core.OverlayController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="320.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.genel.handydisplay.core.gui.OverlayController">
    <children>
       <Rectangle id="bar-rect" arcWidth="5.0" fill="#00000066" height="28.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="480.0" StackPane.alignment="TOP_CENTER" />
       <Label fx:id="widgetNameText" text="Widget Name" textFill="WHITE" StackPane.alignment="TOP_CENTER">

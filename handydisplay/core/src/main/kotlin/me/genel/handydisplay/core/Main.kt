@@ -1,6 +1,7 @@
 package me.genel.handydisplay.core
 
 import javafx.application.Application
+import me.genel.handydisplay.core.gui.JavaFXGui
 import me.genel.handydisplay.core.plugin.PluginLoader
 import org.apache.logging.log4j.kotlin.Logging
 import picocli.CommandLine

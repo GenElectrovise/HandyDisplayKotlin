@@ -1,6 +1,6 @@
 package me.genel.handydisplay.core.plugin
 
-import me.genel.handydisplay.core.IRegistrable
+import me.genel.handydisplay.core.registry.IRegistrable
 import org.apache.logging.log4j.kotlin.Logging
 
 /**

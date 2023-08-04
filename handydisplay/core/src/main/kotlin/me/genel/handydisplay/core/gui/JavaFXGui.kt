@@ -1,4 +1,4 @@
-package me.genel.handydisplay.core
+package me.genel.handydisplay.core.gui
 
 import javafx.application.Application
 import javafx.application.ConditionalFeature
@@ -10,8 +10,10 @@ import javafx.scene.Scene
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.StackPane
 import javafx.stage.Stage
+import me.genel.handydisplay.core.fileConfig
+import me.genel.handydisplay.core.hdRunFile
 import me.genel.handydisplay.core.plugin.AbstractPlugin
-import me.genel.handydisplay.core.plugin.AbstractWidget
+import me.genel.handydisplay.core.registry.Registry
 import org.apache.logging.log4j.kotlin.Logging
 
 const val WIDTH: Double = 480.0
@@ -80,8 +82,8 @@ class JavaFXGui: Application(), Logging {
         primaryStage.show()
 
         // Set up overlay
-        val overlay = createOverlayPane({ cycleWidgets(false) },
-                                        { cycleWidgets(true) })
+        val overlay = OverlayCreator.createOverlayPane({ cycleWidgets(false) },
+                                                       { cycleWidgets(true) })
         contentStack.children[OVERLAY_LAYER] = overlay
 
         // Set up initial widget

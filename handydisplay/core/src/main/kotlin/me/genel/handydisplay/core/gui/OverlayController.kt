@@ -1,37 +1,22 @@
-package me.genel.handydisplay.core
+package me.genel.handydisplay.core.gui
 
 import javafx.application.Platform
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
 import javafx.fxml.FXML
-import javafx.fxml.FXMLLoader
 import javafx.scene.control.Label
-import javafx.scene.layout.Pane
-import javafx.scene.layout.StackPane
-import me.genel.handydisplay.core.plugin.AbstractWidget
 import org.apache.logging.log4j.kotlin.Logging
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-val dateTimeTextFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm - dd/MM/yy")
-
-private var cycleWidgetsLeft: (() -> Unit)? = null
-private var cycleWidgetsRight: (() -> Unit)? = null
-
-fun createOverlayPane(
-        left: () -> Unit,
-        right: () -> Unit
-                     ): Pane {
-    cycleWidgetsLeft = left
-    cycleWidgetsRight = right
-
-    val url = JavaFXGui::class.java.classLoader.getResource("fxml/overlay.fxml")
-    val loader = FXMLLoader(url)
-    return loader.load<StackPane>()
-}
-
 class OverlayController: Logging {
+
+
+    val dateTimeTextFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm - dd/MM/yy")
+
+    var leftToggleAction: (() -> Unit)? = null
+    var rightToggleAction: (() -> Unit)? = null
 
     inner class UpdateTitleWhenWidgetNameChangedListener: ChangeListener<AbstractWidget> {
 
@@ -79,10 +64,10 @@ class OverlayController: Logging {
     }
 
 
-    @FXML fun fxmlLeftToggleButtonOnAction() = (cycleWidgetsLeft
+    @FXML fun fxmlLeftToggleButtonOnAction() = (leftToggleAction
             ?: throw NullPointerException("cycleWidgetsLeft lambda has not been set!")).invoke()
 
 
-    @FXML fun fxmlRightToggleButtonOnAction() = (cycleWidgetsRight
+    @FXML fun fxmlRightToggleButtonOnAction() = (rightToggleAction
             ?: throw NullPointerException("cycleWidgetsRight lambda has not been set!")).invoke()
 }

@@ -12,7 +12,6 @@ import javafx.scene.layout.StackPane
 import javafx.stage.Stage
 import me.genel.handydisplay.core.plugin.AbstractPlugin
 import me.genel.handydisplay.core.plugin.AbstractWidget
-import me.genel.handydisplay.core.plugin.NoneWidget
 import org.apache.logging.log4j.kotlin.Logging
 
 const val WIDTH: Double = 480.0
@@ -30,6 +29,7 @@ class JavaFXGui : Application(), Logging {
     val currentWidget: SimpleObjectProperty<AbstractWidget> = SimpleObjectProperty()
 
     init {
+        GUI = this
         checkSupported()
         validateOrder()
     }
@@ -46,18 +46,15 @@ class JavaFXGui : Application(), Logging {
         // Configure window/stage
         Platform.setImplicitExit(true)
         primaryStage.setOnCloseRequest { _ ->
-            logger.fatal("Close requested, shutting down platform...")
-            println("Close requested, shutting down platform...")
+            logger.fatal("Close requested - shutting down platform...")
+            println("Close requested - shutting down platform...")
             Platform.exit()
         }
         primaryStage.scene = Scene(contentStack, WIDTH, HEIGHT)
         primaryStage.show()
 
         // Set up overlay
-        val overlay = createOverlayPane(
-            { cycleWidgets(false) },
-            { cycleWidgets(true) }
-        )
+        val overlay = createOverlayPane({ cycleWidgets(false) }, { cycleWidgets(true) })
         contentStack.children[OVERLAY_LAYER] = overlay
 
         // Set up initial widget
@@ -67,6 +64,7 @@ class JavaFXGui : Application(), Logging {
 
     override fun stop() {
         super.stop()
+        println("Stopping application...")
     }
 
     private fun checkSupported() {
@@ -81,13 +79,10 @@ class JavaFXGui : Application(), Logging {
     }
 
     private fun validateOrder() {
-        if (guiConfig.order.isEmpty())
-            throw IndexOutOfBoundsException("Cannot start application with an empty widget order. Please configure this in gui.properties. If in " +
-                    "doubt, delete gui.properties and a default version will be created in its place.")
+        if (guiConfig.order.isEmpty()) throw IndexOutOfBoundsException("Cannot start application with an empty widget order. Please configure this in gui.properties. If in doubt, delete gui.properties and a default version will be created in its place.")
 
         guiConfig.order.forEach {
-            if (get<AbstractPlugin>(it) == null)
-                throw NoSuchElementException("There is no widget named $it to populate the given widget order: ${guiConfig.order}")
+            if (get<AbstractPlugin>(it) == null) throw NoSuchElementException("There is no widget named $it to populate the given widget order: ${guiConfig.order}")
         }
     }
 

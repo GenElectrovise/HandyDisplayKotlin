@@ -1,10 +1,10 @@
 package me.genel.handydisplay.core
 
-import javafx.application.Platform
-import javafx.stage.Stage
+import javafx.application.Application
 import me.genel.handydisplay.core.plugin.PluginLoader
 import org.apache.logging.log4j.kotlin.Logging
 import picocli.CommandLine
+import kotlin.system.exitProcess
 
 lateinit var CORE_CONFIG: CoreConfigModel
 lateinit var PLUGIN_LOADER: PluginLoader
@@ -43,20 +43,15 @@ class RunCommand : Runnable, Logging {
     )
     var headful: Boolean = false
 
-
     override fun run() {
         val map = mapOf("mirror" to mirrorName, "headful" to headful)
         logger.debug("Parsed arguments: $map")
 
         PLUGIN_LOADER = PluginLoader()
         CORE_CONFIG = fileConfig(hdRunFile(null, "core.properties"))
-        GUI = JavaFXGui()
-
-        GUI.init()
-        Platform.startup {
-            val rootStage = Stage()
-            GUI.start(rootStage)
-        }
+        // The following initialises #GUI
+        Application.launch(JavaFXGui::class.java)
+        exitProcess(0)
     }
 }
 

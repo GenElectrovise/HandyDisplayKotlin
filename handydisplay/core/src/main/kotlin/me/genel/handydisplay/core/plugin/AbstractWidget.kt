@@ -4,7 +4,6 @@ import javafx.fxml.FXMLLoader
 import javafx.scene.layout.Pane
 import me.genel.handydisplay.core.IRegisterable
 import org.apache.logging.log4j.kotlin.Logging
-import org.apache.logging.log4j.kotlin.logger
 
 abstract class AbstractWidget(override val registryName: String, val displayName: String) : IRegisterable<AbstractWidget>, Logging {
 

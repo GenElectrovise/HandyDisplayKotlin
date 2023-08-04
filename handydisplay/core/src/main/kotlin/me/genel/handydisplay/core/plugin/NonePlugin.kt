@@ -6,7 +6,9 @@ import javafx.scene.layout.VBox
 import me.genel.handydisplay.core.register
 import org.apache.logging.log4j.kotlin.Logging
 
-class NonePlugin : AbstractPlugin(), Logging {
+class NonePlugin: AbstractPlugin(), Logging {
+
+
     override fun finishPluginLoading() {
         register<AbstractWidget>(NoneWidget())
     }
@@ -16,7 +18,8 @@ class NonePlugin : AbstractPlugin(), Logging {
     override val registryName: String = "none"
 }
 
-class NoneWidget : AbstractWidget("none", "None") {
+class NoneWidget: AbstractWidget("none", "None") {
+
 
     override fun createContentPane(): Pane {
         val box = VBox()

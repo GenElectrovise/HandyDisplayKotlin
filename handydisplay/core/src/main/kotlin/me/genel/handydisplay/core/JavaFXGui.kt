@@ -17,11 +17,13 @@ import org.apache.logging.log4j.kotlin.Logging
 const val WIDTH: Double = 480.0
 const val HEIGHT: Double = 320.0
 
+
 // Layers for the GUI stack pane
 const val WIDGET_LAYER = 0
 const val OVERLAY_LAYER = WIDGET_LAYER + 1
 
-class JavaFXGui : Application(), Logging {
+class JavaFXGui: Application(), Logging {
+
 
     private lateinit var contentStack: StackPane
     private val guiConfig: GuiConfigModel = fileConfig(hdRunFile(null, "gui.properties"))
@@ -39,7 +41,7 @@ class JavaFXGui : Application(), Logging {
 
         // Set up stack pane (so that I can index its elements by number easily)
         contentStack = StackPane()
-        for (i in 0..OVERLAY_LAYER) {
+        for (i in 0 .. OVERLAY_LAYER) {
             contentStack.children.add(AnchorPane())
         }
 
@@ -99,7 +101,8 @@ class JavaFXGui : Application(), Logging {
         currentWidget.value = get<AbstractWidget>(newName)
     }
 
-    inner class CurrentWidgetPropertyChangedListener : ChangeListener<AbstractWidget>, Logging {
+    inner class CurrentWidgetPropertyChangedListener: ChangeListener<AbstractWidget>, Logging {
+
 
         override fun changed(observable: ObservableValue<out AbstractWidget>?, oldValue: AbstractWidget?, newValue: AbstractWidget?) {
             logger.info("Switching current widget from ${oldValue?.registryName} to ${newValue?.registryName}")
@@ -115,7 +118,6 @@ class JavaFXGui : Application(), Logging {
     }
 
     data class GuiConfigModel(
-        val order: Set<String>
-    )
-
+            val order: Set<String>
+                             )
 }

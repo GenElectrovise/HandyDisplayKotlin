@@ -5,15 +5,15 @@ import javafx.scene.layout.Pane
 import me.genel.handydisplay.core.IRegisterable
 import org.apache.logging.log4j.kotlin.Logging
 
-abstract class AbstractWidget(override val registryName: String, val displayName: String) : IRegisterable<AbstractWidget>, Logging {
+abstract class AbstractWidget(override val registryName: String, val displayName: String): IRegisterable<AbstractWidget>, Logging {
 
-    init {
-        // Display
+    init { // Display
         assert(
-            displayName.asSequence()
-                .all { it.isLetterOrDigit() }) { "Displayed widget names may only contain letters and digits. $displayName is invalid." }
-        assert(displayName.length in 1..16) { "Displayed widget names must have [1,16] characters. $displayName is invalid." }
+                displayName.asSequence()
+                        .all { it.isLetterOrDigit() }) { "Displayed widget names may only contain letters and digits. $displayName is invalid." }
+        assert(displayName.length in 1 .. 16) { "Displayed widget names must have [1,16] characters. $displayName is invalid." }
     }
+
 
     /**
      * Called when the visible widget switches to that of this plugin. Should create a new instance each time, but can achieve data persistence by
@@ -21,6 +21,7 @@ abstract class AbstractWidget(override val registryName: String, val displayName
      * method) in a JavaFX controller.
      */
     abstract fun createContentPane(): Pane
+
 
     /**
      * Called when the HandyDisplay GUI switches the current widget AWAY FROM this widget.
@@ -34,6 +35,7 @@ abstract class AbstractWidget(override val registryName: String, val displayName
         logger.debug("Hiding $registryName")
     }
 
+
     /**
      * Called when the HandyDisplay GUI switches the current widget ONTO this widget.
      *
@@ -46,6 +48,7 @@ abstract class AbstractWidget(override val registryName: String, val displayName
     fun onShow() {
         logger.debug("Showing $registryName")
     }
+
 
     /**
      * Convenience method to load a JavaFX pane of type `T` from an FXML file located at the given path within the JAR containing this class. This
@@ -68,9 +71,8 @@ abstract class AbstractWidget(override val registryName: String, val displayName
             val loaded: L = loader.load()
 
             return FXMLLoadResult(
-                loader.getController(),
-                loaded
-            )
+                    loader.getController(), loaded
+                                 )
         } catch (cnf: ClassNotFoundException) {
             logger.fatal("Error creating content for widget: $registryName")
             logger.fatal("ClassNotFoundException *may* indicate that a controller was designated in the given FXML.")
@@ -81,7 +83,6 @@ abstract class AbstractWidget(override val registryName: String, val displayName
     }
 
     data class FXMLLoadResult<C, T>(
-        val controller: C,
-        val rootComponent: T
-    )
+            val controller: C, val rootComponent: T
+                                   )
 }

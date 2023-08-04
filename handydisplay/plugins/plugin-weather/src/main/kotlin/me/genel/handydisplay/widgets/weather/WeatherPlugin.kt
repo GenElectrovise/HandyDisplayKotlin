@@ -6,7 +6,8 @@ import me.genel.handydisplay.core.plugin.AbstractPlugin
 import me.genel.handydisplay.core.plugin.AbstractWidget
 import me.genel.handydisplay.core.register
 
-class WeatherPlugin : AbstractPlugin() {
+class WeatherPlugin: AbstractPlugin() {
+
 
     override val registryName: String = "weather"
 
@@ -24,6 +25,6 @@ class WeatherPlugin : AbstractPlugin() {
     }
 
     data class ConfigModel(
-        val datetimeFormat: String
-    )
+            val datetimeFormat: String
+                          )
 }

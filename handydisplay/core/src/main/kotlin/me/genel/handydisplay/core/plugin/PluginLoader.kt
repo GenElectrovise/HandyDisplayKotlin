@@ -17,7 +17,8 @@ import kotlin.system.exitProcess
  * Loads plugins from disk at application startup and maintains instances of their main classes (any subclass of `AbstractPlugin`). Order of plugin
  * loading cannot be guaranteed.
  */
-class PluginLoader : Logging {
+class PluginLoader: Logging {
+
 
     private val scanResult: ScanResult
 
@@ -34,10 +35,8 @@ class PluginLoader : Logging {
         jars.forEach { logger.info(" : ${JarUtils.leafName(it)} - $it") }
 
         val classLoader = URLClassLoader(
-            "pluginJarURLClassLoader",
-            jars.map { File(it).toURI().toURL() }.toTypedArray(),
-            javaClass.classLoader
-        )
+                "pluginJarURLClassLoader", jars.map { File(it).toURI().toURL() }.toTypedArray(), javaClass.classLoader
+                                        )
 
         return ClassGraph().enableClassInfo().addClassLoader(classLoader).scan()
     }
@@ -80,8 +79,7 @@ class PluginLoader : Logging {
         }
     }
 
-    private fun createPluginInstances(classes: List<Class<AbstractPlugin>>) =
-        classes.map { clazz -> instantiatePluginClass(clazz) }
+    private fun createPluginInstances(classes: List<Class<AbstractPlugin>>) = classes.map { clazz -> instantiatePluginClass(clazz) }
 
     private fun instantiatePluginClass(clazz: Class<AbstractPlugin>): AbstractPlugin {
         var mie: PluginInstantiationException? = null
@@ -100,7 +98,6 @@ class PluginLoader : Logging {
             } catch (ini: ExceptionInInitializerError) {
                 PluginInstantiationException("Exception occurred inside constructor.", clazz, cons, ini)
             }
-
         } catch (nsm: NoSuchMethodException) {
             mie = PluginInstantiationException("No public 0-argument constructor found.", clazz, null, nsm)
         } catch (sec: SecurityException) {

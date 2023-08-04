@@ -8,20 +8,23 @@ import java.lang.reflect.Modifier
  * constructor.
  */
 class PluginInstantiationException(
-    message: String, clazz: Class<AbstractPlugin>, cons: Constructor<AbstractPlugin>?, cause: Throwable
-) : Exception(
-    StringBuilder()
-        .appendLine(message)
-        .appendLine("While loading mod: ${clazz.name}")
-        .appendLine("With constructor: ${formatConstructorInfo(cons)}")
-        .toString(), cause
-)
+        message: String, clazz: Class<AbstractPlugin>, cons: Constructor<AbstractPlugin>?, cause: Throwable
+                                  ): Exception(
+        StringBuilder().appendLine(message)
+                .appendLine("While loading mod: ${clazz.name}")
+                .appendLine("With constructor: ${formatConstructorInfo(cons)}")
+                .toString(), cause
+                                              )
+
 
 private fun formatConstructorInfo(cons: Constructor<*>?): String {
     return if (cons != null) "${formatConstructorModifiers(cons.modifiers)} ${formatConstructorArgs(cons)}" else "<null constructor>"
 }
 
+
 private fun formatConstructorArgs(cons: Constructor<*>) = cons.parameterTypes.joinToString(", ", "(", ")") { it.name }
+
+
 private fun formatConstructorModifiers(modifiers: Int): String {
     val builder = StringBuilder()
 

@@ -6,17 +6,18 @@ import javafx.scene.layout.HBox
 import org.apache.logging.log4j.kotlin.Logging
 import java.util.*
 
-class WeatherController : Logging {
+class WeatherController: Logging {
+
 
     var config: WeatherPlugin.ConfigModel? = null
 
-    @FXML
-    lateinit var containerHBox: HBox
+
+    @FXML lateinit var containerHBox: HBox
 
     private val datetimeTimer = Timer()
 
-    @FXML
-    fun initialize() {
+
+    @FXML fun initialize() {
         logger.debug("Initializing weather controller...")
 
         // When the root node has no parent (has been removed from the scene tree),
@@ -28,7 +29,7 @@ class WeatherController : Logging {
         }
 
         try {
-            datetimeTimer.scheduleAtFixedRate(object : TimerTask() { //TODO dispose of weather executor on program closing
+            datetimeTimer.scheduleAtFixedRate(object: TimerTask() { //TODO dispose of weather executor on program closing
                 override fun run() = Platform.runLater {
                     logger.debug("Not updating datetime yet :(")
                 }

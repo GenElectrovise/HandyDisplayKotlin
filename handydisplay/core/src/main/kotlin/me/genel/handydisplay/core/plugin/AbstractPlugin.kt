@@ -9,7 +9,8 @@ import org.apache.logging.log4j.kotlin.Logging
  *
  * Subclasses should declare a zero-argument constructor.
  */
-abstract class AbstractPlugin() : IRegisterable<AbstractPlugin>, Logging {
+abstract class AbstractPlugin(): IRegisterable<AbstractPlugin>, Logging {
+
 
     /**
      * Called after all plugins have been instantiated. The order of calling of this method cannot be guaranteed. This is a good time to check
@@ -17,6 +18,7 @@ abstract class AbstractPlugin() : IRegisterable<AbstractPlugin>, Logging {
      * (instance)`.
      */
     abstract fun finishPluginLoading()
+
 
     /**
      * Called when plugins must shut down immediately because the application wants to close. This must terminate any rogue threads or executors!

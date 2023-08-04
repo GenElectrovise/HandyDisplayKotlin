@@ -14,15 +14,14 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-val dateTimeTextFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm - dd/MM/yy");
+val dateTimeTextFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm - dd/MM/yy")
 
 private var cycleWidgetsLeft: (() -> Unit)? = null
 private var cycleWidgetsRight: (() -> Unit)? = null
 
 fun createOverlayPane(
-    left: () -> Unit,
-    right: () -> Unit
-): Pane {
+        left: () -> Unit, right: () -> Unit
+                     ): Pane {
     cycleWidgetsLeft = left
     cycleWidgetsRight = right
 
@@ -31,9 +30,11 @@ fun createOverlayPane(
     return loader.load<StackPane>()
 }
 
-class OverlayController : Logging {
+class OverlayController: Logging {
 
-    inner class UpdateTitleWhenWidgetNameChangedListener : ChangeListener<AbstractWidget> {
+    inner class UpdateTitleWhenWidgetNameChangedListener: ChangeListener<AbstractWidget> {
+
+
         override fun changed(observable: ObservableValue<out AbstractWidget>?, oldValue: AbstractWidget?, newValue: AbstractWidget?) {
             val oldVal = widgetNameText.text
             val newVal = newValue?.displayName
@@ -42,33 +43,30 @@ class OverlayController : Logging {
         }
     }
 
-    @FXML
-    lateinit var widgetNameText: Label
 
-    @FXML
-    lateinit var datetimeText: Label
+    @FXML lateinit var widgetNameText: Label
 
-    @FXML
-    lateinit var lagDataText: Label
 
-    @FXML
-    fun initialize() {
+    @FXML lateinit var datetimeText: Label
+
+
+    @FXML lateinit var lagDataText: Label
+
+
+    @FXML fun initialize() {
         val datetimeTimer = Timer()
-        datetimeTimer.scheduleAtFixedRate(object : TimerTask() {
-            override fun run() =
-                Platform.runLater { datetimeText.text = LocalDateTime.now().format(dateTimeTextFormatter) }
+        datetimeTimer.scheduleAtFixedRate(object: TimerTask() {
+            override fun run() = Platform.runLater { datetimeText.text = LocalDateTime.now().format(dateTimeTextFormatter) }
         }, 0L, 1000L)
 
         val widgetNameChangeListener = UpdateTitleWhenWidgetNameChangedListener()
         GUI.currentWidget.addListener(widgetNameChangeListener)
     }
 
-    @FXML
-    fun fxmlLeftToggleButtonOnAction() =
-        (cycleWidgetsLeft ?: throw NullPointerException("cycleWidgetsLeft lambda has not been set!")).invoke()
 
-    @FXML
-    fun fxmlRightToggleButtonOnAction() =
-        (cycleWidgetsRight ?: throw NullPointerException("cycleWidgetsRight lambda has not been set!")).invoke()
+    @FXML fun fxmlLeftToggleButtonOnAction() = (cycleWidgetsLeft ?: throw NullPointerException("cycleWidgetsLeft lambda has not been set!")).invoke()
 
+
+    @FXML fun fxmlRightToggleButtonOnAction() =
+            (cycleWidgetsRight ?: throw NullPointerException("cycleWidgetsRight lambda has not been set!")).invoke()
 }

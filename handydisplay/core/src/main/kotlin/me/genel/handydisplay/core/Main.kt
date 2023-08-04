@@ -22,40 +22,35 @@ fun main(args: Array<String>) {
 
 fun checkForResources() {
     val root = RunCommand::class.java.classLoader.getResource("resources_root")
-        ?: throw NullPointerException("Cannot find resources_root. This indicates that the necessary JAR resources are inaccessible.")
+            ?: throw NullPointerException("Cannot find resources_root. This indicates that the necessary JAR resources are inaccessible.")
     println("Found resources_root: $root")
     println("Resources are intact!")
 }
 
-class RunCommand : Runnable, Logging {
+class RunCommand: Runnable, Logging {
+
 
     @CommandLine.Option(
-        names = ["-m", "--mirror"],
-        description = ["Name of the mirror to use."],
-        required = true
-    )
-    lateinit var mirrorName: String
+            names = ["-m", "--mirror"], description = ["Name of the mirror to use."], required = true
+                       ) lateinit var mirrorName: String
+
 
     @CommandLine.Option(
-        names = ["-h", "--head"],
-        description = ["Whether to run the application with a mirror-independent GUI."],
-        required = true
-    )
-    var headful: Boolean = false
+            names = ["-h", "--head"], description = ["Whether to run the application with a mirror-independent GUI."], required = true
+                       ) var headful: Boolean = false
+
 
     override fun run() {
         val map = mapOf("mirror" to mirrorName, "headful" to headful)
         logger.debug("Parsed arguments: $map")
 
         PLUGIN_LOADER = PluginLoader()
-        CORE_CONFIG = fileConfig(hdRunFile(null, "core.properties"))
-        // The following initialises #GUI
+        CORE_CONFIG = fileConfig(hdRunFile(null, "core.properties")) // The following initialises #GUI
         Application.launch(JavaFXGui::class.java)
         exitProcess(0)
     }
 }
 
 data class CoreConfigModel(
-    val key: List<String>,
-    val yay: String
-)
+        val key: List<String>, val yay: String
+                          )

@@ -66,7 +66,10 @@ abstract class AbstractWidget(override val registryName: String, val displayName
             val url = this::class.java.classLoader.getResource(resourcePath)
             val loader = FXMLLoader()
             loader.location = url
+
+            // ++++++
             loader.classLoader = javaClass.classLoader  // This line is very, very important!!
+            // ++++++
 
             val loaded: L = loader.load()
 

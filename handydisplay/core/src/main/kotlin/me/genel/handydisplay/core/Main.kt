@@ -45,7 +45,8 @@ class RunCommand: Runnable, Logging {
         logger.debug("Parsed arguments: $map")
 
         PLUGIN_LOADER = PluginLoader()
-        CORE_CONFIG = fileConfig(hdRunFile(null, "core.properties")) // The following initialises #GUI
+        CORE_CONFIG = fileConfig(hdRunFile(null, "core.properties"))
+        // Start application (initialises GUI variable)
         Application.launch(JavaFXGui::class.java)
         exitProcess(0)
     }

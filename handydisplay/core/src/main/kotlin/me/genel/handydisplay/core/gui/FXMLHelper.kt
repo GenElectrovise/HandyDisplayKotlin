@@ -5,6 +5,9 @@ import me.genel.handydisplay.core.plugin.PluginLoader
 import org.apache.logging.log4j.kotlin.Logging
 import java.io.FileNotFoundException
 
+/**
+ * Helper object for loading FXML files for widgets.
+ */
 object FXMLHelper: Logging {
 
 
@@ -46,14 +49,14 @@ object FXMLHelper: Logging {
             throw cnf
         }
     }
+
+
+    /**
+     * Returned by `loadFXML(..)`. Handy way of getting access to otherwise obscured properties
+     * like the FXML controller.
+     */
+    data class FXMLLoadResult<C, T>(
+            val controller: C,
+            val rootComponent: T
+                                   )
 }
-
-
-/**
- * Returned by `loadFXML(..)`. Handy way of getting access to otherwise obscured properties
- * like the FXML controller.
- */
-data class FXMLLoadResult<C, T>(
-        val controller: C,
-        val rootComponent: T
-                               )

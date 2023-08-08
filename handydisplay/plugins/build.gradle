@@ -1,25 +1,24 @@
 subprojects {
 
-    var fileDeployHdrunPlugins = project(':handydisplay:core').file('deploy/hdrun/plugins/')
+    var fileDistHdrunPlugins = project(':handydisplay:core').file('src/main/dist/hdrun/plugins/')
     var fileHdrunPlugins = project(':handydisplay:core').file('hdrun/plugins/')
 
     tasks.register('deployPluginJars', Copy) {
 
         var name = project.name
-        var file = project(':handydisplay:core').file('deploy/hdrun/plugins/')
 
         doFirst {
-            println("Copying JAR for mod '$name' into '$file'...")
+            println("Copying JAR for mod '$name' into '$fileDistHdrunPlugins'...")
         }
 
         from jar
-        into file
+        into fileDistHdrunPlugins
     }
 
     tasks.register('copyPluginsToHdrun', Copy) {
         dependsOn(deployPluginJars)
 
-        from fileDeployHdrunPlugins
+        from fileDistHdrunPlugins
         into fileHdrunPlugins
     }
 

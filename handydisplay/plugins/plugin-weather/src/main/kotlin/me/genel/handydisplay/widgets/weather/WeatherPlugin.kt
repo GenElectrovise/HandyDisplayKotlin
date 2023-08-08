@@ -1,10 +1,10 @@
 package me.genel.handydisplay.widgets.weather
 
-import me.genel.handydisplay.core.registry.Registry
 import me.genel.handydisplay.core.fileConfig
+import me.genel.handydisplay.core.gui.AbstractWidget
 import me.genel.handydisplay.core.hdRunFile
 import me.genel.handydisplay.core.plugin.AbstractPlugin
-import me.genel.handydisplay.core.gui.AbstractWidget
+import me.genel.handydisplay.core.registry.Registry
 
 class WeatherPlugin: AbstractPlugin() {
 

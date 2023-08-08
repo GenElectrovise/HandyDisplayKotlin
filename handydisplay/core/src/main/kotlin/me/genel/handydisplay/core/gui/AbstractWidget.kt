@@ -1,6 +1,5 @@
 package me.genel.handydisplay.core.gui
 
-import javafx.fxml.FXMLLoader
 import javafx.scene.layout.Pane
 import me.genel.handydisplay.core.registry.IRegistrable
 import org.apache.logging.log4j.kotlin.Logging

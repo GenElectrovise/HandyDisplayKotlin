@@ -1,1 +1,0 @@
-./bin/HandyDisplayKotlin argument1 argument2 argument3

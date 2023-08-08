@@ -15,37 +15,54 @@ application {
     mainClassName = 'me.genel.handydisplay.core.MainKt'
 }
 
-distributions {
-//    WithDeployment {
-//        distributionBaseName = 'handy_display_zip'
-//        // distributionClassifier = 'classifer'
-//        contents {
-//            from 'deploy/'
-//            from jar
-//            from dependencies.contents
-//        }
-//    }
-}
-
-def zipNameShort = "core-${version}"
-def zipName = "${zipNameShort}.zip"
-def zipFileLocal = project.file("build/distributions/${zipName}")
-
-remotes {
-    atompi {
-        host = ATOMPI_HOST
-        user = ATOMPI_USER
-        password = ATOMPI_PASS
-    }
-}
-
 run {
     dependsOn(project(":handydisplay:plugins").tasks.named("build"))
 }
 
-tasks.register('deployCoreSSH') {
-    ssh.run {
-        session(remotes.atompi) {
+//
+// ==== This bit is currently pointless and doesn't work ====
+//
+//installDist.doLast {
+//    println("Cool stuff!!")
+//}
+//
+//distributions {
+//    WithDeployment {
+//        distributionBaseName = 'handy_display_zip'
+//        // distributionClassifier = 'classifer'
+//
+//        contents {
+//            from 'deploy/'
+//
+//            into('bin') {
+//                from 'build/scripts'
+//                fileMode = 0755
+//            }
+//
+//            into('lib') {
+//                from jar
+//            }
+//
+//            // from dependencies.contents
+//        }
+//    }
+//}
+//
+//remotes {
+//    atompi {
+//        host = ATOMPI_HOST
+//        user = ATOMPI_USER
+//        password = ATOMPI_PASS
+//    }
+//}
+//
+//def zipNameShort = "core-${version}"
+//def zipName = "${zipNameShort}.zip"
+//def zipFileLocal = project.file("build/distributions/${zipName}")
+//
+//tasks.register('deployCoreSSH') {
+//    ssh.run {
+//        session(remotes.atompi) {
 //            // Make necessary directories ahead of time
 //            execute "sudo mkdir -p ${ATOMPI_PATH}/archives/"
 //            execute "sudo mkdir -p ${ATOMPI_PATH}/tmp/"
@@ -57,18 +74,18 @@ tasks.register('deployCoreSSH') {
 //            execute "sudo rm -r ${ATOMPI_PATH}/tmp"
 //
 //            put from: project.file("deploy/").getAbsolutePath(), into: "${ATOMPI_PATH}"
-        }
-    }
-}
-
-tasks.register('deployPluginsSSH') {
-    doLast {
-        println("SSH Deploy >> Deploying to: ${ATOMPI_HOST}")
-
-        ssh.run {
-            session(remotes.atompi) {
-
-            }
-        }
-    }
-}
+//        }
+//    }
+//}
+//
+//tasks.register('deployPluginsSSH') {
+//    doLast {
+//        println("SSH Deploy >> Deploying to: ${ATOMPI_HOST}")
+//
+//        ssh.run {
+//            session(remotes.atompi) {
+//
+//            }
+//        }
+//    }
+//}

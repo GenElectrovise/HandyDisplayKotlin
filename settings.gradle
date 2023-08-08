@@ -9,6 +9,9 @@ findProject(':handydisplay:plugins')?.name = 'plugins'
 include 'handydisplay:plugins:plugin-weather'
 findProject(':handydisplay:plugins:plugin-weather')?.name = 'plugin-weather'
 
+include 'handydisplay:plugins:plugin-elegoo35'
+findProject(':handydisplay:plugins:plugin-elegoo35')?.name = 'plugin-elegoo35'
+
 dependencyResolutionManagement {
 
     repositories {
@@ -50,3 +53,4 @@ dependencyResolutionManagement {
         }
     }
 }
+

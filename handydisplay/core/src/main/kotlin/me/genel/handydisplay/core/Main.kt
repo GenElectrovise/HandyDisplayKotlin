@@ -5,6 +5,7 @@ import me.genel.handydisplay.core.gui.JavaFXGui
 import me.genel.handydisplay.core.plugin.PluginLoader
 import org.apache.logging.log4j.kotlin.Logging
 import picocli.CommandLine
+import java.awt.GraphicsEnvironment
 import kotlin.system.exitProcess
 
 /**
@@ -75,6 +76,9 @@ class RunCommand: Runnable, Logging {
 
         // Reference PluginLoader singleton to initialise it
         PluginLoader
+
+        //https://openjfx-dev.openjdk.java.narkive.com/POqzaWTl/running-javafx-headless-without-native-dependencies
+        //https://stackoverflow.com/questions/37394512/javafx-output-to-the-spi-bus-instead-of-hdmi-on-a-rpi
 
         // Start application (initialises GUI variable)
         Application.launch(JavaFXGui::class.java)

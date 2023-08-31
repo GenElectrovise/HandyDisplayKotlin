@@ -1,4 +1,4 @@
-package me.genel.handydisplay.widgets.weather
+package me.genel.handydisplay.plugins.weather
 
 import me.genel.handydisplay.core.fileConfig
 import me.genel.handydisplay.core.gui.AbstractWidget

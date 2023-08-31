@@ -4,7 +4,6 @@ import io.github.classgraph.ClassGraph
 import io.github.classgraph.ScanResult
 import me.genel.handydisplay.core.hdRunFile
 import me.genel.handydisplay.core.registry.Registry
-import nonapi.io.github.classgraph.utils.JarUtils
 import org.apache.logging.log4j.kotlin.Logging
 import java.io.File
 import java.io.FileFilter
@@ -63,7 +62,7 @@ object PluginLoader: Logging {
     private fun scanClasspathAndJars(): ScanResult {
         val jars = getPluginJarPaths()
         logger.info("Found ${jars.size} plugin .JAR files:")
-        jars.forEach { logger.info(" : ${JarUtils.leafName(it)} - $it") }
+        jars.forEach { logger.info(" : $it") }
 
         masterClassLoader = URLClassLoader("pluginJarURLClassLoader",
                                            jars

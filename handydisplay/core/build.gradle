@@ -3,6 +3,8 @@ plugins {
     id 'distribution'
     alias(handylibs.plugins.hidetake.ssh)
     alias(handylibs.plugins.kotlin.serialization)
+    alias(handylibs.plugins.javafx)
+    alias(handylibs.plugins.jlink)
 }
 
 dependencies {
@@ -12,80 +14,23 @@ dependencies {
 }
 
 application {
-    mainClassName = 'me.genel.handydisplay.core.MainKt'
+    mainClass = "me.genel.handydisplay.core.MainKt"
+    mainModule = "uk.iatom.handydisplay.core"
 }
 
 run {
     dependsOn(project(":handydisplay:plugins").tasks.named("build"))
 }
 
-//
-// ==== This bit is currently pointless and doesn't work ====
-//
-//installDist.doLast {
-//    println("Cool stuff!!")
-//}
-//
-//distributions {
-//    WithDeployment {
-//        distributionBaseName = 'handy_display_zip'
-//        // distributionClassifier = 'classifer'
-//
-//        contents {
-//            from 'deploy/'
-//
-//            into('bin') {
-//                from 'build/scripts'
-//                fileMode = 0755
-//            }
-//
-//            into('lib') {
-//                from jar
-//            }
-//
-//            // from dependencies.contents
-//        }
-//    }
-//}
-//
-//remotes {
-//    atompi {
-//        host = ATOMPI_HOST
-//        user = ATOMPI_USER
-//        password = ATOMPI_PASS
-//    }
-//}
-//
-//def zipNameShort = "core-${version}"
-//def zipName = "${zipNameShort}.zip"
-//def zipFileLocal = project.file("build/distributions/${zipName}")
-//
-//tasks.register('deployCoreSSH') {
-//    ssh.run {
-//        session(remotes.atompi) {
-//            // Make necessary directories ahead of time
-//            execute "sudo mkdir -p ${ATOMPI_PATH}/archives/"
-//            execute "sudo mkdir -p ${ATOMPI_PATH}/tmp/"
-//            // Transfer and unzip distribution into tmp/
-//            put from: zipFileLocal, into: "${ATOMPI_PATH}/archives/${zipName}"
-//            execute "sudo unzip -o ${ATOMPI_PATH}/archives/${zipName} -d ${ATOMPI_PATH}/tmp"
-//            // The ZIP contains a directory, so we need to extract it
-//            execute "cp -R ${ATOMPI_PATH}/tmp/${zipNameShort}/* ${ATOMPI_PATH}"
-//            execute "sudo rm -r ${ATOMPI_PATH}/tmp"
-//
-//            put from: project.file("deploy/").getAbsolutePath(), into: "${ATOMPI_PATH}"
-//        }
-//    }
-//}
-//
-//tasks.register('deployPluginsSSH') {
-//    doLast {
-//        println("SSH Deploy >> Deploying to: ${ATOMPI_HOST}")
-//
-//        ssh.run {
-//            session(remotes.atompi) {
-//
-//            }
-//        }
-//    }
-//}
+javafx {
+    version = JAVAFX_VERSION
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
+}
+
+jlink {
+    launcher {
+        name = 'uk.iatom.handydisplay.core'
+    }
+    forceMerge('log4j-api')
+    forceMerge('kotlin')
+}

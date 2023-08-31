@@ -5,6 +5,7 @@ plugins {
     alias(handylibs.plugins.kotlin.serialization)
     alias(handylibs.plugins.javafx)
     alias(handylibs.plugins.dokka)
+    alias(handylibs.plugins.javamodularity)
 }
 
 allprojects {
@@ -16,13 +17,9 @@ allprojects {
     apply plugin: handylibs.plugins.kotlin.serialization.get().pluginId
     apply plugin: handylibs.plugins.javafx.get().pluginId
     apply plugin: handylibs.plugins.dokka.get().pluginId
+    apply plugin: handylibs.plugins.javamodularity.get().pluginId
     apply plugin: 'java'
     apply plugin: 'java-library'
-
-    javafx {
-        version = JAVAFX_VERSION
-        modules = ['javafx.controls', 'javafx.fxml']
-    }
 
     dependencies {
         testImplementation handylibs.kotlin.test

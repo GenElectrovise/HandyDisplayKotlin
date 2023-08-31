@@ -1,4 +1,4 @@
-package me.genel.handydisplay.widgets.weather
+package me.genel.handydisplay.plugins.weather
 
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Pane

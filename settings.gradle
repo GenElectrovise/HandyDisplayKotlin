@@ -9,9 +9,6 @@ findProject(':handydisplay:plugins')?.name = 'plugins'
 include 'handydisplay:plugins:plugin-weather'
 findProject(':handydisplay:plugins:plugin-weather')?.name = 'plugin-weather'
 
-include 'handydisplay:plugins:plugin-elegoo35'
-findProject(':handydisplay:plugins:plugin-elegoo35')?.name = 'plugin-elegoo35'
-
 dependencyResolutionManagement {
 
     repositories {
@@ -25,18 +22,20 @@ dependencyResolutionManagement {
         handylibs {
             //
             // Plugins: alias(handylibs.plugins.xxx)
-            plugin('kotlin-jvm', 'org.jetbrains.kotlin.jvm').version('1.9.0')
-            plugin('kotlin-multiplatform', 'org.jetbrains.kotlin.multiplatform').version('1.9.0')
-            plugin('kotlin-serialization', 'org.jetbrains.kotlin.plugin.serialization').version('1.9.0')
+            plugin('kotlin-jvm', 'org.jetbrains.kotlin.jvm').version(KOTLIN_VERSION)
+            plugin('kotlin-multiplatform', 'org.jetbrains.kotlin.multiplatform').version(KOTLIN_VERSION)
+            plugin('kotlin-serialization', 'org.jetbrains.kotlin.plugin.serialization').version(KOTLIN_VERSION)
+            plugin('javamodularity', 'org.javamodularity.moduleplugin').version('1.8.12')
+            plugin('jlink', 'org.beryx.jlink').version('2.26.0')
             // plugin('gradle-app', 'application') // No version
             // plugin('gradle-dist', 'distribution') // No version
             plugin('hidetake-ssh', 'org.hidetake.ssh').version('2.11.2')
-            plugin('javafx', 'org.openjfx.javafxplugin').version('0.0.9')
+            plugin('javafx', 'org.openjfx.javafxplugin').version('0.0.13')
             plugin('dokka', 'org.jetbrains.dokka').version('1.8.20')
 
             // Libraries: library(handylibs.xxx)
             // Test
-            library('kotlin-test', 'org.jetbrains.kotlin:kotlin-test:1.9.0')
+            library('kotlin-test', "org.jetbrains.kotlin:kotlin-test:$KOTLIN_VERSION")
             // Core
             library('log4j-core', 'org.apache.logging.log4j:log4j-core:2.20.0')
             library('log4j-api-kotlin', 'org.apache.logging.log4j:log4j-api-kotlin:1.2.0')

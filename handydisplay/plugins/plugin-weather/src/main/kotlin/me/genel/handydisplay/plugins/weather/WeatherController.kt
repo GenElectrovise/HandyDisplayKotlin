@@ -1,4 +1,4 @@
-package me.genel.handydisplay.widgets.weather
+package me.genel.handydisplay.plugins.weather
 
 import javafx.application.Platform
 import javafx.fxml.FXML

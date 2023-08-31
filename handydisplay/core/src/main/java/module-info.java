@@ -12,6 +12,7 @@ module uk.iatom.handydisplay.core {
     requires javafx.fxml;
     requires org.apache.logging.log4j;
     requires log4j.api.kotlin;
+    requires hoplite.core;
 
     opens me.genel.handydisplay.core to info.picocli;
 

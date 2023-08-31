@@ -9,14 +9,8 @@ import javafx.scene.layout.StackPane
 object OverlayCreator {
 
 
-    fun createOverlayPane(
-            left: () -> Unit,
-            right: () -> Unit
-                         ): Pane {
-
+    fun createOverlayPane(): Pane {
         val result = FXMLHelper.loadFXML<OverlayController, StackPane>("fxml/overlay.fxml")
-        result.controller.leftToggleAction = left
-        result.controller.rightToggleAction = right
         return result.rootComponent
     }
 }

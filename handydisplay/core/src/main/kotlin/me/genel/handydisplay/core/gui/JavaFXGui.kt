@@ -3,18 +3,14 @@ package me.genel.handydisplay.core.gui
 import javafx.application.Application
 import javafx.application.ConditionalFeature
 import javafx.application.Platform
-import javafx.beans.property.SimpleObjectProperty
-import javafx.beans.value.ChangeListener
-import javafx.beans.value.ObservableValue
 import javafx.scene.Scene
 import javafx.scene.layout.AnchorPane
+import javafx.scene.layout.GridPane
+import javafx.scene.layout.Pane
 import javafx.scene.layout.StackPane
 import javafx.stage.Stage
 import me.genel.handydisplay.core.fileConfig
 import me.genel.handydisplay.core.hdRunFile
-import me.genel.handydisplay.core.plugin.AbstractPlugin
-import me.genel.handydisplay.core.plugin.widget.AbstractWidget
-import me.genel.handydisplay.core.registry.Registry
 import org.apache.logging.log4j.kotlin.Logging
 
 const val WIDTH: Double = 480.0
@@ -22,8 +18,22 @@ const val HEIGHT: Double = 320.0
 
 
 // Layers for the GUI stack pane
-const val WIDGET_LAYER = 0
-const val OVERLAY_LAYER = WIDGET_LAYER + 1
+/**
+ * The StackPane layer housing the grid which widgets are placed into
+ */
+const val GRID_LAYER = 0
+
+
+/**
+ * The StackPane layer which fancy things like the 'character' are drawn on.
+ */
+const val EFFECTS_LAYER = GRID_LAYER + 1
+
+
+/**
+ * The StackPane layer for the overlay.
+ */
+const val OVERLAY_LAYER = EFFECTS_LAYER + 1
 
 
 /**
@@ -42,7 +52,6 @@ const val OVERLAY_LAYER = WIDGET_LAYER + 1
 class JavaFXGui: Application(), Logging {
 
 
-    private lateinit var contentStack: StackPane
     private val guiConfig: GuiConfigModel = fileConfig(
             hdRunFile(
                     null,
@@ -50,13 +59,25 @@ class JavaFXGui: Application(), Logging {
                      )
                                                       )
 
-    val currentWidget: SimpleObjectProperty<AbstractWidget> = SimpleObjectProperty()
+    private lateinit var contentStack: StackPane
+    private lateinit var grid: GridPane
+    private lateinit var effects: Pane
+    private lateinit var overlay: Pane
+
+    private val map: WidgetMap = WidgetMap(
+            createWidgetMapBindingBiArray(
+                    hdRunFile(
+                            null,
+                            "map"
+                             )
+                                         )
+                                          )
+
 
     init {
         if (GUI != null) throw IllegalStateException("Cannot instantiate multiple GUIs!")
         GUI = this
-        checkSupported()
-        validateOrder()
+        checkSupportedJFXFeatures()
     }
 
     override fun start(primaryStage: Stage?) {
@@ -82,19 +103,40 @@ class JavaFXGui: Application(), Logging {
                                   )
         primaryStage.show()
 
-        // Set up overlay
-        val overlay = OverlayCreator.createOverlayPane({ cycleWidgets(false) },
-                                                       { cycleWidgets(true) })
+        // Set up grid layer
+        grid = GridPane(map.width, map.height)
+        contentStack.children[GRID_LAYER] = grid
+        // Set up effects layer
+        effects = AnchorPane()
+        contentStack.children[EFFECTS_LAYER] = effects
+        // Set up overlay layer
+        overlay = OverlayCreator.createOverlayPane()
         contentStack.children[OVERLAY_LAYER] = overlay
 
+        map.forEachIndexed { x, y, wid ->
+
+            // GridPane indexes from 1, but arrays from 0
+            val col = x + 1;
+            val row = y + 1;
+
+            while (grid.columnCount < col) {
+                grid.addColumn()
+            }
+            while (grid.rowCount < row) {
+                grid.addRow()
+            }
+
+            grid.add(
+                    wid.createContentPane(),
+                    col,
+                    row
+                    )
+        }
+
         // Set up initial widget
-        currentWidget.addListener(CurrentWidgetPropertyChangedListener())
-        currentWidget.value = Registry.get<AbstractWidget>(
-                guiConfig.order
-                        .iterator()
-                        .next()
-                                                          )
+        // TODO Set starting pos
     }
+
 
     override fun stop() {
         super.stop()
@@ -105,7 +147,7 @@ class JavaFXGui: Application(), Logging {
     /**
      * Log supported JavaFX features.
      */
-    private fun checkSupported() {
+    private fun checkSupportedJFXFeatures() {
         logger.debug("Supported JavaFX ConditionalFeatures:")
         ConditionalFeature.entries.forEach {
             try {
@@ -118,68 +160,9 @@ class JavaFXGui: Application(), Logging {
 
 
     /**
-     * Ensure that the given widget order (from guiConfig) is valid.
-     *
-     * @throws IndexOutOfBoundsException If the widget order is empty.
-     * @throws NoSuchElementException If a name is present in the order for which there is no
-     * AbstractWidget registered.
-     */
-    private fun validateOrder() {
-        if (guiConfig.order.isEmpty()) throw IndexOutOfBoundsException("Cannot start application with an empty widget order. Please configure this in gui.properties. If in doubt, delete gui.properties and a default version will be created in its place.")
-
-        guiConfig.order.forEach {
-            if (Registry.get<AbstractPlugin>(it) == null) throw NoSuchElementException("There is no widget named $it to populate the given widget order: ${guiConfig.order}")
-        }
-    }
-
-
-    /**
-     * Cycle the current widget left/right (+1 / -1) through the order, wrapping to the start/end
-     * if needed.
-     */
-    private fun cycleWidgets(forwards: Boolean) {
-        logger.info("Cycling widgets " + (if (forwards) "+/forwards/right" else "-/backwards/left"))
-
-        val oldIndex = guiConfig.order.indexOf(currentWidget.value.registryName)
-        var newIndex = if (forwards) oldIndex + 1 else oldIndex - 1
-
-        if (newIndex < 0) newIndex = guiConfig.order.size - 1
-        else if (newIndex >= guiConfig.order.size) newIndex = 0
-
-        val newName = guiConfig.order.elementAt(newIndex)
-        currentWidget.value = Registry.get<AbstractWidget>(newName)
-    }
-
-
-    /**
-     * ChangeListener to update the currently displayed AbstractWidget on the JavaFX stage when
-     * the currentWidget property changes.
-     */
-    inner class CurrentWidgetPropertyChangedListener: ChangeListener<AbstractWidget>, Logging {
-
-
-        override fun changed(
-                observable: ObservableValue<out AbstractWidget>?,
-                oldValue: AbstractWidget?,
-                newValue: AbstractWidget?
-                            ) {
-            logger.info("Switching current widget from ${oldValue?.registryName} to ${newValue?.registryName}")
-            if (newValue == null) throw NullPointerException("Cannot switch to null widget.")
-
-            oldValue?.onHide()
-
-            val pane = newValue.createContentPane()
-            contentStack.children[WIDGET_LAYER] = pane
-
-            newValue.onShow()
-        }
-    }
-
-
-    /**
      * Configuration model for the gui.properties file.
      */
     data class GuiConfigModel(
-            val order: Set<String>
+            val test: String
                              )
 }

@@ -1,3 +1,5 @@
+import me.genel.handydisplay.core.plugin.widget.AbstractWidget;
+
 module uk.iatom.handydisplay.core {
     // Standard library
     requires kotlin.stdlib;
@@ -17,4 +19,7 @@ module uk.iatom.handydisplay.core {
     exports me.genel.handydisplay.core.plugin;
     exports me.genel.handydisplay.core.gui;
     exports me.genel.handydisplay.core.registry;
+    exports me.genel.handydisplay.core.plugin.widget;
+
+    provides AbstractWidget with me.genel.handydisplay.core.plugin.widget.ClockWidget;
 }

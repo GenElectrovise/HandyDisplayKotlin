@@ -2,7 +2,7 @@ package me.genel.handydisplay.plugins.weather
 
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Pane
-import me.genel.handydisplay.core.gui.AbstractWidget
+import me.genel.handydisplay.core.plugin.widget.AbstractWidget
 import me.genel.handydisplay.core.gui.FXMLHelper
 import me.genel.handydisplay.core.gui.FXMLLoadResult
 

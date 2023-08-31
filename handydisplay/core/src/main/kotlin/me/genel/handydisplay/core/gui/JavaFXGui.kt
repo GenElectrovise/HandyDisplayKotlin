@@ -13,6 +13,7 @@ import javafx.stage.Stage
 import me.genel.handydisplay.core.fileConfig
 import me.genel.handydisplay.core.hdRunFile
 import me.genel.handydisplay.core.plugin.AbstractPlugin
+import me.genel.handydisplay.core.plugin.widget.AbstractWidget
 import me.genel.handydisplay.core.registry.Registry
 import org.apache.logging.log4j.kotlin.Logging
 

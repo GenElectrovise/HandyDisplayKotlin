@@ -1,4 +1,4 @@
-package me.genel.handydisplay.core.gui
+package me.genel.handydisplay.core.plugin.widget
 
 import javafx.scene.layout.Pane
 import me.genel.handydisplay.core.registry.IRegistrable

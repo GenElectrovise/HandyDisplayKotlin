@@ -3,7 +3,7 @@ package me.genel.handydisplay.core.plugin
 import javafx.scene.control.Label
 import javafx.scene.layout.Pane
 import javafx.scene.layout.VBox
-import me.genel.handydisplay.core.gui.AbstractWidget
+import me.genel.handydisplay.core.plugin.widget.AbstractWidget
 import me.genel.handydisplay.core.registry.Registry
 import org.apache.logging.log4j.kotlin.Logging
 

@@ -1,6 +1,6 @@
 package me.genel.handydisplay.core.registry
 
-import me.genel.handydisplay.core.gui.AbstractWidget
+import me.genel.handydisplay.core.plugin.widget.AbstractWidget
 import me.genel.handydisplay.core.plugin.AbstractPlugin
 import kotlin.reflect.KClass
 

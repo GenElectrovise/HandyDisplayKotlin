@@ -80,8 +80,12 @@ class RunCommand: Runnable, Logging {
         //https://openjfx-dev.openjdk.java.narkive.com/POqzaWTl/running-javafx-headless-without-native-dependencies
         //https://stackoverflow.com/questions/37394512/javafx-output-to-the-spi-bus-instead-of-hdmi-on-a-rpi
 
-        // Start application (initialises GUI variable)
-        Application.launch(JavaFXGui::class.java)
+        try {
+            // Start application (initialises GUI variable)
+            Application.launch(JavaFXGui::class.java)
+        } catch (e: Exception) {
+            throw e
+        }
         exitProcess(0)
     }
 }

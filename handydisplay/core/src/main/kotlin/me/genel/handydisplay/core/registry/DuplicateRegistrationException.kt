@@ -3,7 +3,7 @@ package me.genel.handydisplay.core.registry
 import kotlin.reflect.KClass
 
 /**
- * An exception which is thrown when calling `register(..)` to add an item to a registry sub-map
+ * An exception which is thrown when calling `register(..)` to add an item to a registry sub-map.json
  * which already contains an entry for that name.
  */
 class DuplicateRegistrationException(

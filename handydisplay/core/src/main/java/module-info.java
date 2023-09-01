@@ -7,12 +7,16 @@ module uk.iatom.handydisplay.core {
     // Dependencies
     requires info.picocli;
     requires io.github.classgraph;
+    requires hoplite.core;
+    requires hoplite.json;
+    requires com.fasterxml.jackson.core; // Needed for hoplite-json
+    requires kotlin.reflect; // Needed for hoplite-json
+    requires java.sql; // Needed for hoplite-json
     // JavaFX
     requires javafx.controls;
     requires javafx.fxml;
     requires org.apache.logging.log4j;
     requires log4j.api.kotlin;
-    requires hoplite.core;
 
     opens me.genel.handydisplay.core to info.picocli;
 

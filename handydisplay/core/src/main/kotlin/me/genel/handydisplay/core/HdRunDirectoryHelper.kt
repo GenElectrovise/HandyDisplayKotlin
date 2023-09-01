@@ -72,7 +72,7 @@ private fun deployFile(
                 ?: throw NullPointerException("Cannot deploy non-existent plugin file $path from plugin ${plugin.registryName}")
     } else {
         val path = "hdrun/$name"
-        AbstractPlugin::class.java.classLoader.getResourceAsStream(path)
+        AbstractPlugin::class.java.module.getResourceAsStream(path)
                 ?: throw NullPointerException("Cannot deploy non-existent core file $path.")
     }
     val destinationFile: File = hdRunFile(

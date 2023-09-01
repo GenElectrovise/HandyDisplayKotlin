@@ -19,18 +19,18 @@ object Registry {
 
 
     /**
-     * Add the given item of type `R` to the sub-map of type `R`.
+     * Add the given item of type `R` to the sub-map.json of type `R`.
      *
      *
      * In Java pseudocode:
      * ```
      * allRegistryEntries = Map<Class, Map<String, IRegistrable>>;
-     * sub-map = allRegistryEntries.get(R.class);
-     * sub-map.put(name, item)
+     * sub-map.json = allRegistryEntries.get(R.class);
+     * sub-map.json.put(name, item)
      * ```
      *
      * @param item The item to add (register)
-     * @param R The type (implementing `IRegistrable<R>`) of the sub-map into which the item should be registered.
+     * @param R The type (implementing `IRegistrable<R>`) of the sub-map.json into which the item should be registered.
      */
     inline fun <reified R: IRegistrable<R>> register(item: R) {
         val err = getRegistryNameErrors(item.registryName)
@@ -67,10 +67,10 @@ object Registry {
 
 
     /**
-     * Retrieve an item of type `R` from the sub-map of type `R` with the given name.
+     * Retrieve an item of type `R` from the sub-map.json of type `R` with the given name.
      *
-     * @param name The unique identifier for the item to retrieve, within `R`'s sub-map.
-     * @param R The type (a type implementing `IRegistrable<R>`) of the sub-map to query.
+     * @param name The unique identifier for the item to retrieve, within `R`'s sub-map.json.
+     * @param R The type (a type implementing `IRegistrable<R>`) of the sub-map.json to query.
      *
      * @see AbstractPlugin
      * @see AbstractWidget
@@ -81,9 +81,9 @@ object Registry {
 
 
     /**
-     * Retrieve all entries in the sub-map of type `R`.
+     * Retrieve all entries in the sub-map.json of type `R`.
      *
-     * @param R The type (a type implementing `IRegistrable<R>`) of the sub-map to query.
+     * @param R The type (a type implementing `IRegistrable<R>`) of the sub-map.json to query.
      */
     @Suppress("UNCHECKED_CAST") inline fun <reified R: IRegistrable<R>> getAll(): Set<R>? {
         return registryEntries[R::class]

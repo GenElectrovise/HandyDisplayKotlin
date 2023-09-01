@@ -10,7 +10,9 @@ plugins {
 dependencies {
     implementation handylibs.picocli
     implementation handylibs.classgraph
-    implementation handylibs.hoplite
+    implementation handylibs.hoplite.core
+    implementation handylibs.hoplite.json
+    implementation handylibs.jackson.core
 }
 
 application {

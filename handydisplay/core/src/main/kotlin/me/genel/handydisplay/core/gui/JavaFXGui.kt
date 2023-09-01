@@ -5,13 +5,17 @@ import javafx.application.ConditionalFeature
 import javafx.application.Platform
 import javafx.scene.Scene
 import javafx.scene.layout.AnchorPane
+import javafx.scene.layout.ColumnConstraints
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.Pane
+import javafx.scene.layout.RowConstraints
 import javafx.scene.layout.StackPane
 import javafx.stage.Stage
 import me.genel.handydisplay.core.fileConfig
 import me.genel.handydisplay.core.hdRunFile
 import org.apache.logging.log4j.kotlin.Logging
+import kotlin.system.exitProcess
+
 
 const val WIDTH: Double = 480.0
 const val HEIGHT: Double = 320.0
@@ -52,12 +56,18 @@ const val OVERLAY_LAYER = EFFECTS_LAYER + 1
 class JavaFXGui: Application(), Logging {
 
 
-    private val guiConfig: GuiConfigModel = fileConfig(
-            hdRunFile(
-                    null,
-                    "gui.properties"
-                     )
-                                                      )
+    private val guiConfig: GuiConfigModel = try {
+        fileConfig(
+                hdRunFile(
+                        null,
+                        "gui.properties"
+                         )
+                  )
+    } catch (e: Exception) {
+        logger.fatal(e)
+        e.printStackTrace()
+        exitProcess(0)
+    }
 
     private lateinit var contentStack: StackPane
     private lateinit var grid: GridPane
@@ -65,12 +75,10 @@ class JavaFXGui: Application(), Logging {
     private lateinit var overlay: Pane
 
     private val map: WidgetMap = WidgetMap(
-            createWidgetMapBindingBiArray(
-                    hdRunFile(
-                            null,
-                            "map"
-                             )
-                                         )
+            hdRunFile(
+                    null,
+                    "map.json"
+                     )
                                           )
 
 
@@ -104,7 +112,7 @@ class JavaFXGui: Application(), Logging {
         primaryStage.show()
 
         // Set up grid layer
-        grid = GridPane(map.width, map.height)
+        grid = GridPane()
         contentStack.children[GRID_LAYER] = grid
         // Set up effects layer
         effects = AnchorPane()
@@ -113,18 +121,24 @@ class JavaFXGui: Application(), Logging {
         overlay = OverlayCreator.createOverlayPane()
         contentStack.children[OVERLAY_LAYER] = overlay
 
+        // Add rows and columns
+        for (i in 1 .. map.width) {
+            val con = ColumnConstraints()
+            con.prefWidth = WIDTH
+            grid.columnConstraints.add(con)
+        }
+        for (i in 1 .. map.height) {
+            val con = RowConstraints()
+            con.prefHeight = WIDTH
+            grid.rowConstraints.add(con)
+        }
+
+        // Fill cells with content
         map.forEachIndexed { x, y, wid ->
 
             // GridPane indexes from 1, but arrays from 0
             val col = x + 1;
             val row = y + 1;
-
-            while (grid.columnCount < col) {
-                grid.addColumn()
-            }
-            while (grid.rowCount < row) {
-                grid.addRow()
-            }
 
             grid.add(
                     wid.createContentPane(),

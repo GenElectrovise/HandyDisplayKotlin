@@ -31,19 +31,14 @@ dependencyResolutionManagement {
             // Test
             library('kotlin-test', "org.jetbrains.kotlin:kotlin-test:$KOTLIN_VERSION")
             // Core
-            library('log4j-core', 'org.apache.logging.log4j:log4j-core:2.20.0')
-            library('log4j-api-kotlin', 'org.apache.logging.log4j:log4j-api-kotlin:1.2.0')
             library('kotlinx-json', 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1')
             library('picocli', 'info.picocli:picocli:4.7.4')
-            library('classgraph', 'io.github.classgraph:classgraph:4.8.161')
             library('hoplite-core', 'com.sksamuel.hoplite:hoplite-core:2.8.0.RC2')
             library('hoplite-json', 'com.sksamuel.hoplite:hoplite-json:2.8.0.RC2')// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
             library('jackson-core', 'com.fasterxml.jackson.core:jackson-core:2.15.2')
             library('jackson-databind', 'com.fasterxml.jackson.core:jackson-databind:2.12.7.1')
 
             // Raspberry Pi
-            library('slf4j-api', 'org.slf4j:slf4j-api:2.0.5')
-            library('slf4j-simple', 'org.slf4j:slf4j-simple:2.0.5')
             library('pi4j-core', 'com.pi4j:pi4j-core:2.3.0')
             library('pi4j-rpi', 'com.pi4j:pi4j-plugin-raspberrypi:2.3.0')
             library('pi4j-pigpio', 'com.pi4j:pi4j-plugin-pigpio:2.3.0')

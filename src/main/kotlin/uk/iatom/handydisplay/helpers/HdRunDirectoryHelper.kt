@@ -4,9 +4,9 @@ import uk.iatom.handydisplay.services.plugin.AbstractPlugin
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
+import java.util.logging.*
 
-private val hdRunLogger =
-        org.apache.logging.log4j.kotlin.logger("me.genel.handydisplay.core.HdRunDirectoryHelper")
+private val hdRunLogger = Logger.getLogger("me.genel.handydisplay.core.HdRunDirectoryHelper")
 
 
 /**
@@ -71,11 +71,10 @@ private fun deployFile(
         plugin: AbstractPlugin?,
         name: String
                       ) {
-    hdRunLogger.debug("Deploying file $name from ${plugin?.registryName ?: "<core>"}")
+    hdRunLogger.fine("Deploying file $name from ${plugin?.registryName ?: "<core>"}")
 
     val path: String = if (plugin == null) "hdrun/$name"
     else "hdrun/plugins/${plugin.registryName}/$name"
-
 
     val resource = ClassLoader
             .getSystemClassLoader()

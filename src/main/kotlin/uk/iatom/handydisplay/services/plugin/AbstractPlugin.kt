@@ -1,7 +1,6 @@
 package uk.iatom.handydisplay.services.plugin
 
 import uk.iatom.handydisplay.registry.IRegistrable
-import org.apache.logging.log4j.kotlin.Logging
 
 /**
  * The class which the core will search for during plugin loading: children of this class are IRegisterables and will be automatically instantiated
@@ -9,7 +8,7 @@ import org.apache.logging.log4j.kotlin.Logging
  *
  * Subclasses should declare a zero-argument constructor.
  */
-abstract class AbstractPlugin(override val registryName: String): IRegistrable<AbstractPlugin>, Logging {
+abstract class AbstractPlugin(override val registryName: String): IRegistrable<AbstractPlugin> {
 
 
     /**

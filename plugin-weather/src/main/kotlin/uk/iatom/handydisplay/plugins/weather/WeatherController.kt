@@ -3,12 +3,13 @@ package uk.iatom.handydisplay.plugins.weather
 import javafx.application.Platform
 import javafx.fxml.FXML
 import javafx.scene.layout.HBox
-import org.apache.logging.log4j.kotlin.Logging
 import java.util.*
+import java.util.logging.*
 
-class WeatherController: Logging {
+class WeatherController {
 
 
+    var logger = Logger.getLogger(javaClass.name)
     var config: WeatherPlugin.ConfigModel? = null
 
 
@@ -18,7 +19,7 @@ class WeatherController: Logging {
 
 
     @FXML fun initialize() {
-        logger.debug("Initializing weather controller...")
+        logger.fine("Initializing weather controller...")
 
         // When the root node has no parent (has been removed from the scene tree),
         // the widget has been hidden and can be disposed of.
@@ -34,7 +35,7 @@ class WeatherController: Logging {
             datetimeTimer.scheduleAtFixedRate(
                     object: TimerTask() { //TODO dispose of weather executor on program closing
                         override fun run() = Platform.runLater {
-                            logger.debug("Not updating datetime yet :(")
+                            logger.finer("Not updating datetime yet :(")
                         }
                     },
                     0L,
@@ -46,7 +47,7 @@ class WeatherController: Logging {
     }
 
     private fun shutdown() {
-        logger.debug("Shutting down weather controller...")
+        logger.fine("Shutting down weather controller...")
         datetimeTimer.cancel()
         datetimeTimer.purge()
     }

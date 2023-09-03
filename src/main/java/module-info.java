@@ -10,7 +10,6 @@ module uk.iatom.handydisplay {
     requires java.desktop;
     // Dependencies
     requires info.picocli;
-    requires io.github.classgraph;
     requires hoplite.core;
     requires hoplite.json;
     requires com.fasterxml.jackson.core; // Needed for hoplite-json
@@ -19,10 +18,9 @@ module uk.iatom.handydisplay {
     // JavaFX
     requires javafx.controls;
     requires javafx.fxml;
-    requires org.apache.logging.log4j;
-    requires log4j.api.kotlin;
 
     opens uk.iatom.handydisplay to info.picocli;
+    opens hdrun;
 
     exports uk.iatom.handydisplay.helpers;
     exports uk.iatom.handydisplay.registry;

@@ -3,10 +3,9 @@ package uk.iatom.handydisplay.services.plugin
 import javafx.scene.control.Label
 import javafx.scene.layout.Pane
 import javafx.scene.layout.VBox
-import org.apache.logging.log4j.kotlin.Logging
 import uk.iatom.handydisplay.services.widget.AbstractWidget
 
-class NonePlugin: AbstractPlugin("none"), Logging {
+class NonePlugin: AbstractPlugin("none") {
 
 
     override fun finishPluginLoading() {

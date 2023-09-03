@@ -1,18 +1,20 @@
 package uk.iatom.handydisplay
 
 import javafx.application.Application
-import uk.iatom.handydisplay.gui.JavaFXGui
-import org.apache.logging.log4j.kotlin.Logging
 import picocli.CommandLine
+import uk.iatom.handydisplay.gui.JavaFXGui
 import uk.iatom.handydisplay.helpers.fileConfig
 import uk.iatom.handydisplay.helpers.hdRunFile
 import uk.iatom.handydisplay.services.plugin.ModulePluginLoader
+import java.util.logging.*
 import kotlin.system.exitProcess
 
 /**
  * Core configuration singleton instance, loaded from core.properties.
  */
 lateinit var CORE_CONFIG: CoreConfigModel
+
+private lateinit var logger: Logger
 
 
 /**
@@ -24,8 +26,34 @@ fun main(args: Array<String>) {
     println("Program arguments: ${args.joinToString()}")
 
     checkForResources()
+    readConfiguration()
+    configureLogging()
 
+    logger.info("Application starting! (For real this time!)")
     CommandLine(RunCommand()).execute(*args)
+}
+
+private fun readConfiguration() {
+    CORE_CONFIG = fileConfig(
+            hdRunFile(
+                    null,
+                    "core.properties"
+                     )
+                            )
+}
+
+private fun configureLogging() {
+    val configStream = hdRunFile(
+            null,
+            "handylog.properties",
+            deployIfNotPresent = true
+                                ).inputStream()
+    LogManager
+            .getLogManager()
+            .readConfiguration(configStream)
+
+    logger = Logger.getLogger("uk.iatom.handydisplay.MainKt")
+    logger.severe("Logging is now configured!")
 }
 
 
@@ -33,17 +61,21 @@ fun main(args: Array<String>) {
  * Check that the JAR resources are available.
  */
 fun checkForResources() {
-    val root = RunCommand::class.java.classLoader.getResource("resources_root")
+    val root = ClassLoader
+            .getSystemClassLoader()
+            .getResource("resources_root")
             ?: throw NullPointerException("Cannot find resources_root. This indicates that the necessary JAR resources are inaccessible.")
-    println("Found resources_root: $root")
-    println("Resources are intact!")
+    println("Resources are intact! Found resources_root: $root")
 }
 
 
 /**
  * The one and only PicoCLI command for HandyDisplay. Parses program arguments and runs the app.
  */
-class RunCommand: Runnable, Logging {
+class RunCommand: Runnable {
+
+
+    val logger: Logger = Logger.getLogger(javaClass.name)
 
 
     @CommandLine.Option(
@@ -65,15 +97,7 @@ class RunCommand: Runnable, Logging {
                 "mirror" to mirrorName,
                 "headful" to headful
                        )
-        logger.debug("Parsed arguments: $map")
-
-        // Create configuration
-        CORE_CONFIG = fileConfig(
-                hdRunFile(
-                        null,
-                        "core.properties"
-                         )
-                                )
+        logger.fine("Parsed arguments: $map")
 
         // Reference PluginLoader singleton to initialise it
         // PluginLoader

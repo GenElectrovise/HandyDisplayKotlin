@@ -1,13 +1,15 @@
 package uk.iatom.handydisplay.services.widget
 
 import javafx.fxml.FXMLLoader
-import org.apache.logging.log4j.kotlin.Logging
 import java.io.FileNotFoundException
+import java.util.logging.Logger
 
 /**
  * Helper object for loading FXML files for widgets.
  */
-object FXMLHelper: Logging {
+object FXMLHelper {
+
+    val logger = Logger.getLogger(javaClass.name)
 
 
     /**
@@ -41,10 +43,9 @@ object FXMLHelper: Logging {
                     loaded
                              )
         } catch (cnf: ClassNotFoundException) {
-            logger.fatal("Error loading FXML content from '$resourcePath'")
-            logger.fatal("ClassNotFoundException *may* indicate that a controller was designated in the given FXML.")
-            logger.fatal("Remove this designation and try again.")
-            logger.fatal(cnf)
+            logger.severe("Error loading FXML content from '$resourcePath'")
+            logger.severe("ClassNotFoundException *may* indicate that a controller was designated in the given FXML.")
+            logger.severe("Remove this designation and try again.")
             throw cnf
         }
     }

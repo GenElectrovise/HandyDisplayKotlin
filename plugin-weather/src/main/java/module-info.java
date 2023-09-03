@@ -7,12 +7,11 @@ module uk.iatom.handydisplay.plugins.weather {
     // Standard library
     requires kotlin.stdlib;
     requires java.desktop;
+    requires java.logging;
     requires uk.iatom.handydisplay;
     // JavaFX
     requires javafx.controls;
     requires javafx.fxml;
-    requires org.apache.logging.log4j;
-    requires log4j.api.kotlin;
 
     provides AbstractPlugin with WeatherPlugin;
     provides AbstractWidget with WeatherWidget;

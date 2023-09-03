@@ -3,7 +3,6 @@ package uk.iatom.handydisplay.gui
 import javafx.application.Platform
 import javafx.fxml.FXML
 import javafx.scene.control.Label
-import org.apache.logging.log4j.kotlin.Logging
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -11,7 +10,7 @@ import java.util.*
 /**
  * FXML controller for the JavaFXGui overlay.
  */
-class OverlayController: Logging {
+class OverlayController {
 
 
     val dateTimeTextFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm - dd/MM/yy")

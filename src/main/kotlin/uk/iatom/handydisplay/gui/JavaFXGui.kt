@@ -11,9 +11,10 @@ import javafx.scene.layout.Pane
 import javafx.scene.layout.RowConstraints
 import javafx.scene.layout.StackPane
 import javafx.stage.Stage
+import uk.iatom.handydisplay.exception
 import uk.iatom.handydisplay.helpers.fileConfig
 import uk.iatom.handydisplay.helpers.hdRunFile
-import org.apache.logging.log4j.kotlin.Logging
+import java.util.logging.*
 import kotlin.system.exitProcess
 
 
@@ -53,7 +54,10 @@ const val OVERLAY_LAYER = EFFECTS_LAYER + 1
  * This class is a singleton, the instance of which can be accessed by the package-level `GUI`
  * variable.
  */
-class JavaFXGui: Application(), Logging {
+class JavaFXGui: Application() {
+
+
+    val logger = Logger.getLogger(javaClass.name)
 
 
     private val guiConfig: GuiConfigModel = try {
@@ -64,7 +68,10 @@ class JavaFXGui: Application(), Logging {
                          )
                   )
     } catch (e: Exception) {
-        logger.fatal(e)
+        logger.exception(
+                "A fatal error occurred while reading gui configuration!",
+                e
+                        )
         e.printStackTrace()
         exitProcess(0)
     }
@@ -100,7 +107,7 @@ class JavaFXGui: Application(), Logging {
         // Configure window/stage
         Platform.setImplicitExit(true)
         primaryStage.setOnCloseRequest { _ ->
-            logger.fatal("Close requested - shutting down platform...")
+            logger.severe("Close requested - shutting down platform...")
             println("Close requested - shutting down platform...")
             Platform.exit()
         }
@@ -162,12 +169,12 @@ class JavaFXGui: Application(), Logging {
      * Log supported JavaFX features.
      */
     private fun checkSupportedJFXFeatures() {
-        logger.debug("Supported JavaFX ConditionalFeatures:")
+        logger.fine("Supported JavaFX ConditionalFeatures:")
         ConditionalFeature.entries.forEach {
             try {
-                logger.debug(" > ${it.name}: ${Platform.isSupported(it)}")
+                logger.fine(" > ${it.name}: ${Platform.isSupported(it)}")
             } catch (e: Exception) {
-                logger.debug(" ! FAILED ${it.name}: ${e.message}")
+                logger.fine(" ! FAILED ${it.name}: ${e.message}")
             }
         }
     }

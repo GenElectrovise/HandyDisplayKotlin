@@ -3,6 +3,7 @@ package uk.iatom.handydisplay.registry
 import uk.iatom.handydisplay.services.plugin.AbstractPlugin
 import uk.iatom.handydisplay.services.widget.AbstractWidget
 import java.util.*
+import java.util.logging.*
 import kotlin.reflect.KClass
 
 
@@ -15,8 +16,7 @@ object Registry {
      */
     val registryEntries: MutableMap<KClass<out IRegistrable<*>>, MutableMap<String, IRegistrable<*>>> =
             LinkedHashMap()
-    val registryLogger =
-            org.apache.logging.log4j.kotlin.logger("me.genel.handydisplay.core.Registry")
+    val registryLogger = Logger.getLogger("me.genel.handydisplay.core.Registry")
 
     init {
         registerServices(AbstractPlugin::class)
@@ -64,11 +64,10 @@ object Registry {
                     old,
                     item
                                                    )
-            registryLogger.fatal(ex)
             throw ex
         }
 
-        registryLogger.debug("Registering ${item.registryName}=<${R::class.simpleName}>${item.javaClass.name}")
+        registryLogger.fine("Registering ${item.registryName}=<${R::class.simpleName}>${item.javaClass.name}")
         map[item.registryName] = item
     }
 

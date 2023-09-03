@@ -1,11 +1,13 @@
 package uk.iatom.handydisplay.services.plugin
 
-import org.apache.logging.log4j.kotlin.Logging
 import uk.iatom.handydisplay.helpers.hdRunFile
 import java.lang.module.ModuleFinder
+import java.util.logging.*
 import kotlin.io.path.Path
 
-object ModulePluginLoader: Logging {
+object ModulePluginLoader {
+
+    val logger = Logger.getLogger(javaClass.name)
 
     init {
         logger.info("Loading plugin modules...")
@@ -17,7 +19,7 @@ object ModulePluginLoader: Logging {
                         false
                          ).absolutePath
                        )
-        logger.debug("Searching path: $path")
+        logger.fine("Searching path: $path")
 
         val finder = ModuleFinder.of(path)
         val moduleNames = finder
@@ -27,7 +29,7 @@ object ModulePluginLoader: Logging {
                             .descriptor()
                             .name()
                 }
-        logger.debug("Found ${moduleNames.size} potential modules: ${moduleNames.joinToString(", ")}")
+        logger.info("Found ${moduleNames.size} potential modules: ${moduleNames.joinToString(", ")}")
 
         val bootLayer = ModuleLayer.boot()
         val configuration = bootLayer

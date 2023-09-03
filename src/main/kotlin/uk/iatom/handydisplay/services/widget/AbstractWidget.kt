@@ -2,7 +2,7 @@ package uk.iatom.handydisplay.services.widget
 
 import javafx.scene.layout.Pane
 import uk.iatom.handydisplay.registry.IRegistrable
-import org.apache.logging.log4j.kotlin.Logging
+import java.util.logging.*
 
 /**
  * A screen which can be displayed to the user. Must be registered and its registryName added to
@@ -18,7 +18,10 @@ import org.apache.logging.log4j.kotlin.Logging
 abstract class AbstractWidget(
         override val registryName: String,
         val displayName: String
-                             ): IRegistrable<AbstractWidget>, Logging {
+                             ): IRegistrable<AbstractWidget> {
+
+
+    val logger = Logger.getLogger(javaClass.name)
 
 
     init { // Display
@@ -46,7 +49,7 @@ abstract class AbstractWidget(
      * Can be used to notify JavaFX controllers that they should cancel background tasks, so long as care with multithreading is taken.
      */
     fun onHide() {
-        logger.debug("Hiding $registryName")
+        logger.finer("Hiding $registryName")
     }
 
 
@@ -60,6 +63,6 @@ abstract class AbstractWidget(
      * preferable to use the `@FXML` annotation with an `initialize()` method for configuring a controller.
      */
     fun onShow() {
-        logger.debug("Showing $registryName")
+        logger.finer("Showing $registryName")
     }
 }

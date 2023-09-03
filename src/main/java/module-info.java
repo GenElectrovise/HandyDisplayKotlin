@@ -1,5 +1,8 @@
-import uk.iatom.handydisplay.plugin.widget.AbstractWidget;
-import uk.iatom.handydisplay.plugin.widget.ClockWidget;
+import uk.iatom.handydisplay.services.plugin.AbstractPlugin;
+import uk.iatom.handydisplay.services.plugin.NonePlugin;
+import uk.iatom.handydisplay.services.plugin.NoneWidget;
+import uk.iatom.handydisplay.services.widget.AbstractWidget;
+import uk.iatom.handydisplay.services.widget.ClockWidget;
 
 module uk.iatom.handydisplay {
     // Standard library
@@ -21,11 +24,11 @@ module uk.iatom.handydisplay {
 
     opens uk.iatom.handydisplay to info.picocli;
 
-    exports uk.iatom.handydisplay;
-    exports uk.iatom.handydisplay.plugin;
-    exports uk.iatom.handydisplay.gui;
+    exports uk.iatom.handydisplay.helpers;
     exports uk.iatom.handydisplay.registry;
-    exports uk.iatom.handydisplay.plugin.widget;
+    exports uk.iatom.handydisplay.services.plugin;
+    exports uk.iatom.handydisplay.services.widget;
 
-    provides AbstractWidget with ClockWidget;
+    provides AbstractPlugin with NonePlugin;
+    provides AbstractWidget with NoneWidget, ClockWidget;
 }

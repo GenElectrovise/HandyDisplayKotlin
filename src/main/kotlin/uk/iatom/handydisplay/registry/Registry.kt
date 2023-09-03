@@ -1,7 +1,8 @@
 package uk.iatom.handydisplay.registry
 
-import uk.iatom.handydisplay.plugin.widget.AbstractWidget
-import uk.iatom.handydisplay.plugin.AbstractPlugin
+import uk.iatom.handydisplay.services.plugin.AbstractPlugin
+import uk.iatom.handydisplay.services.widget.AbstractWidget
+import java.util.*
 import kotlin.reflect.KClass
 
 
@@ -16,6 +17,20 @@ object Registry {
             LinkedHashMap()
     val registryLogger =
             org.apache.logging.log4j.kotlin.logger("me.genel.handydisplay.core.Registry")
+
+    init {
+        registerServices(AbstractPlugin::class)
+        registerServices(AbstractWidget::class)
+    }
+
+    private inline fun <reified S: IRegistrable<S>> registerServices(clazz: KClass<S>) {
+        ServiceLoader
+                .load(clazz.java)
+                .iterator()
+                .forEach {
+                    register(it)
+                }
+    }
 
 
     /**
@@ -32,7 +47,7 @@ object Registry {
      * @param item The item to add (register)
      * @param R The type (implementing `IRegistrable<R>`) of the sub-map.json into which the item should be registered.
      */
-    inline fun <reified R: IRegistrable<R>> register(item: R) {
+    private inline fun <reified R: IRegistrable<R>> register(item: R) {
         val err = getRegistryNameErrors(item.registryName)
         if (err != null) throw err
 
@@ -61,7 +76,7 @@ object Registry {
     /**
      * Convenience method which calls `register(..)` for each item in the given series.
      */
-    inline fun <reified R: IRegistrable<R>> registerAll(items: Iterable<R>) {
+    private inline fun <reified R: IRegistrable<R>> registerAll(items: Iterable<R>) {
         items.forEach { register<R>(it) }
     }
 

@@ -1,5 +1,7 @@
-import uk.iatom.handydisplay.plugin.AbstractPlugin;
+import uk.iatom.handydisplay.plugins.weather.WeatherWidget;
+import uk.iatom.handydisplay.services.plugin.AbstractPlugin;
 import uk.iatom.handydisplay.plugins.weather.WeatherPlugin;
+import uk.iatom.handydisplay.services.widget.AbstractWidget;
 
 module uk.iatom.handydisplay.plugins.weather {
     // Standard library
@@ -13,4 +15,5 @@ module uk.iatom.handydisplay.plugins.weather {
     requires log4j.api.kotlin;
 
     provides AbstractPlugin with WeatherPlugin;
+    provides AbstractWidget with WeatherWidget;
 }

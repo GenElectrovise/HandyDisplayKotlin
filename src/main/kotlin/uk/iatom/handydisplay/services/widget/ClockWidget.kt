@@ -1,4 +1,4 @@
-package uk.iatom.handydisplay.plugin.widget
+package uk.iatom.handydisplay.services.widget
 
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.Pane

@@ -1,4 +1,4 @@
-package uk.iatom.handydisplay.plugin.widget
+package uk.iatom.handydisplay.services.widget
 
 import javafx.scene.layout.Pane
 import uk.iatom.handydisplay.registry.IRegistrable

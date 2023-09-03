@@ -2,6 +2,7 @@ package uk.iatom.handydisplay.gui
 
 import javafx.scene.layout.Pane
 import javafx.scene.layout.StackPane
+import uk.iatom.handydisplay.services.widget.FXMLHelper
 
 /**
  * Singleton provider of overlay panes.

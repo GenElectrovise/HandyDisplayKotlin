@@ -1,4 +1,4 @@
-package uk.iatom.handydisplay
+package uk.iatom.handydisplay.helpers
 
 import com.sksamuel.hoplite.ConfigLoaderBuilder
 import com.sksamuel.hoplite.addResourceOrFileSource

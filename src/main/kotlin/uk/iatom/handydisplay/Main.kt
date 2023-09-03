@@ -2,9 +2,11 @@ package uk.iatom.handydisplay
 
 import javafx.application.Application
 import uk.iatom.handydisplay.gui.JavaFXGui
-import uk.iatom.handydisplay.plugin.PluginLoader
 import org.apache.logging.log4j.kotlin.Logging
 import picocli.CommandLine
+import uk.iatom.handydisplay.helpers.fileConfig
+import uk.iatom.handydisplay.helpers.hdRunFile
+import uk.iatom.handydisplay.services.plugin.ModulePluginLoader
 import kotlin.system.exitProcess
 
 /**
@@ -74,7 +76,8 @@ class RunCommand: Runnable, Logging {
                                 )
 
         // Reference PluginLoader singleton to initialise it
-        PluginLoader
+        // PluginLoader
+        ModulePluginLoader
 
         // TODO Test RPi with GUI currently - maybe it will work??
         //https://openjfx-dev.openjdk.java.narkive.com/POqzaWTl/running-javafx-headless-without-native-dependencies

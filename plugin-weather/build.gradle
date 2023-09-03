@@ -4,36 +4,32 @@ dependencies {
     javafx {
         javafx {
             version = JAVAFX_VERSION
-            modules = [ 'javafx.controls', 'javafx.fxml' ]
+            modules = ['javafx.controls', 'javafx.fxml']
         }
     }
 }
 
 
+var fileDistHdrunPlugins = rootProject.file('src/main/dist/hdrun/plugins/')
+var fileHdrunPlugins = rootProject.file('hdrun/plugins/')
 
-subprojects {
+tasks.register('deployPluginJars', Copy) {
 
-    var fileDistHdrunPlugins = rootProject.file('src/main/dist/hdrun/plugins/')
-    var fileHdrunPlugins = rootProject.file('hdrun/plugins/')
+    var name = project.name
 
-    tasks.register('deployPluginJars', Copy) {
-
-        var name = project.name
-
-        doFirst {
-            println("Copying JAR for mod '$name' into '$fileDistHdrunPlugins'...")
-        }
-
-        from jar
-        into fileDistHdrunPlugins
+    doFirst {
+        println("Copying JAR for mod '$name' into '$fileDistHdrunPlugins'...")
     }
 
-    tasks.register('copyPluginsToHdrun', Copy) {
-        dependsOn(deployPluginJars)
-
-        from fileDistHdrunPlugins
-        into fileHdrunPlugins
-    }
-
-    jar.finalizedBy(copyPluginsToHdrun)
+    from jar
+    into fileDistHdrunPlugins
 }
+
+tasks.register('copyPluginsToHdrun', Copy) {
+    dependsOn(deployPluginJars)
+
+    from fileDistHdrunPlugins
+    into fileHdrunPlugins
+}
+
+jar.finalizedBy(copyPluginsToHdrun)

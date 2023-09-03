@@ -1,8 +1,7 @@
-package uk.iatom.handydisplay
+package uk.iatom.handydisplay.helpers
 
-import uk.iatom.handydisplay.plugin.AbstractPlugin
+import uk.iatom.handydisplay.services.plugin.AbstractPlugin
 import java.io.File
-import java.io.InputStream
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 
@@ -42,18 +41,26 @@ fun hdRunFile(
         deployIfNotPresent: Boolean = true
              ): File {
     val path = if (plugin == null) name else "plugins/${plugin.registryName}/$name"
-    val file = File(
+    val destFile = File(
             runDir.absolutePath,
             path
-                   )
-    file.parentFile?.mkdirs()
-    if (!file.exists() && deployIfNotPresent) {
+                       )
+    val isProbablyDirectory = name
+            .trim()
+            .let {
+                it.endsWith('/') || it.endsWith(System.lineSeparator())
+            }
+
+    if (destFile.isDirectory || isProbablyDirectory) {
+        destFile.mkdirs()
+    } else if (!destFile.exists() && deployIfNotPresent) {
+        destFile.parentFile?.mkdirs()
         deployFile(
                 plugin,
                 name
                   )
     }
-    return file
+    return destFile
 }
 
 
@@ -66,15 +73,15 @@ private fun deployFile(
                       ) {
     hdRunLogger.debug("Deploying file $name from ${plugin?.registryName ?: "<core>"}")
 
-    val resource: InputStream = if (plugin != null) {
-        val path = "hdrun/plugins/${plugin.registryName}/$name"
-        plugin.javaClass.classLoader.getResourceAsStream(path)
-                ?: throw NullPointerException("Cannot deploy non-existent plugin file $path from plugin ${plugin.registryName}")
-    } else {
-        val path = "hdrun/$name"
-        AbstractPlugin::class.java.module.getResourceAsStream(path)
-                ?: throw NullPointerException("Cannot deploy non-existent core file $path.")
-    }
+    val path: String = if (plugin == null) "hdrun/$name"
+    else "hdrun/plugins/${plugin.registryName}/$name"
+
+
+    val resource = ClassLoader
+            .getSystemClassLoader()
+            .getResourceAsStream(path)
+            ?: throw NullPointerException("There is no resource file '$path' which can be deployed.")
+
     val destinationFile: File = hdRunFile(
             plugin,
             name,

@@ -1,4 +1,4 @@
-package uk.iatom.handydisplay.plugin
+package uk.iatom.handydisplay.services.plugin
 
 import java.lang.reflect.Constructor
 import java.lang.reflect.Modifier

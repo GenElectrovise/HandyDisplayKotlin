@@ -11,8 +11,8 @@ import javafx.scene.layout.Pane
 import javafx.scene.layout.RowConstraints
 import javafx.scene.layout.StackPane
 import javafx.stage.Stage
-import uk.iatom.handydisplay.fileConfig
-import uk.iatom.handydisplay.hdRunFile
+import uk.iatom.handydisplay.helpers.fileConfig
+import uk.iatom.handydisplay.helpers.hdRunFile
 import org.apache.logging.log4j.kotlin.Logging
 import kotlin.system.exitProcess
 

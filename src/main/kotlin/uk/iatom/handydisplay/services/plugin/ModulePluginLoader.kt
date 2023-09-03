@@ -1,7 +1,7 @@
-package uk.iatom.handydisplay.plugin
+package uk.iatom.handydisplay.services.plugin
 
 import org.apache.logging.log4j.kotlin.Logging
-import uk.iatom.handydisplay.runDir
+import uk.iatom.handydisplay.helpers.hdRunFile
 import java.lang.module.ModuleFinder
 import kotlin.io.path.Path
 
@@ -10,7 +10,15 @@ object ModulePluginLoader: Logging {
     init {
         logger.info("Loading plugin modules...")
 
-        val path = Path(runDir.absolutePath)
+        val path = Path(
+                hdRunFile(
+                        null,
+                        "plugins/",
+                        false
+                         ).absolutePath
+                       )
+        logger.debug("Searching path: $path")
+
         val finder = ModuleFinder.of(path)
         val moduleNames = finder
                 .findAll()
@@ -19,6 +27,7 @@ object ModulePluginLoader: Logging {
                             .descriptor()
                             .name()
                 }
+        logger.debug("Found ${moduleNames.size} potential modules: ${moduleNames.joinToString(", ")}")
 
         val bootLayer = ModuleLayer.boot()
         val configuration = bootLayer
@@ -35,9 +44,10 @@ object ModulePluginLoader: Logging {
                 systemLoader
                                                            )
 
-        logger.info("Loaded ${newLayer.modules().size} plugin modules!")
-        newLayer
-                .modules()
-                .forEach { logger.debug(" > ${it.name}") }
+        logger.info("Loaded ${newLayer.modules().size} plugin modules: ${
+            newLayer
+                    .modules()
+                    .joinToString(separator = ", ") { it.name }
+        }")
     }
 }

@@ -1,17 +1,15 @@
-package uk.iatom.handydisplay.plugin
+package uk.iatom.handydisplay.services.plugin
 
 import javafx.scene.control.Label
 import javafx.scene.layout.Pane
 import javafx.scene.layout.VBox
-import uk.iatom.handydisplay.plugin.widget.AbstractWidget
-import uk.iatom.handydisplay.registry.Registry
 import org.apache.logging.log4j.kotlin.Logging
+import uk.iatom.handydisplay.services.widget.AbstractWidget
 
-class NonePlugin: AbstractPlugin(), Logging {
+class NonePlugin: AbstractPlugin("none"), Logging {
 
 
     override fun finishPluginLoading() {
-        Registry.register<AbstractWidget>(NoneWidget())
     }
 
     override fun shutdownNow() {}

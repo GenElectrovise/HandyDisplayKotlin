@@ -1,10 +1,10 @@
 package uk.iatom.handydisplay.gui
 
-import uk.iatom.handydisplay.fileConfig
-import uk.iatom.handydisplay.plugin.NoneWidget
-import uk.iatom.handydisplay.plugin.widget.AbstractWidget
-import uk.iatom.handydisplay.registry.Registry
+import uk.iatom.handydisplay.helpers.fileConfig
+import uk.iatom.handydisplay.services.plugin.NoneWidget
+import uk.iatom.handydisplay.services.widget.AbstractWidget
 import java.io.File
+import java.util.*
 
 fun loadWidgetMapFromJsonFile(configFile: File): List<List<AbstractWidget>> {
     val config = fileConfig<WidgetMapConfig>(configFile)
@@ -15,8 +15,14 @@ fun loadWidgetMapFromJsonFile(configFile: File): List<List<AbstractWidget>> {
 
     // Create bindings
     val bindings: MutableMap<String, AbstractWidget> = mutableMapOf()
+    val widgetServiceLoader = ServiceLoader.load(AbstractWidget::class.java)
     config.bindings.mapValuesTo(bindings) { entry ->
-        Registry.get<AbstractWidget>(entry.value)
+        widgetServiceLoader
+                .stream()
+                .filter { entry.value == it.get().registryName }
+                .findFirst()
+                .get()
+                .get()
                 ?: throw IllegalStateException("The map.json expected the widget ${entry.value} which does not exist.")
     }
 

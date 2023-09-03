@@ -1,7 +1,6 @@
-package uk.iatom.handydisplay.gui
+package uk.iatom.handydisplay.services.widget
 
 import javafx.fxml.FXMLLoader
-import uk.iatom.handydisplay.plugin.PluginLoader
 import org.apache.logging.log4j.kotlin.Logging
 import java.io.FileNotFoundException
 
@@ -22,9 +21,9 @@ object FXMLHelper: Logging {
      *
      * TODO Check whether controllers within other ClassLoaders can be used.
      */
-    fun <C, L> loadFXML(resourcePath: String): FXMLLoadResult<C, L> {
+    fun <C, L> loadFXML(resourcePath: String): LoadResult<C, L> {
         try {
-            val mcl = PluginLoader.masterClassLoader
+            val mcl = ClassLoader.getSystemClassLoader()
             val url = mcl.getResource(resourcePath) ?: throw FileNotFoundException(
                     "Cannot find resource at path $resourcePath in ClassLoader $mcl"
                                                                                   )
@@ -37,10 +36,10 @@ object FXMLHelper: Logging {
 
             val loaded: L = loader.load()
 
-            return FXMLLoadResult(
+            return LoadResult(
                     loader.getController(),
                     loaded
-                                 )
+                             )
         } catch (cnf: ClassNotFoundException) {
             logger.fatal("Error loading FXML content from '$resourcePath'")
             logger.fatal("ClassNotFoundException *may* indicate that a controller was designated in the given FXML.")
@@ -49,4 +48,14 @@ object FXMLHelper: Logging {
             throw cnf
         }
     }
+
+
+    /**
+     * Returned by `loadFXML(..)`. Handy way of getting access to otherwise obscured properties
+     * like the FXML controller.
+     */
+    data class LoadResult<C, T>(
+            val controller: C,
+            val rootComponent: T
+                               )
 }

@@ -15,7 +15,7 @@ plugins {
 
 allprojects {
 
-    group = 'me.genel.handydisplay'
+    group = 'uk.iatom.handydisplay'
     version = '0.0.1'
 
     apply plugin: handylibs.plugins.kotlin.jvm.get().pluginId

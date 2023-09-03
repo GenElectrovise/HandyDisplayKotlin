@@ -1,4 +1,4 @@
-package uk.iatom.handydisplay.plugin
+package uk.iatom.handydisplay.services.plugin
 
 import uk.iatom.handydisplay.registry.IRegistrable
 import org.apache.logging.log4j.kotlin.Logging
@@ -9,7 +9,7 @@ import org.apache.logging.log4j.kotlin.Logging
  *
  * Subclasses should declare a zero-argument constructor.
  */
-abstract class AbstractPlugin: IRegistrable<AbstractPlugin>, Logging {
+abstract class AbstractPlugin(override val registryName: String): IRegistrable<AbstractPlugin>, Logging {
 
 
     /**

@@ -3,9 +3,14 @@ plugins {
     id 'java-library'
     alias(handylibs.plugins.kotlin.jvm)
     alias(handylibs.plugins.kotlin.serialization)
-    alias(handylibs.plugins.javafx)
     alias(handylibs.plugins.dokka)
     alias(handylibs.plugins.javamodularity)
+
+    id 'application'
+    id 'distribution'
+    alias(handylibs.plugins.hidetake.ssh)
+    alias(handylibs.plugins.javafx)
+    alias(handylibs.plugins.jlink)
 }
 
 allprojects {
@@ -41,4 +46,34 @@ allprojects {
     compileTestKotlin {
         kotlinOptions.jvmTarget = '17'
     }
+}
+
+dependencies {
+    implementation handylibs.picocli
+    implementation handylibs.classgraph
+    implementation handylibs.hoplite.core
+    implementation handylibs.hoplite.json
+    implementation handylibs.jackson.core
+}
+
+application {
+    mainClass = "uk.iatom.handydisplay.MainKt"
+    mainModule = "uk.iatom.handydisplay"
+}
+
+run {
+    // dependsOn(project(":handydisplay:plugins").tasks.named("build"))
+}
+
+javafx {
+    version = JAVAFX_VERSION
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
+}
+
+jlink {
+    launcher {
+        name = 'uk.iatom.handydisplay.core'
+    }
+    forceMerge('log4j-api')
+    forceMerge('kotlin')
 }

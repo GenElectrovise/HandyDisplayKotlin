@@ -26,6 +26,11 @@ allprojects {
     apply plugin: 'java'
     apply plugin: 'java-library'
 
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
     dependencies {
         testImplementation handylibs.kotlin.test
         implementation handylibs.kotlinx.json
@@ -45,6 +50,7 @@ allprojects {
 }
 
 dependencies {
+    implementation handylibs.fxgl
     implementation handylibs.picocli
     implementation handylibs.hoplite.core
     implementation handylibs.hoplite.json
@@ -53,7 +59,7 @@ dependencies {
 
 application {
     mainClass = "uk.iatom.handydisplay.MainKt"
-    mainModule = "uk.iatom.handydisplay"
+    mainModule = "iAtom.HandyDisplay"
 }
 
 run {
@@ -62,7 +68,7 @@ run {
 
 javafx {
     version = JAVAFX_VERSION
-    modules = [ 'javafx.controls', 'javafx.fxml' ]
+    modules = [ 'javafx.controls', 'javafx.fxml' , 'javafx.media']
 }
 
 jlink {

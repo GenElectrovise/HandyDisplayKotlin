@@ -1,5 +1,6 @@
 dependencies {
     implementation rootProject
+    implementation handylibs.fxgl
 
     javafx {
         javafx {

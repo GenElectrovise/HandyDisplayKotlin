@@ -1,14 +1,28 @@
 package uk.iatom.handydisplay.services.plugin
 
+import com.almasb.fxgl.input.Input
 import javafx.scene.control.Label
 import javafx.scene.layout.Pane
 import javafx.scene.layout.VBox
+import uk.iatom.handydisplay.fxgl.HDApp
 import uk.iatom.handydisplay.services.widget.AbstractWidget
+import java.util.logging.*
 
 class NonePlugin: AbstractPlugin("none") {
 
 
+    val logger = Logger.getLogger(javaClass.name)
+
+
     override fun finishPluginLoading() {
+    }
+
+    override fun onInitInput(input: Input) {
+        logger.info("Initialising NonePlugin inputs...")
+    }
+
+    override fun onInitGame(hdApp: HDApp) {
+        logger.info("Initialising NonePlugin game objects...")
     }
 
     override fun shutdownNow() {}

@@ -1,5 +1,7 @@
 package uk.iatom.handydisplay.services.plugin
 
+import com.almasb.fxgl.input.Input
+import uk.iatom.handydisplay.fxgl.HDApp
 import uk.iatom.handydisplay.registry.IRegistrable
 
 /**
@@ -9,6 +11,11 @@ import uk.iatom.handydisplay.registry.IRegistrable
  * Subclasses should declare a zero-argument constructor.
  */
 abstract class AbstractPlugin(override val registryName: String): IRegistrable<AbstractPlugin> {
+
+
+    abstract fun onInitInput(input: Input);
+
+    abstract fun onInitGame(hdApp: HDApp)
 
 
     /**

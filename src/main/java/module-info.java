@@ -4,11 +4,12 @@ import uk.iatom.handydisplay.services.plugin.NoneWidget;
 import uk.iatom.handydisplay.services.widget.AbstractWidget;
 import uk.iatom.handydisplay.services.widget.ClockWidget;
 
-module uk.iatom.handydisplay {
+module iAtom.HandyDisplay {
     // Standard library
     requires kotlin.stdlib;
     requires java.desktop;
     // Dependencies
+    requires com.almasb.fxgl.all;
     requires info.picocli;
     requires hoplite.core;
     requires hoplite.json;
@@ -20,8 +21,8 @@ module uk.iatom.handydisplay {
     requires javafx.fxml;
 
     opens uk.iatom.handydisplay to info.picocli;
-    opens hdrun;
 
+    exports uk.iatom.handydisplay.fxgl;
     exports uk.iatom.handydisplay.helpers;
     exports uk.iatom.handydisplay.registry;
     exports uk.iatom.handydisplay.services.plugin;

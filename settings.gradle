@@ -31,6 +31,7 @@ dependencyResolutionManagement {
             // Test
             library('kotlin-test', "org.jetbrains.kotlin:kotlin-test:$KOTLIN_VERSION")
             // Core
+            library('fxgl', 'com.github.almasb:fxgl:17.3')
             library('kotlinx-json', 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1')
             library('picocli', 'info.picocli:picocli:4.7.4')
             library('hoplite-core', 'com.sksamuel.hoplite:hoplite-core:2.8.0.RC2')

@@ -1,5 +1,6 @@
 package uk.iatom.handydisplay.bootstrap
 
+import com.almasb.fxgl.app.GameApplication
 import picocli.CommandLine
 import uk.iatom.handydisplay.fxgl.HDApp
 import uk.iatom.handydisplay.services.plugin.ModulePluginLoader
@@ -46,7 +47,10 @@ class RunCommand: Runnable {
 
         try {
             // Start application (initialises GUI variable)
-            HDApp.launchPublic(arrayOf())
+            GameApplication.launch(
+                    HDApp::class.java,
+                    arrayOf()
+                                  )
         } catch (e: Exception) {
             throw e
         }

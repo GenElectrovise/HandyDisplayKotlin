@@ -2,7 +2,6 @@ package uk.iatom.handydisplay.registry
 
 import uk.iatom.handydisplay.services.plugin.AbstractPlugin
 import uk.iatom.handydisplay.services.widget.AbstractWidget
-import java.lang.NullPointerException
 import java.util.*
 import java.util.logging.*
 import kotlin.reflect.KClass
@@ -100,11 +99,11 @@ object Registry {
      *
      * @param R The type (a type implementing `IRegistrable<R>`) of the sub-map.json to query.
      */
-    @Suppress("UNCHECKED_CAST") inline fun <reified R: IRegistrable<R>> getAll(): Set<R> {
+    @Suppress("UNCHECKED_CAST") inline fun <reified R: IRegistrable<R>> getAll(): Set<R>? {
         return registryEntries[R::class]
                 ?.toList()
                 ?.map { it.second }
-                ?.toSet() as Set<R>
+                ?.toSet() as Set<R>?
     }
 }
 

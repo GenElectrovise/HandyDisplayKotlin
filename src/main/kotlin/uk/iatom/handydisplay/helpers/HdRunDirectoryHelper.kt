@@ -1,6 +1,7 @@
 package uk.iatom.handydisplay.helpers
 
 import uk.iatom.handydisplay.services.plugin.AbstractPlugin
+import uk.iatom.handydisplay.services.plugin.ModulePluginLoader
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
@@ -73,13 +74,19 @@ private fun deployFile(
                       ) {
     hdRunLogger.fine("Deploying file $name from ${plugin?.registryName ?: "<core>"}")
 
-    val path: String = if (plugin == null) "hdrun/$name"
-    else "hdrun/plugins/${plugin.registryName}/$name"
+    val path: String = if (plugin == null) "/hdrun/$name"
+    else "/hdrun/plugins/${plugin.registryName}/$name"
 
-    val resource = ClassLoader
-            .getSystemClassLoader()
-            .getResourceAsStream(path)
-            ?: throw NullPointerException("There is no resource file '$path' which can be deployed.")
+    //@formatter:off
+    // Try many, many, many ways to find that resource!
+    // It's alright if this is computationally intensive as this won't be called very often!
+    val resource =
+            ClassLoader.getSystemClassLoader().getResource(path)
+            ?: StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE).callerClass.getResource(path)
+            ?: StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE).callerClass.classLoader.getResource(path)
+            ?: ModulePluginLoader.javaClass.getResource(path)
+            ?: ModulePluginLoader.javaClass.classLoader.getResource(path)
+    //@formatter:on
 
     val destinationFile: File = hdRunFile(
             plugin,
@@ -87,11 +94,13 @@ private fun deployFile(
             deployIfNotPresent = false
                                          ) // Plugin is sometimes null and this is a good thing!!
 
-    resource.use { stream ->
-        Files.copy(
-                stream,
-                destinationFile.toPath(),
-                StandardCopyOption.REPLACE_EXISTING
-                  )
-    }
+    resource
+            .openStream()
+            .use { stream ->
+                Files.copy(
+                        stream,
+                        destinationFile.toPath(),
+                        StandardCopyOption.REPLACE_EXISTING
+                          )
+            }
 }

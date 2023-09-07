@@ -16,7 +16,7 @@ module iAtom.HandyDisplay {
     requires javafx.fxml;
     requires java.logging;
 
-    opens uk.iatom.handydisplay to info.picocli;
+    opens uk.iatom.handydisplay.bootstrap to info.picocli;
 
     exports uk.iatom.handydisplay.fxgl;
     exports uk.iatom.handydisplay.helpers;
@@ -26,4 +26,7 @@ module iAtom.HandyDisplay {
 
     provides AbstractPlugin with NonePlugin;
     provides AbstractWidget with NoneWidget, ClockWidget;
+
+    uses AbstractPlugin;
+    uses AbstractWidget;
 }

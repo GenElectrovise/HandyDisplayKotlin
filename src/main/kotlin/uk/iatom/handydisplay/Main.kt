@@ -41,6 +41,15 @@ private fun readConfiguration() {
 }
 
 private fun configureLogging() {
+    val logsDirectory = hdRunFile(
+            null,
+            "logs/",
+            deployIfNotPresent = false
+                                 )
+    if (!logsDirectory.exists()) {
+        logsDirectory.mkdirs()
+    }
+
     val configStream = hdRunFile(
             null,
             "handylog.properties",

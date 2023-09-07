@@ -10,7 +10,7 @@ import java.util.logging.*
 class WeatherPlugin: AbstractPlugin("weather") {
 
 
-    val logger = Logger.getLogger(javaClass.name)
+    private val logger: Logger = Logger.getLogger(javaClass.name)
 
     companion object {
 

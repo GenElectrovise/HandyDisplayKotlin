@@ -59,10 +59,6 @@ application {
     mainModule = "iAtom.HandyDisplay"
 }
 
-run {
-    // dependsOn(project(":handydisplay:plugins").tasks.named("build"))
-}
-
 javafx {
     version = JAVAFX_VERSION
     modules = [ 'javafx.controls', 'javafx.fxml' , 'javafx.media']
@@ -72,6 +68,6 @@ jlink {
     launcher {
         name = 'uk.iatom.handydisplay.core'
     }
-    forceMerge('log4j-api')
     forceMerge('kotlin')
+    forceMerge('javafx')
 }

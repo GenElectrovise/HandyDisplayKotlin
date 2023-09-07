@@ -4,18 +4,10 @@ import java.util.function.*
 import java.util.logging.*
 
 fun Logger.exception(
-        msg: String,
-        exception: Exception
+        exception: Exception,
+        msg: Supplier<String>
                     ) = log(
         Level.SEVERE,
-        msg,
-        exception
-                           )
-
-fun Logger.exception(
-        msg: Supplier<String>,
-        exception: Exception
-                    ) = exception(
         msg.get(),
         exception
-                                 )
+                           )

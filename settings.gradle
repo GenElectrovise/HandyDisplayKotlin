@@ -32,7 +32,8 @@ dependencyResolutionManagement {
             library('kotlin-test', "org.jetbrains.kotlin:kotlin-test:$KOTLIN_VERSION")
             // Core
             library('fxgl', 'com.github.almasb:fxgl:17.3')
-            library('kotlinx-json', 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1')
+            library('kotlinx-json', 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0')
+            library('kotlinx-properties', 'org.jetbrains.kotlinx:kotlinx-serialization-properties:1.6.0')
             library('picocli', 'info.picocli:picocli:4.7.4')
 
             // Raspberry Pi

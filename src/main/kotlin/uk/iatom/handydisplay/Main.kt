@@ -3,8 +3,8 @@ package uk.iatom.handydisplay
 import picocli.CommandLine
 import uk.iatom.handydisplay.bootstrap.CoreConfigModel
 import uk.iatom.handydisplay.bootstrap.RunCommand
-import uk.iatom.handydisplay.helpers.fileConfig
 import uk.iatom.handydisplay.helpers.hdRunFile
+import uk.iatom.handydisplay.helpers.propertiesConfig
 import java.util.logging.*
 
 /**
@@ -32,7 +32,7 @@ fun main(args: Array<String>) {
 }
 
 private fun readConfiguration() {
-    CORE_CONFIG = fileConfig(
+    CORE_CONFIG = propertiesConfig(
             hdRunFile(
                     null,
                     "core.properties"

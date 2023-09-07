@@ -15,6 +15,8 @@ module iAtom.HandyDisplay {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.logging;
+    requires kotlinx.serialization.json;
+    requires kotlinx.serialization.properties;
 
     opens uk.iatom.handydisplay.bootstrap to info.picocli;
 

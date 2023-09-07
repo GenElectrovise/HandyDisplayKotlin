@@ -2,8 +2,8 @@ package uk.iatom.handydisplay.plugins.weather
 
 import com.almasb.fxgl.input.Input
 import uk.iatom.handydisplay.fxgl.HDApp
-import uk.iatom.handydisplay.helpers.fileConfig
 import uk.iatom.handydisplay.helpers.hdRunFile
+import uk.iatom.handydisplay.helpers.propertiesConfig
 import uk.iatom.handydisplay.services.plugin.AbstractPlugin
 import java.util.logging.*
 
@@ -19,7 +19,7 @@ class WeatherPlugin: AbstractPlugin("weather") {
     }
 
     init {
-        config = fileConfig(
+        config = propertiesConfig(
                 hdRunFile(
                         this,
                         "weather.properties"

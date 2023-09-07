@@ -34,10 +34,6 @@ dependencyResolutionManagement {
             library('fxgl', 'com.github.almasb:fxgl:17.3')
             library('kotlinx-json', 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1')
             library('picocli', 'info.picocli:picocli:4.7.4')
-            library('hoplite-core', 'com.sksamuel.hoplite:hoplite-core:2.8.0.RC2')
-            library('hoplite-json', 'com.sksamuel.hoplite:hoplite-json:2.8.0.RC2')// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
-            library('jackson-core', 'com.fasterxml.jackson.core:jackson-core:2.15.2')
-            library('jackson-databind', 'com.fasterxml.jackson.core:jackson-databind:2.12.7.1')
 
             // Raspberry Pi
             library('pi4j-core', 'com.pi4j:pi4j-core:2.3.0')

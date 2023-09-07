@@ -11,14 +11,10 @@ module iAtom.HandyDisplay {
     // Dependencies
     requires com.almasb.fxgl.all;
     requires info.picocli;
-    requires hoplite.core;
-    requires hoplite.json;
-    requires com.fasterxml.jackson.core; // Needed for hoplite-json
-    requires kotlin.reflect; // Needed for hoplite-json
-    requires java.sql; // Needed for hoplite-json
     // JavaFX
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.logging;
 
     opens uk.iatom.handydisplay to info.picocli;
 

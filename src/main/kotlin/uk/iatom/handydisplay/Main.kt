@@ -10,7 +10,7 @@ import java.util.logging.*
 /**
  * Core configuration singleton instance, loaded from core.properties.
  */
-lateinit var CORE_CONFIG: CoreConfigModel
+var CORE_CONFIG: CoreConfigModel? = null
 
 private lateinit var logger: Logger
 

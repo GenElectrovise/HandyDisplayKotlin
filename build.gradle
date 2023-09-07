@@ -52,9 +52,6 @@ allprojects {
 dependencies {
     implementation handylibs.fxgl
     implementation handylibs.picocli
-    implementation handylibs.hoplite.core
-    implementation handylibs.hoplite.json
-    implementation handylibs.jackson.core
 }
 
 application {

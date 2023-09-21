@@ -21,6 +21,7 @@ dependencyResolutionManagement {
             plugin('kotlin-serialization', 'org.jetbrains.kotlin.plugin.serialization').version(KOTLIN_VERSION)
             plugin('javamodularity', 'org.javamodularity.moduleplugin').version('1.8.12')
             plugin('jlink', 'org.beryx.jlink').version('2.26.0')
+            plugin('ktfmt', 'com.ncorti.ktfmt.gradle').version('0.13.0')
             // plugin('gradle-app', 'application') // No version
             // plugin('gradle-dist', 'distribution') // No version
             plugin('hidetake-ssh', 'org.hidetake.ssh').version('2.11.2')

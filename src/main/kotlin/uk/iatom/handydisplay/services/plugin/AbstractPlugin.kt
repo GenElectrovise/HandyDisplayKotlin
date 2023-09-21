@@ -5,31 +5,29 @@ import uk.iatom.handydisplay.fxgl.HDApp
 import uk.iatom.handydisplay.registry.IRegistrable
 
 /**
- * The class which the core will search for during plugin loading: children of this class are IRegisterables and will be automatically instantiated
- * and registered.
+ * The class which the core will search for during plugin loading: children of this class are
+ * IRegisterables and will be automatically instantiated and registered.
  *
  * Subclasses should declare a zero-argument constructor.
  */
-abstract class AbstractPlugin(override val registryName: String): IRegistrable<AbstractPlugin> {
+abstract class AbstractPlugin(override val registryName: String) : IRegistrable<AbstractPlugin> {
 
+  abstract fun onInitInput(input: Input)
 
-    abstract fun onInitInput(input: Input);
+  abstract fun onInitGame(hdApp: HDApp)
 
-    abstract fun onInitGame(hdApp: HDApp)
+  /**
+   * Called after all plugins have been instantiated. The order of calling of this method cannot be
+   * guaranteed. This is a good time to check compatibility with other loaded plugins and register
+   * other aspects of this plugin, such as widgets, using `register<R: IRegisterable? (instance)`.
+   */
+  abstract fun finishPluginLoading()
 
+  /**
+   * Called when plugins must shut down immediately because the application wants to close. This
+   * must terminate any rogue threads or executors!
+   */
+  abstract fun shutdownNow()
 
-    /**
-     * Called after all plugins have been instantiated. The order of calling of this method cannot be guaranteed. This is a good time to check
-     * compatibility with other loaded plugins and register other aspects of this plugin, such as widgets, using `register<R: IRegisterable?
-     * (instance)`.
-     */
-    abstract fun finishPluginLoading()
-
-
-    /**
-     * Called when plugins must shut down immediately because the application wants to close. This must terminate any rogue threads or executors!
-     */
-    abstract fun shutdownNow()
-
-    //TODO Implement shutdownNow
+  // TODO Implement shutdownNow
 }

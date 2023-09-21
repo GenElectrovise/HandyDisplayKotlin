@@ -6,12 +6,9 @@ package uk.iatom.handydisplay.registry
  * @param registryName The name with which there is an error.
  * @param errorReason An explanation of the error.
  */
-class RegistryNameException(
-        registryName: String,
-        errorReason: String
-                           ): Exception(
+class RegistryNameException(registryName: String, errorReason: String) :
+    Exception(
         StringBuilder()
-                .appendLine("$registryName is an invalid name for a registry entry.")
-                .appendLine(errorReason)
-                .toString()
-                                       )
+            .appendLine("$registryName is an invalid name for a registry entry.")
+            .appendLine(errorReason)
+            .toString())

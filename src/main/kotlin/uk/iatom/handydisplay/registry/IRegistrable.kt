@@ -7,6 +7,5 @@ package uk.iatom.handydisplay.registry
  */
 interface IRegistrable<out IRegistrable> {
 
-
-    val registryName: String
+  val registryName: String
 }
